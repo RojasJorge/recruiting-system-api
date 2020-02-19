@@ -11,7 +11,10 @@ const changes = require('./changes')
 
 /** Connect to DB */
 const r = require('rethinkdb')
-const ConnectiontDB = r.connect()
+const ConnectiontDB = r.connect({
+  host: '128.199.162.22',
+  port: 28015
+})
 
 const start = (host, port) => {
   const server = new Hapi.Server({
