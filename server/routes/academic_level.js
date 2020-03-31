@@ -23,26 +23,28 @@ const AcademicLevel = [{
   }
 }, {
   method: 'GET',
-  path: config.get('/api_base_path') + '/academic-level',
+  path: config.get('/api_base_path') + '/academic-level/{id?}',
   handler: handlers.academic_level.get,
   options: {
     auth: {
       scope: ['admin', 'root', 'candidate', 'company']
     },
     validate: {
-      query: schemas.academic_level._get
+      query: schemas.academic_level._get,
+      params: schemas.academic_level._get_id
     }
   }
 }, {
   method: 'PUT',
-  path: config.get('/api_base_path') + '/academic-level',
+  path: config.get('/api_base_path') + '/academic-level/{id?}',
   handler: handlers.academic_level.update,
   options: {
     auth: {
       scope: ['admin', 'root', 'company']
     },
     validate: {
-      payload: schemas.academic_level._update
+      payload: schemas.academic_level._update,
+      params: schemas.academic_level._get_id
     }
   }
 }]

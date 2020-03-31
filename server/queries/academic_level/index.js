@@ -62,13 +62,10 @@ const add = (r, conn, params, owner) => {
   })
 }
 
-const update = (r, conn, params) => {
+const update = (r, conn, id, params) => {
 
   /** Update the requested object based on id */
   return new Promise((resolve, reject) => {
-
-    const id = params.id
-    delete params.id /** Delete from params (payload) */
 
     /** Date updated */
     params.updated_at = new Date()
