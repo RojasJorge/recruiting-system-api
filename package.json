@@ -1,16 +1,15 @@
 {
-  "name": "envia-api",
+  "name": "umana-api-v2",
   "version": "1.0.0",
-  "description": "Tracking system",
+  "description": "Recruiting System",
   "main": "index.js",
   "scripts": {
-    "test": "test",
     "start": "node index.js"
   },
   "author": "Jorge Rojas",
   "license": "ISC",
   "dependencies": {
-    "@hapi/hapi": "^18.4.0",
+    "@hapi/hapi": "^18.4.1",
     "@hapi/inert": "^5.2.0",
     "@hapi/joi": "^15.0.3",
     "@hapi/nes": "^11.2.2",
@@ -23,6 +22,7 @@
     "fs": "0.0.1-security",
     "handlebars": "^4.7.2",
     "hapi-auth-jwt2": "^8.3.0",
+    "hapi-require-https": "^5.0.0",
     "jsonwebtoken": "^8.5.1",
     "lodash": "^4.17.15",
     "require-directory": "^2.1.1",
