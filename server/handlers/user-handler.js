@@ -1,6 +1,7 @@
 'use strict'
 
 const queries = require('../queries/user')
+const get = require('../queries/get')
 
 module.exports = {
   /** Do not use (h.response) for validate func. */
@@ -10,7 +11,7 @@ module.exports = {
   login: async (req, h) =>
     h.response(await queries.login(req.server.db.r, req.server.db.conn, req.payload)),
   get: async (req, h) =>
-    h.response(await queries.get(req.server.db.r, req.server.db.conn, req)),
+    h.response(req.params.id ? await get.single(req, 'users') : await get.collection(req, 'users')),
   add: async (req, h) =>
     h.response(await queries.add(req.server.db.r, req.server.db.conn, req.payload)),
   update: async (req, h) =>
