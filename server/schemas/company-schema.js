@@ -3,7 +3,6 @@
 const Joi = require('@hapi/joi')
 
 const _get = Joi.object({
-  id: Joi.string().min(6).max(36).optional(),
   name: Joi.string().min(4).max(150).optional(),
   status: Joi.boolean().optional(),
   category: Joi.object().keys({
@@ -26,7 +25,18 @@ const _get = Joi.object({
     city: Joi.string().max(50).optional(),
     zone: Joi.number().max(25).optional(),
     latitude: Joi.string().min(6).max(20).optional()
+  }).optional(),
+  pager: Joi.object().keys({
+    page: Joi.number().optional(),
+    limit: Joi.number().optional(),
+  }).default({
+    page: 1,
+    limit: 10
   }).optional()
+})
+
+const _get_id = Joi.object({
+  id: Joi.string().min(6).max(36).optional(),
 })
 
 const _add = Joi.object({
@@ -91,6 +101,13 @@ const _career_get = Joi.object({
   parent: Joi.string().min(10).max(36).allow([null, '']).optional(),
   slug: Joi.string().optional(),
   status: Joi.boolean().optional(),
+  pager: Joi.object().keys({
+    page: Joi.number().optional(),
+    limit: Joi.number().optional(),
+  }).default({
+    page: 1,
+    limit: 10
+  }).optional()
 }).when(Joi.object({
   id: Joi.exist()
 }).unknown(), {
@@ -109,14 +126,14 @@ const _career_add = Joi.object({
 })
 
 const _career_update = Joi.object({
-  id: Joi.string().min(6).max(36).required(),
-  name: Joi.string().min(2).max(150).required(),
+  name: Joi.string().min(2).max(150).optional(),
   status: Joi.boolean().optional(),
   parent: Joi.string().min(10).max(36).allow([null, '']).optional()
 })
 
 module.exports = {
   _get,
+  _get_id,
   _add,
   _update,
   _career_get,

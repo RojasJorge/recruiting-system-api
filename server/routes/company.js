@@ -23,14 +23,15 @@ const Company = [{
   }
 }, {
   method: 'GET',
-  path: config.get('/api_base_path') + '/company',
+  path: config.get('/api_base_path') + '/company/{id?}',
   handler: handlers.company.get,
   options: {
     auth: {
       scope: ['admin', 'root', 'candidate', 'company']
     },
     validate: {
-      query: schemas.company._get
+      query: schemas.company._get,
+      params: schemas.company._get_id
     }
   }
 }, {
@@ -76,14 +77,15 @@ const Company = [{
   }
 }, {
   method: 'PUT',
-  path: config.get('/api_base_path') + '/career',
+  path: config.get('/api_base_path') + '/career/{id?}',
   handler: handlers.company.career_update,
   options: {
     auth: {
       scope: ['admin', 'root', 'company']
     },
     validate: {
-      payload: schemas.company._career_update
+      payload: schemas.company._career_update,
+      params: schemas.company._get_id
     }
   }
 }]

@@ -30,38 +30,14 @@ const all = (r, conn, req) => {
   })
 }
 
-const get = (r, conn, params) => {
-  return new Promise((resolve, reject) => {
+const get = req =>
+  new Promise(async (resolve, reject) => {
 
-    const id = params.id
-    delete params.id
+  
 
-    let Query = r
-      .db(config.get('/db/name'))
-      .table(_table)
-
-    if (id) {
-      Query = Query.get(id)
-    } else {
-      Query = Query.filter(params || {})
-    }
-
-    Query.run(conn, (err, results) => {
-      if (err) reject(err)
-
-      if (!results) return reject(Boom.notFound())
-
-      if (id && results) {
-        resolve(results)
-      } else {
-        results.toArray((err, rows) => {
-          if (err) resolve(err)
-          resolve(rows)
-        })
-      }
-    })
+  
   })
-}
+
 
 const add = (r, conn, params, owner) => {
   return new Promise(async (resolve) => {
@@ -149,7 +125,10 @@ const career_get = (r, conn, params) => {
       } else {
         results.toArray((err, items) => {
           if (err) resolve(err)
-          return resolve({items, total})
+          return resolve({
+            items,
+            total
+          })
         })
       }
     })
@@ -184,18 +163,15 @@ const career_add = (r, conn, params, owner) => {
   })
 }
 
-const career_update = (r, conn, params) => {
-
-  const id = params.id
-  delete params.id /** Delete from params (payload) */
+const career_update = (r, conn, id, params) => {
+  
+  console.log("update category ['career']", params)
 
   /** Date updated */
   params.updated_at = new Date()
 
   /** Reject if id is missing */
-  if (!id) resolve({
-    messageError: 'Id param is required'
-  })
+  if (!id) resolve(Boom.badRequest("Id param is required"))
 
   /** Update the requested object based on id */
   return new Promise((resolve) => {
