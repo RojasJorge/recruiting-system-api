@@ -7,19 +7,20 @@ const routes = require('./routes')
 const config = require('../config')
 const Path = require('path')
 const helpers = require('./queries/helpers')
-const changes = require('./changes')
+const Fs = require('fs')
 
 /** Connect to DB */
 const r = require('rethinkdb')
-const ConnectiontDB = r.connect({
-  host: '128.199.162.22',
-  port: 28015
-})
+const ConnectiontDB = r.connect()
 
 const start = (host, port) => {
-  const server = new Hapi.Server({
+  let server = new Hapi.Server({
     host,
     port,
+    tls: JSON.parse(config.get('/app/secure')) ? {
+      key: Fs.readFileSync('/etc/letsencrypt/live/staging.umana.co/privkey.pem'),
+      cert: Fs.readFileSync('/etc/letsencrypt/live/staging.umana.co/fullchain.pem')
+    } : false,
     routes: {
       cors: true,
       files: {
@@ -41,10 +42,7 @@ const start = (host, port) => {
 
   ConnectiontDB.then(async (conn) => {
 
-    const io = require('socket.io')(server.listener)
-
     /** Add the new Rethinkdb variables to the server */
-    server.comSocket = io
     server.db = {
       r,
       conn
@@ -87,31 +85,6 @@ const start = (host, port) => {
 
     /** Register all routes */
     await server.route(routes)
-
-    let count = 0
-
-    /** Socket */
-    io.on('connection', async (socket) => {
-
-      socket.emit('count', {
-        count
-      })
-
-      socket.on('increase', () => {
-        count++
-        io.sockets.emit('count', {count})
-      })
-
-      socket.on('decrease', () => {
-        count--
-        io.sockets.emit('count', {count})
-      })
-
-      socket.on('something', (data) => {
-        console.log('data', data);
-
-      })
-    })
 
     /** Start the server */
     await server.start()
