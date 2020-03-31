@@ -16,8 +16,9 @@ const config = {
   api_key: 'pc6N3T8RXDgFLcd9YRykSustCAauilqO3P1/oqVpME1+shnqpAPPJpioWmt1Bdk9a0nftnjRf+ibIH/RsM5ZDJfAESkONsWeQufL99bukjvvIe+RfHUFlombq8f+BTGzLqlxauFH0xCPM7JTX8RmLxRZ5V7/GV3O1qUFf72oJopK73ShwvMr1AYMrXkSUGpLapvJnZ6Jl8acQ9dWWd0BSldvqLRkwnLHJepY+mYkjKA1cSEsi8FGbSivxWFNLDLyiXa/SRKdJa68cXAASc7UdzUynXqcG7jQ7+bj75+U30N8dW3POzwvqDCUQhbuykg2g3tt4uoBJ8/fCZV/oRYAcA==',
   api_secret: 'T5gS4M4p+B6y68MT8FegENz2A4vxPeFQE7vunnK0DL92gKm3JPEB1Dga212NwA12Mt1C+G6jZgNTSR0ClHBhUne7WyPgDS3bDUjJXXZzoEzolilSd480jakrX5XkEHkhQ4eqcQY2j/ISj704LLN3ithOc81GIDA+Zw6jR64B6AmKXyC2AqlO06aV4xbYQevR5dkqZsJPYhxoBJRTisEDcm2f4XkkgoxcqcLULKuS3HpXCiWwRGtfFH+1xGoHD24ncG1h1gP9uU9GmfaMJuUpPt0RFoRD3sbrs+htRK8helVfqv/N9vogTIkakhEUgAg3AVjOfnnx8NSJ1YXBjsWSTQ==',
   app: {
-    host: process.env.APP_HOST || '128.199.162.22',
-    port: process.env.APP_PORT || 3026
+    host: process.env.APP_HOST || 'https://staging.umana.co',
+    port: process.env.APP_PORT || 3028,
+    secure: process.env.APP_HTTPS || false,
   },
   db: {
     name: 'umana'
