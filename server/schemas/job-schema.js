@@ -204,37 +204,37 @@ const _add = Joi.object().keys({
   academic_level: Joi.array()
     .items(
       Joi.object()
-        .keys({
-          id: Joi.string()
-            .allow([null, ''])
-            .max(36)
-            .optional(),
-          logic: Joi.boolean()
-            .allow([null, ''])
-            .default(null)
-            .optional(),
-          name: Joi.string()
-            .allow([null, ''])
-            .max(150)
-            .optional(),
-          children: Joi.object()
-            .keys({
-              id: Joi.string()
-                .allow([null, ''])
-                .max(36)
-                .optional(),
-              name: Joi.string()
-                .allow([null, ''])
-                .max(150)
-                .optional(),
-            })
-            .allow(null)
-            .default(null)
-            .optional(),
-        })
-        .allow(null)
-        .default(null)
-        .optional(),
+      .keys({
+        id: Joi.string()
+          .allow([null, ''])
+          .max(36)
+          .optional(),
+        logic: Joi.boolean()
+          .allow([null, ''])
+          .default(null)
+          .optional(),
+        name: Joi.string()
+          .allow([null, ''])
+          .max(150)
+          .optional(),
+        children: Joi.object()
+          .keys({
+            id: Joi.string()
+              .allow([null, ''])
+              .max(36)
+              .optional(),
+            name: Joi.string()
+              .allow([null, ''])
+              .max(150)
+              .optional(),
+          })
+          .allow(null)
+          .default(null)
+          .optional(),
+      })
+      .allow(null)
+      .default(null)
+      .optional(),
     )
     .optional(),
   skills: Joi.array()
@@ -471,37 +471,37 @@ const _update = Joi.object().keys({
   academic_level: Joi.array()
     .items(
       Joi.object()
-        .keys({
-          id: Joi.string()
-            .allow([null, ''])
-            .max(36)
-            .optional(),
-          logic: Joi.boolean()
-            .allow([null, ''])
-            .default(null)
-            .optional(),
-          name: Joi.string()
-            .allow([null, ''])
-            .max(150)
-            .optional(),
-          children: Joi.object()
-            .keys({
-              id: Joi.string()
-                .allow([null, ''])
-                .max(36)
-                .optional(),
-              name: Joi.string()
-                .allow([null, ''])
-                .max(150)
-                .optional(),
-            })
-            .allow(null)
-            .default(null)
-            .optional(),
-        })
-        .allow(null)
-        .default(null)
-        .optional(),
+      .keys({
+        id: Joi.string()
+          .allow([null, ''])
+          .max(36)
+          .optional(),
+        logic: Joi.boolean()
+          .allow([null, ''])
+          .default(null)
+          .optional(),
+        name: Joi.string()
+          .allow([null, ''])
+          .max(150)
+          .optional(),
+        children: Joi.object()
+          .keys({
+            id: Joi.string()
+              .allow([null, ''])
+              .max(36)
+              .optional(),
+            name: Joi.string()
+              .allow([null, ''])
+              .max(150)
+              .optional(),
+          })
+          .allow(null)
+          .default(null)
+          .optional(),
+      })
+      .allow(null)
+      .default(null)
+      .optional(),
     )
     .optional(),
   skills: Joi.array()
