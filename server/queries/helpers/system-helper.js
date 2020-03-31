@@ -14,7 +14,7 @@ const tokenVerifier = (request) => {
         email: decoded.email,
         name: decoded.name,
         lastname: decoded.lastname,
-        phone: decoded.phone,
+        phone: decoded.phone ? decoded.phone : "0000-0000",
         id: decoded.id,
         scopes: decoded.scopes
       }
