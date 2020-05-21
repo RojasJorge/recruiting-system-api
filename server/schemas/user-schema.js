@@ -2,20 +2,20 @@
 
 const Joi = require('@hapi/joi')
 
-const _login = Joi.object({
+const login = Joi.object({
 	email: Joi.string().email().required(),
 	password: Joi.string().required()
 })
 
-const _refresh = Joi.object({
+const refresh = Joi.object({
 	token: Joi.string().min(100).required()
 })
 
-const _get = Joi.object({
+const get = Joi.object({
+	name: Joi.string().min(4).max(150).optional(),
 	lastname: Joi.string().min(4).max(150).optional(),
-	phone: Joi.string().allow([null, '']).max(100).optional(),
+	phone: Joi.string().allow(null).max(100).optional(),
 	status: Joi.boolean().optional(),
-	available: Joi.boolean().optional(),
 	pager: Joi.object().keys({
 		page: Joi.number().optional(),
 		limit: Joi.number().optional(),
@@ -25,11 +25,12 @@ const _get = Joi.object({
 	}).optional()
 })
 
-const _get_id = Joi.object({
+const get_id = Joi.object({
 	id: Joi.string().min(10).max(36).allow([null, '']).optional()
 })
 
-const _add = Joi.object({
+const add = Joi.object({
+	avatar: Joi.string().max(300).allow(null).default(null).optional(),
 	created_at: Joi.date().default(new Date()).forbidden(),
 	email: Joi.string().email().required(),
 	password: Joi.string().required(),
@@ -37,31 +38,30 @@ const _add = Joi.object({
 	lastname: Joi.string().min(4).max(150).required(),
 	phone: Joi.string().allow([null, '']).max(100).optional(),
 	birthday: Joi.date().default(null).optional(),
-	address: Joi.string().allow([null, '']).max(250).optional(),
-	scopes: Joi.array().items(Joi.string().min(4).max(20)).allow(null).default(["candidate"]).optional(),
+	address: Joi.string().allow(null).max(250).optional(),
+	scope: Joi.array().items(Joi.string().valid('umana', 'admin', 'candidate', 'company')).default(['candidate']).optional(),
 	status: Joi.boolean().default(true).forbidden(),
-	available: Joi.boolean().default(true).forbidden(),
-	profile: Joi.object().default({}).forbidden()
+	profile: Joi.string().min(36).max(36).default(null).forbidden()
 })
 
-const _update = Joi.object({
-	avatar: Joi.string().max(300).allow(null).default("").optional(),
+const update = Joi.object({
+	avatar: Joi.string().max(300).allow(null).default(null).optional(),
 	password: Joi.string().optional(),
 	name: Joi.string().min(4).max(150).optional(),
 	lastname: Joi.string().min(4).max(150).optional(),
 	phone: Joi.string().max(100).optional(),
 	birthday: Joi.date().optional(),
 	address: Joi.string().max(250).optional(),
-	scopes: Joi.array().items(Joi.string().min(4).max(20)).optional(),
+	scope: Joi.array().items(Joi.string().valid('umana', 'admin', 'candidate', 'company')).optional(),
 	status: Joi.boolean().optional(),
-	profile: Joi.any().optional()
+	profile: Joi.string().min(36).max(36).default(null).optional()
 })
 
 module.exports = {
-	_login,
-	_refresh,
-	_get,
-	_get_id,
-	_add,
-	_update
+	login,
+	refresh,
+	get,
+	get_id,
+	add,
+	update
 }

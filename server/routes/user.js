@@ -16,7 +16,7 @@ const User = [{
     auth: false,
     handler: handlers.user.login,
     validate: {
-      payload: schemas.user._login
+      payload: schemas.user.login
     }
   }
 }, {
@@ -24,9 +24,11 @@ const User = [{
   path: config.get('/api_base_path') + '/user',
   handler: handlers.user.add,
   options: {
-    auth: false,
+    auth: {
+      scope: ['admin', 'umana', 'company', 'candidate']
+    },
     validate: {
-      payload: schemas.user._add
+      payload: schemas.user.add
     }
   }
 }, {
@@ -35,12 +37,12 @@ const User = [{
   handler: handlers.user.get,
   options: {
     auth: false,
-    // auth: {
-    //   scope: ['admin', 'root', 'candidate']
-    // },
+    auth: {
+      scope: ['admin', 'umana', 'company', 'candidate']
+    },
     validate: {
-      query: schemas.user._get,
-      params: schemas.user._get_id
+      query: schemas.user.get,
+      params: schemas.user.get_id
     }
   }
 }, {
@@ -49,11 +51,11 @@ const User = [{
   handler: handlers.user.update,
   options: {
     auth: {
-      scope: ['admin', 'root', 'candidate']
+      scope: ['admin', 'umana', 'company', 'candidate']
     },
     validate: {
-      payload: schemas.user._update,
-      params: schemas.user._get_id
+      payload: schemas.user.update,
+      params: schemas.user.get_id
     }
   }
 }, {
@@ -62,7 +64,7 @@ const User = [{
   handler: handlers.user.refresh,
   options: {
     auth: {
-      scope: ['admin', 'root', 'candidate']
+      scope: ['admin', 'umana', 'company', 'candidate']
     },
     // validate: {
     //   payload: schemas.user._refresh

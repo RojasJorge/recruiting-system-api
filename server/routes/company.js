@@ -15,7 +15,7 @@ const Company = [{
   handler: handlers.company.add,
   options: {
     auth: {
-      scope: ['admin', 'root', 'company']
+      scope: ['admin', 'umana', 'company', 'candidate']
     },
     validate: {
       payload: schemas.company._add
@@ -27,7 +27,7 @@ const Company = [{
   handler: handlers.company.get,
   options: {
     auth: {
-      scope: ['admin', 'root', 'candidate', 'company']
+      scope: ['admin', 'umana', 'company', 'candidate']
     },
     validate: {
       query: schemas.company._get,
@@ -40,7 +40,7 @@ const Company = [{
   handler: handlers.company.update,
   options: {
     auth: {
-      scope: ['admin', 'root', 'company']
+      scope: ['admin', 'umana', 'company', 'candidate']
     },
     validate: {
       payload: schemas.company._update
@@ -57,7 +57,7 @@ const Company = [{
   handler: handlers.company.career_add,
   options: {
     auth: {
-      scope: ['admin', 'root', 'company']
+      scope: ['admin', 'umana', 'company', 'candidate']
     },
     validate: {
       payload: schemas.company._career_add
@@ -69,7 +69,7 @@ const Company = [{
   handler: handlers.company.career_get,
   options: {
     auth: {
-      scope: ['admin', 'root', 'candidate', 'company']
+      scope: ['admin', 'umana', 'company', 'candidate']
     },
     validate: {
       query: schemas.company._career_get
@@ -81,7 +81,7 @@ const Company = [{
   handler: handlers.company.career_update,
   options: {
     auth: {
-      scope: ['admin', 'root', 'company']
+      scope: ['admin', 'umana', 'company', 'candidate']
     },
     validate: {
       payload: schemas.company._career_update,
