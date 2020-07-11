@@ -11,7 +11,7 @@ const schemas = require('../schemas')
 
 const Job = [{
   method: 'POST',
-  path: config.get('/api_base_path') + '/job',
+  path: config.get('/api/base_path') + '/job',
   handler: handlers.job.add,
   options: {
     auth: {
@@ -23,7 +23,7 @@ const Job = [{
   }
 }, {
   method: 'GET',
-  path: config.get('/api_base_path') + '/job',
+  path: config.get('/api/base_path') + '/job',
   handler: handlers.job.get,
   options: {
     auth: {
@@ -35,7 +35,7 @@ const Job = [{
   }
 }, {
   method: 'PUT',
-  path: config.get('/api_base_path') + '/job',
+  path: config.get('/api/base_path') + '/job',
   handler: handlers.job.update,
   options: {
     auth: {

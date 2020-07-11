@@ -1,22 +1,20 @@
 'use strict'
 
-const queries = require('../queries/company')
-const get = require('../queries/get')
+const query = require('../query')
 
 module.exports = {
-  /** Standard CRU */
   get: async (req, h) =>
-    h.response(req.params.id ? await get.single(req, 'companies') : await get.collection(req, 'companies')),
+    h.response(await query.get(req, 'companies')),
   add: async (req, h) =>
-    h.response(await queries.add(req.server.db.r, req.server.db.conn, req.payload, req.owner)),
+    h.response(await query.add(req, 'companies')),
   update: async (req, h) =>
-    h.response(await queries.update(req.server.db.r, req.server.db.conn, req.payload)),
+    h.response(await query.update(req, 'companies')),
 
   /** Careers (Categories) */
   career_get: async (req, h) =>
-    h.response(req.params.id ? await get.single(req, 'careers') : await get.collection(req, 'careers')),
+    h.response(await query.get(req, 'careers')),
   career_add: async (req, h) =>
-    h.response(await queries.career_add(req.server.db.r, req.server.db.conn, req.payload, req.owner)),
+    h.response(await query.add(req, 'careers')),
   career_update: async (req, h) =>
-    h.response(await queries.career_update(req.server.db.r, req.server.db.conn, req.params.id, req.payload))
+    h.response(await query.update(req, 'careers'))
 }

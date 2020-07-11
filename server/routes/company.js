@@ -11,7 +11,7 @@ const schemas = require('../schemas')
 
 const Company = [{
   method: 'POST',
-  path: config.get('/api_base_path') + '/company',
+  path: config.get('/api/base_path') + '/company',
   handler: handlers.company.add,
   options: {
     auth: {
@@ -23,7 +23,7 @@ const Company = [{
   }
 }, {
   method: 'GET',
-  path: config.get('/api_base_path') + '/company/{id?}',
+  path: config.get('/api/base_path') + '/company/{id?}',
   handler: handlers.company.get,
   options: {
     auth: {
@@ -36,7 +36,7 @@ const Company = [{
   }
 }, {
   method: 'PUT',
-  path: config.get('/api_base_path') + '/company',
+  path: config.get('/api/base_path') + '/company',
   handler: handlers.company.update,
   options: {
     auth: {
@@ -53,7 +53,7 @@ const Company = [{
    */
 
   method: 'POST',
-  path: config.get('/api_base_path') + '/career',
+  path: config.get('/api/base_path') + '/career',
   handler: handlers.company.career_add,
   options: {
     auth: {
@@ -65,7 +65,7 @@ const Company = [{
   }
 }, {
   method: 'GET',
-  path: config.get('/api_base_path') + '/career',
+  path: config.get('/api/base_path') + '/career',
   handler: handlers.company.career_get,
   options: {
     auth: {
@@ -77,7 +77,7 @@ const Company = [{
   }
 }, {
   method: 'PUT',
-  path: config.get('/api_base_path') + '/career/{id?}',
+  path: config.get('/api/base_path') + '/career/{id?}',
   handler: handlers.company.career_update,
   options: {
     auth: {

@@ -16,13 +16,8 @@ const get = Joi.object({
 	lastname: Joi.string().min(4).max(150).optional(),
 	phone: Joi.string().allow(null).max(100).optional(),
 	status: Joi.boolean().optional(),
-	pager: Joi.object().keys({
-		page: Joi.number().optional(),
-		limit: Joi.number().optional(),
-	}).default({
-		page: 1,
-		limit: 10
-	}).optional()
+	page: Joi.number().default(1).optional(),
+	offset: Joi.number().default(10).optional(),
 })
 
 const get_id = Joi.object({

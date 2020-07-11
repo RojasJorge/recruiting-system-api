@@ -1,12 +1,13 @@
 'use strict'
 
-const queries = require('../queries/job')
+const query = require('../query')
+const table = 'jobs'
 
 module.exports = {
   get: async (req, h) =>
-    h.response(await queries.get(req.server.db.r, req.server.db.conn, req.query)),
+    h.response(await query.get(req, table)),
   add: async (req, h) =>
-    h.response(await queries.add(req.server.db.r, req.server.db.conn, req.payload, req.owner)),
+    h.response(await query.add(req, table)),
   update: async (req, h) =>
-    h.response(await queries.update(req.server.db.r, req.server.db.conn, req.payload))
+    h.response(await query.update(req, table))
 }

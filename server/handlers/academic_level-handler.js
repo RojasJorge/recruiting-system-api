@@ -1,17 +1,13 @@
 'use strict'
 
-const queries = require('../queries/academic_level')
-const get = require('../queries/get')
+const query = require('../query')
+const table = 'academic_levels'
 
 module.exports = {
   get: async (req, h) =>
-    h.response(req.params.id ? await get.single(req, 'academic_levels') : await get.collection(req, 'academic_levels')),
+    h.response(await query.get(req, table)),
   add: async (req, h) =>
-    h.response(await queries.add(req.server.db.r, req.server.db.conn, req.payload, req.owner)),
+    h.response(await query.add(req, table)),
   update: async (req, h) =>
-  {
-    console.log("log on update", req.params.id, req.payload)
-    return h.response(true)
-    // h.response(await queries.update(req.server.db.r, req.server.db.conn, req.params.id, req.payload))
-  }
+    h.response(await query.update(req, table))
 }

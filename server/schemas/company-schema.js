@@ -26,13 +26,8 @@ const _get = Joi.object({
     zone: Joi.number().max(25).optional(),
     latitude: Joi.string().min(6).max(20).optional()
   }).optional(),
-  pager: Joi.object().keys({
-    page: Joi.number().optional(),
-    limit: Joi.number().optional(),
-  }).default({
-    page: 1,
-    limit: 10
-  }).optional()
+  page: Joi.number().default(1).optional(),
+	offset: Joi.number().default(10).optional(),
 })
 
 const _get_id = Joi.object({
@@ -101,13 +96,8 @@ const _career_get = Joi.object({
   parent: Joi.string().min(10).max(36).allow([null, '']).optional(),
   slug: Joi.string().optional(),
   status: Joi.boolean().optional(),
-  pager: Joi.object().keys({
-    page: Joi.number().optional(),
-    limit: Joi.number().optional(),
-  }).default({
-    page: 1,
-    limit: 10
-  }).optional()
+  page: Joi.number().default(1).optional(),
+	offset: Joi.number().default(10).optional(),
 }).when(Joi.object({
   id: Joi.exist()
 }).unknown(), {

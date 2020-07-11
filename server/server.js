@@ -5,27 +5,28 @@ const handlers = require('./handlers')
 const plugins = require('./plugins')
 const routes = require('./routes')
 const config = require('../config')
-const Path = require('path')
-const helpers = require('./queries/helpers')
-const Fs = require('fs')
+// const Path = require('path')
+// const helpers = require('./queries/helpers')
+// const Fs = require('fs')
 
 /** Connect to DB */
 const r = require('rethinkdb')
-const ConnectiontDB = r.connect()
+const ConnectiontDB = r.connect({
+  host: 'localhost',
+  port: 28015,
+  db: config.get('/db/name')
+})
 
 const start = (host, port) => {
-  let server = new Hapi.Server({
+  let server = Hapi.server({
     host,
     port,
-    tls: JSON.parse(config.get('/app/secure')) ? {
-      key: Fs.readFileSync('/etc/letsencrypt/live/staging.umana.co/privkey.pem'),
-      cert: Fs.readFileSync('/etc/letsencrypt/live/staging.umana.co/fullchain.pem')
-    } : false,
+    // tls: JSON.parse(config.get('/app/secure')) ? {
+    //   key: Fs.readFileSync('/etc/letsencrypt/live/staging.umana.co/privkey.pem'),
+    //   cert: Fs.readFileSync('/etc/letsencrypt/live/staging.umana.co/fullchain.pem')
+    // } : false,
     routes: {
       cors: true,
-      files: {
-        relativeTo: Path.join(__dirname, 'public')
-      },
       validate: {
         failAction: async (request, h, err) => {
           if (process.env.NODE_ENV === 'production') {
@@ -41,6 +42,7 @@ const start = (host, port) => {
   })
 
   ConnectiontDB.then(async (conn) => {
+    console.log('DB is open')
 
     /** Add the new Rethinkdb variables to the server */
     server.db = {
@@ -51,20 +53,12 @@ const start = (host, port) => {
     /** Register the plugins */
     await server.register(plugins)
 
-    await server.views({
-      engines: {
-        html: require('handlebars')
-      },
-      relativeTo: __dirname,
-      path: __dirname + '/views'
-    })
-
     /** Configure auth strategy */
     await server.auth.strategy('jwt', 'jwt', {
-      key: config.get('/api_secret'),
-      validate: handlers.user.validate /** validate function defined on user handler */ ,
+      key: config.get('/app/secret'),
+      validate: handlers.user.validate /** validate function defined on user handler */,
       verifyOptions: {
-        ignoreExpiration: false /** do not reject expired tokens */ ,
+        ignoreExpiration: false /** do not reject expired tokens */,
         algorithms: ['HS256'] /** specify your secure algorithm */
       }
     })
@@ -73,23 +67,22 @@ const start = (host, port) => {
     await server.auth.default('jwt')
 
     /** Read the token, then pass decoded with user data to handlers */
-    await server.ext({
-      type: 'onRequest',
-      method: async function (request, h) {
-        if (request.path !== '/api/v1/login') {
-          if (await helpers.system.tokenVerifier(request)) request.owner = await helpers.system.tokenVerifier(request)
-        }
-        return h.continue
-      }
-    })
+    // await server.ext({
+    //   type: 'onRequest',
+    //   method: async function (request, h) {
+    //     if (request.path !== '/api/v1/login') {
+    //       if (await helpers.system.tokenVerifier(request)) request.owner = await helpers.system.tokenVerifier(request)
+    //     }
+    //     return h.continue
+    //   }
+    // })
 
     /** Register all routes */
     await server.route(routes)
 
     /** Start the server */
     await server.start()
-    console.log('Connected to DB')
-    console.log(`Server running at: ${server.info.uri}${config.get('/api_base_path')} - ${new Date()}`)
+    console.log(`Server running at: ${server.info.uri}${config.get('/api/base_path')}`)
   })
 }
 

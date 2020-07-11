@@ -11,7 +11,7 @@ const schemas = require('../schemas')
 
 const User = [{
   method: 'POST',
-  path: config.get('/api_base_path') + '/login',
+  path: config.get('/api/base_path') + '/login',
   options: {
     auth: false,
     handler: handlers.user.login,
@@ -21,7 +21,7 @@ const User = [{
   }
 }, {
   method: 'POST',
-  path: config.get('/api_base_path') + '/user',
+  path: config.get('/api/base_path') + '/user',
   handler: handlers.user.add,
   options: {
     auth: {
@@ -33,7 +33,7 @@ const User = [{
   }
 }, {
   method: 'GET',
-  path: config.get('/api_base_path') + '/user/{id?}',
+  path: config.get('/api/base_path') + '/user/{id?}',
   handler: handlers.user.get,
   options: {
     auth: false,
@@ -47,7 +47,7 @@ const User = [{
   }
 }, {
   method: 'PUT',
-  path: config.get('/api_base_path') + '/user/{id}',
+  path: config.get('/api/base_path') + '/user/{id}',
   handler: handlers.user.update,
   options: {
     auth: {
@@ -58,18 +58,17 @@ const User = [{
       params: schemas.user.get_id
     }
   }
-}, {
-  method: 'POST',
-  path: config.get('/api_base_path') + '/refresh',
-  handler: handlers.user.refresh,
-  options: {
-    auth: {
-      scope: ['admin', 'umana', 'company', 'candidate']
-    },
-    // validate: {
-    //   payload: schemas.user._refresh
-    // }
-  }
-}]
+}, 
+// {
+//   method: 'POST',
+//   path: config.get('/api/base_path') + '/refresh',
+//   handler: handlers.user.refresh,
+//   options: {
+//     auth: {
+//       scope: ['admin', 'umana', 'company', 'candidate']
+//     }
+//   }
+// }
+]
 
 module.exports = User

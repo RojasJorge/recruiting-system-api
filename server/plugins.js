@@ -8,7 +8,7 @@ let plugins = [
   require('@hapi/vision').plugin
 ]
 
-if (JSON.parse(config.get('/app/secure')))
+if (JSON.parse(config.get('/api/secure')))
   plugins.push({
     plugin: require('hapi-require-https'),
     options: {}
