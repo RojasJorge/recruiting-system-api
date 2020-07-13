@@ -23,26 +23,28 @@ const Job = [{
   }
 }, {
   method: 'GET',
-  path: config.get('/api/base_path') + '/job',
+  path: config.get('/api/base_path') + '/job/{id?}',
   handler: handlers.job.get,
   options: {
     auth: {
       scope: ['admin', 'root', 'candidate', 'company']
     },
     validate: {
-      query: schemas.job._get
+      query: schemas.job._get,
+      params: schemas.job._get_id
     }
   }
 }, {
   method: 'PUT',
-  path: config.get('/api/base_path') + '/job',
+  path: config.get('/api/base_path') + '/job/{id}',
   handler: handlers.job.update,
   options: {
     auth: {
       scope: ['admin', 'root', 'company']
     },
     validate: {
-      payload: schemas.job._update
+      payload: schemas.job._update,
+      params: schemas.job._get_id
     }
   }
 }]
