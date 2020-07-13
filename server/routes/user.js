@@ -36,7 +36,7 @@ const User = [{
   path: config.get('/api/base_path') + '/user/{id?}',
   handler: handlers.user.get,
   options: {
-    auth: false,
+    // auth: false,
     auth: {
       scope: ['admin', 'umana', 'company', 'candidate']
     },
