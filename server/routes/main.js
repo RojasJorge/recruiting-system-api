@@ -3,6 +3,7 @@
 const config = require('../../config')
 const handlers = require('../handlers')
 const schemas = require('../schemas')
+const search = require('../search')
 
 /**
  * System paths
@@ -21,7 +22,17 @@ const Main = [{
       })
     }
   }
-}, 
+}, {
+  method: 'POST',
+  path: config.get('/api/base_path') + '/search',
+  handler: search,
+  options: {
+    auth: false,
+    validate: {
+      payload: schemas.system.search
+    }
+  }
+}
 // {
 //   method: 'GET',
 //   path: config.get('/api/base_path') + '/setup',
