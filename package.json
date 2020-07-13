@@ -18,7 +18,7 @@
     "bcrypt": "^3.0.3",
     "bluebird": "^3.5.3",
     "boom": "^7.3.0",
-    "confidence": "^4.0.1",
+    "confidence": "^4.0.2",
     "dotenv": "^6.2.0",
     "fs": "0.0.1-security",
     "handlebars": "^4.7.2",
