@@ -4,13 +4,8 @@ const Joi = require('@hapi/joi')
 
 const _get = Joi.object({
   status: Joi.boolean().optional(),
-  pager: Joi.object().keys({
-    page: Joi.number().optional(),
-    limit: Joi.number().optional(),
-  }).default({
-    page: 1,
-    limit: 10
-  }).optional()
+  page: Joi.number().default(1).optional(),
+  offset: Joi.number().default(10).optional(),
 })
 
 const _get_id = Joi.object({
