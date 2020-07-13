@@ -63,7 +63,6 @@ const _add = Joi.object({
 })
 
 const _update = Joi.object({
-  id: Joi.string().min(6).max(36).required(),
   avatar: Joi.string().max(50).optional(),
   name: Joi.string().min(4).max(150).optional(),
   status: Joi.boolean().optional(),
