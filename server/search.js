@@ -48,42 +48,43 @@ const last_companies = ({server: {db: {r, conn}}, payload: {type, query}}) =>
  * @returns {Promise<T | Boom<unknown>>}
  */
 const term_in_tables = ({server: {db: {r, conn}}, payload: {query}}) =>
-	Promise.reduce(schemes.system.search_table_schema, (acc, current) =>
-			new Promise((resolve, reject) =>
-				/** DB query */
-				r
-					.table(current.table)
-					.filter(doc => {
-						/** Extract fields from current iteration */
-						const {fields} = current
-						
-						/** Init query */
-						let pipe = doc(current.fields.shift()).downcase().match(`(?i)^${query.variables.term}$`)
-						
-						/** Find DB matches based on term param */
-						if (fields.length > 0) {
-							for (const i in fields) {
-								pipe = pipe.or(doc(fields[i]).downcase().match(`(?i)^${query.variables.term}$`))
-							}
+	Promise.reduce(schemes.system.search_table_schema, (acc, current) => {
+		return new Promise((resolve, reject) => {
+			
+			/** DB query */
+			r
+				.table(current.table)
+				.filter(doc => {
+					/** Extract fields from current iteration */
+					const {fields} = current
+					
+					/** Init query */
+					let pipe = doc(current.fields.shift()).downcase().match(`(?i)^${query.variables.term}$`)
+					
+					/** Find DB matches based on term param */
+					if (fields.length > 0) {
+						for (const i in fields) {
+							pipe = pipe.or(doc(fields[i]).downcase().match(`(?i)^${query.variables.term}$`))
 						}
-						
-						return pipe
-					})
-					.limit(query.variables.limit || 5)
-					.run(conn, (err, result) => {
+					}
+					
+					return pipe
+				})
+				.limit(query.variables.limit || 5)
+				.run(conn, (err, result) => {
+					if (err) return reject(err)
+					
+					/** Map rows */
+					return result.toArray((err, rows) => {
 						if (err) return reject(err)
 						
-						/** Map rows */
-						return result.toArray((err, rows) => {
-							if (err) return reject(err)
-							
-							/** Adds row results into each module name */
-							acc[current.table] = rows
-							return resolve(acc)
-						})
+						/** Adds row results into each module name */
+						acc[current.table] = rows
+						return resolve(acc)
 					})
-			)
-		, {} /** We get an object like {users: [...], companies: [...]} */)
+				})
+		})
+	}, {} /** We get an object like {users: [...], companies: [...]} */)
 		.then(result => result)
 		.catch(err => new Boom.badImplementation('Scheme error'))
 
