@@ -17,13 +17,26 @@ const search = Joi.object({
 	query: Joi.object({
 		name: Joi.string().allow(null).optional(),
 		variables: Joi.object({
-			limit: Joi.number().allow(null).optional()
+			limit: Joi.number().allow(null).optional(),
+			term: Joi.string().min(3).max(50).optional()
 		})
 	})
 })
 
+const search_table_schema = [{
+	table: "users",
+	fields: ["id", "name", "lastname", "email", "dpi"]
+}, {
+	table: "companies",
+	fields: ["id", "name", "phone"]
+}, {
+	table: "jobs",
+	fields: ["id", "company_id", "availability", "title", "workplace"]
+}]
+
 module.exports = {
 	avatar_get,
 	avatar_add,
-	search
+	search,
+	search_table_schema
 }
