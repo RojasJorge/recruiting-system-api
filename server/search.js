@@ -50,8 +50,6 @@ const last_companies = ({server: {db: {r, conn}}, payload: {type, query}}) =>
 const term_in_tables = ({server: {db: {r, conn}}, payload: {query}}) =>
 	Promise.reduce(schemes.system.search_table_schema, (acc, current) => {
 		return new Promise(async (resolve, reject) => {
-			
-			console.log('Query:', current)
 			/** DB query */
 			await r
 				.table(current.table)
