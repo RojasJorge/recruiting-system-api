@@ -49,17 +49,17 @@ const last_companies = ({server: {db: {r, conn}}, payload: {type, query}}) =>
  */
 const term_in_tables = ({server: {db: {r, conn}}, payload: {query}}) =>
 	Promise.reduce(schemes.system.search_table_schema, (acc, current) => {
-		return new Promise((resolve, reject) => {
+		return new Promise(async (resolve, reject) => {
 			
+			console.log('Query:', current)
 			/** DB query */
-			r
+			await r
 				.table(current.table)
 				.filter(doc => {
 					/** Extract fields from current iteration */
 					const {fields} = current
-					
 					/** Init query */
-					let pipe = doc(current.fields.shift()).downcase().match(`(?i)^${query.variables.term}$`)
+					let pipe = doc(fields[0]).downcase().match(`(?i)^${query.variables.term}$`)
 					
 					/** Find DB matches based on term param */
 					if (fields.length > 0) {
