@@ -1,13 +1,13 @@
-'use strict'
+'use strict';
 
-const query = require('../query')
-const bcrypt = require('bcrypt')
-const Boom = require('@hapi/boom')
-const helpers = require('../helpers')
-const _ = require('lodash')
-const JWT = require('jsonwebtoken')
-const config = require('../../config')
-const table = 'users'
+const query = require('../query');
+const bcrypt = require('bcrypt');
+const Boom = require('@hapi/boom');
+const helpers = require('../helpers');
+const _ = require('lodash');
+const JWT = require('jsonwebtoken');
+const config = require('../../config');
+const table = 'users';
 
 module.exports = {
 	validate: async (decoded, req) => {

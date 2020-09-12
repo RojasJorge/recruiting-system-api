@@ -1,21 +1,21 @@
-'use strict'
+'use strict';
 
-const Hapi = require('@hapi/hapi')
-const handlers = require('./handlers')
-const plugins = require('./plugins')
-const routes = require('./routes')
-const config = require('../config')
+const Hapi = require('@hapi/hapi');
+const handlers = require('./handlers');
+const plugins = require('./plugins');
+const routes = require('./routes');
+const config = require('../config');
 // const Path = require('path')
 // const helpers = require('./queries/helpers')
 // const Fs = require('fs')
 
 /** Connect to DB */
-const r = require('rethinkdb')
+const r = require('rethinkdb');
 const ConnectiontDB = r.connect({
-	host: 'localhost',
-	port: 28015,
-	db: config.get('/db/name')
-})
+  host: 'localhost',
+  port: 28015,
+  db: config.get('/db/name'),
+});
 
 const start = (host, port) => {
 	let server = Hapi.server({
@@ -85,12 +85,11 @@ const start = (host, port) => {
 	})
 }
 
-
-process.on('unhandledRejection', (err) => {
-	console.log(err)
-	process.exit(1)
+process.on('unhandledRejection', err => {
+  console.log(err);
+  process.exit(1);
 });
 
 module.exports = {
-	start
-}
+  start,
+};

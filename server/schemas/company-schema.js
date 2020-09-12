@@ -59,7 +59,19 @@ const _add = Joi.object({
     zone: Joi.number().max(25).allow(null, '').optional(),
     latitude: Joi.string().min(6).max(20).allow(null, '').default(null).optional(),
     longitude: Joi.string().min(6).max(20).allow(null, '').default(null).optional()
-  }).optional()
+  }).optional(),
+	typeBusness: Joi.string()
+		.max(50)
+		.allow(null, '')
+		.optional(),
+	nit: Joi.string()
+		.max(50)
+		.allow(null, '')
+		.optional(),
+	socialreason: Joi.string()
+		.max(50)
+		.allow(null, '')
+		.optional(),
 })
 
 const _update = Joi.object({
@@ -85,7 +97,19 @@ const _update = Joi.object({
     zone: Joi.number().max(25).allow(null, '').optional(),
     latitude: Joi.string().min(6).max(20).allow(null, '').optional(),
     longitude: Joi.string().min(6).max(20).allow(null, '').optional()
-  }).optional()
+  }).optional(),
+	typeBusness: Joi.string()
+		.max(50)
+		.allow(null, '')
+		.optional(),
+	nit: Joi.string()
+		.max(50)
+		.allow(null, '')
+		.optional(),
+	socialreason: Joi.string()
+		.max(50)
+		.allow(null, '')
+		.optional(),
 })
 
 /** Categories */
