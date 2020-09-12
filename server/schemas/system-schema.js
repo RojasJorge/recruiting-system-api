@@ -1,6 +1,6 @@
 'use strict'
 
-const Joi = require('@hapi/joi')
+const Joi = require('joi')
 
 const avatar_get = Joi.object({
 	filename: Joi.string().max(50).optional()
@@ -9,7 +9,7 @@ const avatar_get = Joi.object({
 const avatar_add = Joi.object({
 	entity_id: Joi.string().max(250).required(),
 	media: Joi.string().dataUri().required(),
-	module: Joi.string().valid(['companies', 'users', 'jobs']).required()
+	module: Joi.string().valid('companies', 'users', 'jobs').required()
 })
 
 const search = Joi.object({

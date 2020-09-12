@@ -1,7 +1,6 @@
 'use strict'
 
 const Confidence = require('confidence')
-// require('dotenv').config()
 
 const pack = require('./package')
 

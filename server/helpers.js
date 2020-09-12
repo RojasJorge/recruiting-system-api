@@ -24,6 +24,12 @@ const user_exists = (req, type = null) => new Promise((resolve, reject) => {
     .getAll(req.payload.email, {
       index: 'email'
     })
+    // .innerJoin(r.table('profiles'), (users, profiles) => {
+    //   return profiles('uid').eq(users('id'))
+    // })
+    // .map((doc) => {
+    //   return doc.merge().doc
+    // })
     .run(conn, (err, results) => {
       if (err) return reject(Boom.badGateway())
 
@@ -35,6 +41,15 @@ const user_exists = (req, type = null) => new Promise((resolve, reject) => {
     })
 
 })
+
+
+/**
+ * Watch user scope to show/edit contents
+ */
+const verify_scope = _ =>
+  new Promise((resolve, reject) => {
+  
+  })
 
 module.exports = {
   user_exists

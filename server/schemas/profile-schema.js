@@ -1,6 +1,6 @@
 'use strict';
 
-const Joi = require('@hapi/joi');
+const Joi = require('joi');
 
 const _add = Joi.object().keys({
   steps: Joi.object(),
@@ -10,7 +10,7 @@ const ____add = Joi.object({
   personal: Joi.object().keys({
     avatar: Joi.string()
       .optional()
-      .allow([null, '']),
+      .allow(null, ''),
     name: Joi.string()
       .min(3)
       .max(100)
@@ -111,19 +111,19 @@ const ____add = Joi.object({
           academicLevel: Joi.string()
             .max(100)
             .optional()
-            .allow([null, '']),
+            .allow(null, ''),
           specialization: Joi.string()
             .max(100)
             .optional()
-            .allow([null, '']),
+            .allow(null, ''),
           dateInit: Joi.date()
             .optional()
-            .allow([null, '']),
+            .allow(null, ''),
           dateEnd: Joi.date()
             .optional()
-            .allow([null, '']),
+            .allow(null, ''),
           studyNow: Joi.boolean(),
-          schedule: Joi.string().valid(['daytime', 'evening', 'night', 'weekends', 'inline']),
+          schedule: Joi.string().valid('daytime', 'evening', 'night', 'weekends', 'inline'),
         }),
       )
       .optional(),
@@ -134,11 +134,11 @@ const ____add = Joi.object({
           titleCourse: Joi.string()
             .max(100)
             .optional()
-            .allow([null, '']),
+            .allow(null, ''),
           place: Joi.string()
             .max(100)
             .optional()
-            .allow([null, '']),
+            .allow(null, ''),
           year: Joi.number().optional(),
         }),
       )
@@ -211,7 +211,7 @@ const ____add = Joi.object({
       })
       .optional(),
     typeHousing: Joi.string()
-      .valid(['own', 'family', 'rented'])
+      .valid('own', 'family', 'rented')
       .optional(),
     dependents: Joi.number().optional(),
     vehicle: Joi.array()
@@ -250,7 +250,7 @@ const ____add = Joi.object({
     relocate: Joi.boolean().optional(),
     travel: Joi.boolean().optional(),
     hiringAvailability: Joi.string()
-      .valid(['Immediate', 'One week', 'Time of law for change of work', 'One month'])
+      .valid('Immediate', 'One week', 'Time of law for change of work', 'One month')
       .optional(),
   }),
 });

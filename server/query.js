@@ -6,9 +6,14 @@ const _ = require('lodash')
 
 const get = (req, table) => new Promise(async (resolve, reject) => {
 	
-	console.log('Query.get():', req.query)
+	/**
+	 * Switch controller to fetch only user's contents
+	 */
+	// if(_.filter(req.server.current.scopes, o => o !== 'umana')) {
+	// 	await get_own_contents(req)
+	// }
 	
-	/** Extract specific values from request (req) */
+	/** Extract values from request */
 	const {
 		server: {
 			db: {
@@ -24,6 +29,7 @@ const get = (req, table) => new Promise(async (resolve, reject) => {
 			offset
 		}
 	} = req
+	
 	
 	/** Delete pagination params from query */
 	delete req.query.page
@@ -41,10 +47,11 @@ const get = (req, table) => new Promise(async (resolve, reject) => {
 	if (id) {
 		Query = Query.get(id)
 	} else {
+		
 		/** Apply filters */
 		const start = ((parseInt(page, 10) * parseInt(offset, 10)) - parseInt(offset, 10))
 		const end = (start + parseInt(offset, 10))
-		console.log('Start:', start, 'End:', end)
+		
 		Query = Query.filter(req.query || {}).slice(start, end)
 	}
 	
@@ -89,5 +96,14 @@ const update = (req, table) => new Promise((resolve, reject) =>
 		})
 )
 
+
+/**
+ * Get own contents
+ */
+const get_own_contents = req =>
+	new Promise((resolve, reject) => {
+		
+		return resolve(true)
+	})
 
 module.exports = {get, add, update}

@@ -67,13 +67,13 @@ const start = (host, port) => {
 		
 		/** Read the token, then pass decoded with user data to handlers */
 		// await server.ext({
-		//   type: 'onRequest',
-		//   method: async function (request, h) {
-		//     if (request.path !== '/api/v1/login') {
-		//       if (await helpers.system.tokenVerifier(request)) request.owner = await helpers.system.tokenVerifier(request)
-		//     }
-		//     return h.continue
-		//   }
+		// 	type: 'onRequest',
+		// 	method: async (request, h) => {
+		// 		if (request.path !== '/api/v1/user' && request.path !== '/api/v1/login' && request.method !== 'post') {
+		// 			request.server.current = await handlers.system.add_scope(request)
+		// 		}
+		// 		return h.continue
+		// 	}
 		// })
 		
 		/** Register all routes */

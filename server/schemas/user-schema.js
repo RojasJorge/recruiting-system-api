@@ -1,6 +1,6 @@
 'use strict'
 
-const Joi = require('@hapi/joi')
+const Joi = require('joi')
 
 const login = Joi.object({
 	email: Joi.string().email().required(),
@@ -24,7 +24,7 @@ const get = Joi.object({
 })
 
 const get_id = Joi.object({
-	id: Joi.string().min(10).max(36).allow([null, '']).optional()
+	id: Joi.string().min(10).max(36).allow(null, '').optional()
 })
 
 const add = Joi.object({
@@ -34,12 +34,11 @@ const add = Joi.object({
 	password: Joi.string().required(),
 	name: Joi.string().min(4).max(150).required(),
 	lastname: Joi.string().min(4).max(150).required(),
-	phone: Joi.string().allow([null, '']).max(100).optional(),
+	phone: Joi.string().allow(null, '').max(100).optional(),
 	birthday: Joi.date().default(null).optional(),
 	address: Joi.string().allow(null).max(250).optional(),
 	scope: Joi.array().items(Joi.string().valid('umana', 'admin', 'candidate', 'company')).default(['candidate']).optional(),
-	status: Joi.boolean().default(true).forbidden(),
-	profile: Joi.string().min(36).max(36).default(null).forbidden()
+	status: Joi.boolean().default(true).forbidden()
 })
 
 const update = Joi.object({
@@ -51,8 +50,7 @@ const update = Joi.object({
 	birthday: Joi.date().optional(),
 	address: Joi.string().max(250).optional(),
 	scope: Joi.array().items(Joi.string().valid('umana', 'admin', 'candidate', 'company')).optional(),
-	status: Joi.boolean().optional(),
-	profile: Joi.string().min(36).max(36).default(null).optional()
+	status: Joi.boolean().optional()
 })
 
 module.exports = {

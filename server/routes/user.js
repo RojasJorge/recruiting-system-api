@@ -24,9 +24,10 @@ const User = [{
   path: config.get('/api/base_path') + '/user',
   handler: handlers.user.add,
   options: {
-    auth: {
-      scope: ['admin', 'umana', 'company', 'candidate']
-    },
+    auth: false,
+    // auth: {
+    //   scope: ['admin', 'umana', 'company', 'candidate']
+    // },
     validate: {
       payload: schemas.user.add
     }

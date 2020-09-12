@@ -1,6 +1,9 @@
-// 'use strict'
+'use strict'
 
-// const config = require('../../config')
+const Promise = require('bluebird')
+const JWT = require('jsonwebtoken')
+const Boom = require('@hapi/boom')
+const config = require('../../config')
 // const queries = require('../queries')
 
 // const setup = async (req, h) => {
@@ -43,8 +46,13 @@
 // const avatar_get = async (req, h) => h.file(await queries.system.avatar_get(req.query))
 // const avatar_add = async (req, h) => h.response(await queries.system.avatar_add(req.server.db.r, req.server.db.conn, req.payload))
 
-// module.exports = {
-//   setup,
-//   avatar_get,
-//   avatar_add
-// }
+/**
+ * Check user scope & adds restrictions
+ */
+const add_scope = req =>
+	new Promise(async (resolve, reject) =>
+		resolve(await JWT.verify(req.headers.authorization, config.get('/app/secret'))))
+
+module.exports = {
+	add_scope
+}

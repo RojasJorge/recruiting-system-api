@@ -1,4 +1,4 @@
-const Joi = require('@hapi/joi');
+const Joi = require('joi');
 
 let dt = new Date();
 dt.setMonth(dt.getMonth() + 1);
@@ -15,7 +15,7 @@ const _get = Joi.object().keys({
 	expiration_date: Joi.date().optional(),
 	status: Joi.boolean().optional(),
 	availability: Joi.string()
-		.valid(['freelance', 'practice', 'temporal', 'full', 'part'])
+		.valid('freelance', 'practice', 'temporal', 'full', 'part')
 		.optional(),
 	location: Joi.object()
 		.keys({
@@ -52,7 +52,7 @@ const _get = Joi.object().keys({
 		})
 		.optional(),
 	gender: Joi.string()
-		.valid(['male', 'female', 'indifferent'])
+		.valid('male', 'female', 'indifferent')
 		.optional(),
 	age: Joi.object()
 		.keys({
@@ -95,12 +95,12 @@ const _add = Joi.object().keys({
 		.max(36)
 		.required(),
 	company_state: Joi.string()
-		.valid(['public', 'confidential'])
+		.valid('public', 'confidential')
 		.default('public')
 		.optional(),
 	avatar: Joi.string()
 		.max(50)
-		.allow([null, ''])
+		.allow(null, '')
 		.default(null)
 		.optional(),
 	title: Joi.string()
@@ -108,7 +108,7 @@ const _add = Joi.object().keys({
 		.max(250)
 		.required(),
 	availability: Joi.string()
-		.valid(['freelance', 'practice', 'temporal', 'full', 'part', 'vacacionista'])
+		.valid('freelance', 'practice', 'temporal', 'full', 'part', 'vacacionista')
 		.default('temporal')
 		.optional(),
 	career: Joi.array()
@@ -117,12 +117,12 @@ const _add = Joi.object().keys({
 				id: Joi.string()
 					.min(6)
 					.max(36)
-					.allow([null, ''])
+					.allow(null, '')
 					.required(),
 				name: Joi.string()
 					.min(2)
 					.max(150)
-					.allow([null, ''])
+					.allow(null, '')
 					.optional(),
 				status: Joi.boolean()
 					.default(true)
@@ -130,44 +130,44 @@ const _add = Joi.object().keys({
 				level: Joi.number()
 					.integer()
 					.default(0)
-					.allow([null, ''])
+					.allow(null, '')
 					.optional(),
 				parent: Joi.string()
 					.min(10)
 					.max(36)
-					.allow([null, ''])
+					.allow(null, '')
 					.default(null)
 					.optional(),
 			}),
 		)
 		.optional(),
 	schedule_type: Joi.string()
-		.valid(['fixed', 'flex'])
-		.allow([null, ''])
+		.valid('fixed', 'flex')
+		.allow(null, '')
 		.default('flex')
 		.optional(),
 	schedule: Joi.string()
 		.max(2000)
-		.allow([null, ''])
+		.allow(null, '')
 		.optional(),
 	description: Joi.string()
 		.max(2000)
-		.allow([null, ''])
+		.allow(null, '')
 		.optional(),
 	workplace: Joi.string()
-		.valid(['in-location', 'remoto', 'semi-remoto'])
+		.valid('in-location', 'remoto', 'semi-remoto')
 		.default('in-location')
 		.optional(),
 	location: Joi.object()
 		.keys({
 			address: Joi.string()
 				.max(250)
-				.allow([null, ''])
+				.allow(null, '')
 				.default(null)
 				.optional(),
 			zone: Joi.number()
 				.default(0)
-				.allow([null, ''])
+				.allow(null, '')
 				.optional(),
 			country: Joi.string()
 				.max(100)
@@ -184,18 +184,18 @@ const _add = Joi.object().keys({
 		})
 		.optional(),
 	gender: Joi.string()
-		.valid(['male', 'female', 'indifferent'])
+		.valid('male', 'female', 'indifferent')
 		.default('indifferent')
 		.optional(),
 	age: Joi.object()
 		.keys({
 			min: Joi.number()
 				.default(0)
-				.allow([null, ''])
+				.allow(null, '')
 				.optional(),
 			max: Joi.number()
 				.default(0)
-				.allow([null, ''])
+				.allow(null, '')
 				.optional(),
 		})
 		.optional(),
@@ -205,32 +205,32 @@ const _add = Joi.object().keys({
 		.optional(),
 	required_years: Joi.number()
 		.default(0)
-		.allow([null, ''])
+		.allow(null, '')
 		.optional(),
 	academic_level: Joi.array()
 		.items(
 			Joi.object()
 				.keys({
 					id: Joi.string()
-						.allow([null, ''])
+						.allow(null, '')
 						.max(36)
 						.optional(),
 					logic: Joi.boolean()
-						.allow([null, ''])
+						.allow(null, '')
 						.default(null)
 						.optional(),
 					name: Joi.string()
-						.allow([null, ''])
+						.allow(null, '')
 						.max(150)
 						.optional(),
 					children: Joi.object()
 						.keys({
 							id: Joi.string()
-								.allow([null, ''])
+								.allow(null, '')
 								.max(36)
 								.optional(),
 							name: Joi.string()
-								.allow([null, ''])
+								.allow(null, '')
 								.max(150)
 								.optional(),
 						})
@@ -251,45 +251,45 @@ const _add = Joi.object().keys({
 		.items(
 			Joi.object().keys({
 				language: Joi.string()
-					.allow([null, ''])
+					.allow(null, '')
 					.max(36)
 					.optional(),
 				comprehension: Joi.number()
 					.default(0)
-					.allow([null, ''])
+					.allow(null, '')
 					.optional(),
 				speak: Joi.number()
 					.default(0)
-					.allow([null, ''])
+					.allow(null, '')
 					.optional(),
 				write: Joi.number()
 					.default(0)
-					.allow([null, ''])
+					.allow(null, '')
 					.optional(),
 			}),
 		)
 		.optional(),
 	softwares: Joi.array()
 		.items(Joi.string())
-		.allow([null, '', []])
+		.allow(null, '')
 		.default([])
 		.optional(),
 	responsibilities: Joi.string()
 		.max(2000)
-		.allow([null, ''])
+		.allow(null, '')
 		.default(null)
 		.optional(),
 	requirements: Joi.string()
 		.max(2000)
-		.allow([null, ''])
+		.allow(null, '')
 		.default(null)
 		.optional(),
 	vehicle: Joi.string()
-		.valid(['indifferent', 'vehicle', 'motorcycle'])
+		.valid('indifferent', 'vehicle', 'motorcycle')
 		.default('indifferent')
 		.optional(),
 	type_license: Joi.string()
-		.valid(['indifferent', 'a', 'b', 'c'])
+		.valid('indifferent', 'a', 'b', 'c')
 		.default('indifferent')
 		.optional(),
 	benefits: Joi.array()
@@ -298,7 +298,7 @@ const _add = Joi.object().keys({
 		.optional(),
 	benefits_other: Joi.string()
 		.max(2000)
-		.allow([null, ''])
+		.allow(null, '')
 		.default(null)
 		.optional(),
 	salary: Joi.object()
@@ -319,26 +319,26 @@ const _add = Joi.object().keys({
 			}),
 			base_min: Joi.number()
 				.default(0.0)
-				.allow([null, ''])
+				.allow(null, '')
 				.optional(),
 			base_max: Joi.number()
 				.default(0.0)
-				.allow([null, ''])
+				.allow(null, '')
 				.optional(),
 			commission_min: Joi.number()
 				.default(0.0)
-				.allow([null, ''])
+				.allow(null, '')
 				.optional(),
 			commission_max: Joi.number()
 				.default(0.0)
-				.allow([null, ''])
+				.allow(null, '')
 				.optional(),
 			salary_min: Joi.number()
-				.allow([null, ''])
+				.allow(null, '')
 				.default(null)
 				.optional(),
 			salary_max: Joi.number()
-				.allow([null, ''])
+				.allow(null, '')
 				.default(null)
 				.optional(),
 		})
@@ -351,19 +351,19 @@ const _update = Joi.object().keys({
 	archive: Joi.boolean().optional(),
 	avatar: Joi.string()
 		.max(50)
-		.allow([null, ''])
+		.allow(null, '')
 		.optional(),
 	company_id: Joi.string()
 		.min(6)
 		.max(36)
 		.required(),
 	company_state: Joi.string()
-		.valid(['public', 'confidential'])
+		.valid('public', 'confidential')
 		.default('public')
 		.optional(),
 	avatar: Joi.string()
 		.max(50)
-		.allow([null, ''])
+		.allow(null, '')
 		.default(null)
 		.optional(),
 	title: Joi.string()
@@ -371,7 +371,7 @@ const _update = Joi.object().keys({
 		.max(250)
 		.required(),
 	availability: Joi.string()
-		.valid(['freelance', 'practice', 'temporal', 'full', 'part', 'vacacionista'])
+		.valid('freelance', 'practice', 'temporal', 'full', 'part', 'vacacionista')
 		.default('temporal')
 		.optional(),
 	career: Joi.array()
@@ -380,16 +380,16 @@ const _update = Joi.object().keys({
 				id: Joi.string()
 					.min(6)
 					.max(36)
-					.allow([null, ''])
+					.allow(null, '')
 					.required(),
 				name: Joi.string()
 					.min(2)
 					.max(150)
-					.allow([null, ''])
+					.allow(null, '')
 					.optional(),
 				status: Joi.boolean()
 					.default(true)
-					.allow([null, ''])
+					.allow(null, '')
 					.optional(),
 				level: Joi.number()
 					.integer()
@@ -398,39 +398,39 @@ const _update = Joi.object().keys({
 				parent: Joi.string()
 					.min(10)
 					.max(36)
-					.allow([null, ''])
+					.allow(null, '')
 					.default(null)
 					.optional(),
 			}),
 		)
 		.optional(),
 	schedule_type: Joi.string()
-		.valid(['fixed', 'flex'])
-		.allow([null, ''])
+		.valid('fixed', 'flex')
+		.allow(null, '')
 		.default('flex')
 		.optional(),
 	schedule: Joi.string()
 		.max(2000)
-		.allow([null, ''])
+		.allow(null, '')
 		.optional(),
 	description: Joi.string()
 		.max(2000)
-		.allow([null, ''])
+		.allow(null, '')
 		.optional(),
 	workplace: Joi.string()
-		.valid(['in-location', 'remoto', 'semi-remoto'])
+		.valid('in-location', 'remoto', 'semi-remoto')
 		.default('in-location')
 		.optional(),
 	location: Joi.object()
 		.keys({
 			address: Joi.string()
 				.max(250)
-				.allow([null, ''])
+				.allow(null, '')
 				.default(null)
 				.optional(),
 			zone: Joi.number()
 				.default(0)
-				.allow([null, ''])
+				.allow(null, '')
 				.optional(),
 			country: Joi.string()
 				.max(100)
@@ -447,18 +447,18 @@ const _update = Joi.object().keys({
 		})
 		.optional(),
 	gender: Joi.string()
-		.valid(['male', 'female', 'indifferent'])
+		.valid('male', 'female', 'indifferent')
 		.default('indifferent')
 		.optional(),
 	age: Joi.object()
 		.keys({
 			min: Joi.number()
 				.default(0)
-				.allow([null, ''])
+				.allow(null, '')
 				.optional(),
 			max: Joi.number()
 				.default(0)
-				.allow([null, ''])
+				.allow(null, '')
 				.optional(),
 		})
 		.optional(),
@@ -468,32 +468,32 @@ const _update = Joi.object().keys({
 		.optional(),
 	required_years: Joi.number()
 		.default(0)
-		.allow([null, ''])
+		.allow(null, '')
 		.optional(),
 	academic_level: Joi.array()
 		.items(
 			Joi.object()
 				.keys({
 					id: Joi.string()
-						.allow([null, ''])
+						.allow(null, '')
 						.max(36)
 						.optional(),
 					logic: Joi.boolean()
-						.allow([null, ''])
+						.allow(null, '')
 						.default(null)
 						.optional(),
 					name: Joi.string()
-						.allow([null, ''])
+						.allow(null, '')
 						.max(150)
 						.optional(),
 					children: Joi.object()
 						.keys({
 							id: Joi.string()
-								.allow([null, ''])
+								.allow(null, '')
 								.max(36)
 								.optional(),
 							name: Joi.string()
-								.allow([null, ''])
+								.allow(null, '')
 								.max(150)
 								.optional(),
 						})
@@ -514,45 +514,45 @@ const _update = Joi.object().keys({
 		.items(
 			Joi.object().keys({
 				language: Joi.string()
-					.allow([null, ''])
+					.allow(null, '')
 					.max(36)
 					.optional(),
 				comprehension: Joi.number()
 					.default(0)
-					.allow([null, ''])
+					.allow(null, '')
 					.optional(),
 				speak: Joi.number()
 					.default(0)
-					.allow([null, ''])
+					.allow(null, '')
 					.optional(),
 				write: Joi.number()
 					.default(0)
-					.allow([null, ''])
+					.allow(null, '')
 					.optional(),
 			}),
 		)
 		.optional(),
 	softwares: Joi.array()
 		.items(Joi.string())
-		.allow([null, '', []])
+		.allow(null, '')
 		.default([])
 		.optional(),
 	responsibilities: Joi.string()
 		.max(2000)
-		.allow([null, ''])
+		.allow(null, '')
 		.default(null)
 		.optional(),
 	requirements: Joi.string()
 		.max(2000)
-		.allow([null, ''])
+		.allow(null, '')
 		.default(null)
 		.optional(),
 	vehicle: Joi.string()
-		.valid(['indifferent', 'vehicle', 'motorcycle'])
+		.valid('indifferent', 'vehicle', 'motorcycle')
 		.default('indifferent')
 		.optional(),
 	type_license: Joi.string()
-		.valid(['indifferent', 'a', 'b', 'c'])
+		.valid('indifferent', 'a', 'b', 'c')
 		.default('indifferent')
 		.optional(),
 	benefits: Joi.array()
@@ -561,7 +561,7 @@ const _update = Joi.object().keys({
 		.optional(),
 	benefits_other: Joi.string()
 		.max(2000)
-		.allow([null, ''])
+		.allow(null, '')
 		.default(null)
 		.optional(),
 	salary: Joi.object()
@@ -582,26 +582,26 @@ const _update = Joi.object().keys({
 			}),
 			base_min: Joi.number()
 				.default(0.0)
-				.allow([null, ''])
+				.allow(null, '')
 				.optional(),
 			base_max: Joi.number()
 				.default(0.0)
-				.allow([null, ''])
+				.allow(null, '')
 				.optional(),
 			commission_min: Joi.number()
 				.default(0.0)
-				.allow([null, ''])
+				.allow(null, '')
 				.optional(),
 			commission_max: Joi.number()
 				.default(0.0)
-				.allow([null, ''])
+				.allow(null, '')
 				.optional(),
 			salary_min: Joi.number()
-				.allow([null, ''])
+				.allow(null, '')
 				.default(null)
 				.optional(),
 			salary_max: Joi.number()
-				.allow([null, ''])
+				.allow(null, '')
 				.default(null)
 				.optional(),
 		})
