@@ -24,12 +24,19 @@ const user_exists = (req, type = null) => new Promise((resolve, reject) => {
     .getAll(req.payload.email, {
       index: 'email'
     })
-    // .innerJoin(r.table('profiles'), (users, profiles) => {
-    //   return profiles('uid').eq(users('id'))
-    // })
-    // .map((doc) => {
-    //   return doc.merge().doc
-    // })
+    .innerJoin(r.table('profiles'), (users, profiles) => {
+      return profiles('uid').eq(users('id'))
+    })
+    .map((doc) => {
+      return doc.merge(() => {
+        return doc('left').merge({
+          profile: doc('right')
+        })
+      })
+    })
+    .without('left')
+    // .without(['password'])
+    .without('right')
     .run(conn, (err, results) => {
       if (err) return reject(Boom.badGateway())
 
