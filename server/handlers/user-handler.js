@@ -1,15 +1,29 @@
 'use strict';
 
-const query = require('../query');
-const bcrypt = require('bcrypt');
-const Boom = require('@hapi/boom');
-const helpers = require('../helpers');
-const _ = require('lodash');
-const JWT = require('jsonwebtoken');
-const config = require('../../config');
-const table = 'users';
+const query = require('../query')
+const bcrypt = require('bcrypt')
+const Boom = require('@hapi/boom')
+const helpers = require('../helpers')
+const _ = require('lodash')
+const JWT = require('jsonwebtoken')
+const config = require('../../config')
+const table = 'users'
 
 module.exports = {
+	
+	
+	/**
+	 | ---------------------------------------------------------------
+	 | VALIDATION HANDLER
+	 |
+	 | Used by hapi server to check the token (decoded)
+	 | & find user based on provided id.
+	 | ---------------------------------------------------------------
+	 | @param decoded
+	 | @param req
+	 | @returns {Promise<{credentials: {scope: *}, isValid: boolean}|{credentials: {}, isValid: boolean}>}
+	 */
+	
 	validate: async (decoded, req) => {
 		const user = await req.server.db.r.table('users').get(decoded.id).run(req.server.db.conn)
 		if (user) {
@@ -22,6 +36,19 @@ module.exports = {
 			return {isValid: false, credentials: {}}
 		}
 	},
+	
+	
+	/**
+	 | ---------------------------------------------------------------
+	 | LOGIN
+	 |
+	 | Server default login handler
+	 | ---------------------------------------------------------------
+	 | @param req
+	 | @param h
+	 | @returns {Promise<Boom<unknown>|*>}
+	 */
+	
 	login: async (req, h) => {
 		
 		/** Request user in db */
@@ -43,12 +70,16 @@ module.exports = {
 		/** Delete temporary avatar */
 		// delete profile.personal.avatar
 		
-		user.token = JWT.sign(
-			JSON.stringify(user),
-			config.get('/app/secret')
-		)
+		// user.token =
 		
-		user = {...user, profile}
+		user = {
+			...user,
+			profile,
+			token: JWT.sign(
+				JSON.stringify(user),
+				config.get('/app/secret')
+			)
+		}
 		
 		return h.response(user)
 	},
@@ -68,14 +99,10 @@ module.exports = {
 	},
 	add: async (req, h) => {
 		
-		// console.log("user add payload", req.payload)
-		
 		if (!await helpers.user_exists(req)) return Boom.notAcceptable('Account already exists')
 		
 		/** Hash the user password */
 		req.payload.password = bcrypt.hashSync(req.payload.password, 10, hash => hash)
-		
-		console.log('Password:', req.payload.password)
 		
 		/** Store new user */
 		const stored = await query.add(req, table)
@@ -83,7 +110,7 @@ module.exports = {
 		let profile = null
 		
 		/** Store new profile referenced to the user */
-		if(stored) {
+		if (stored) {
 			profile = await req.server.db.r.table('profiles').insert({uid: stored}).run(req.server.db.conn)
 		}
 		
