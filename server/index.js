@@ -1,21 +1,22 @@
-'use strict';
+'use strict'
 
-const Hapi = require('@hapi/hapi');
-const handlers = require('./handlers');
-const plugins = require('./plugins');
-const routes = require('./routes');
-const config = require('../config');
+const Hapi = require('@hapi/hapi')
+const handlers = require('./handlers')
+const plugins = require('./plugins')
+const config = require('../config')
+const Boom = require('@hapi/boom')
 // const Path = require('path')
 // const helpers = require('./queries/helpers')
 // const Fs = require('fs')
 
 /** Connect to DB */
-const r = require('rethinkdb');
+const r = require('rethinkdb')
+
 const ConnectiontDB = r.connect({
-  host: 'localhost',
-  port: 28015,
-  db: config.get('/db/name'),
-});
+	host: 'localhost',
+	port: 28015,
+	db: config.get('/db/name'),
+})
 
 const start = (host, port) => {
 	let server = Hapi.server({
@@ -66,18 +67,24 @@ const start = (host, port) => {
 		await server.auth.default('jwt')
 		
 		/** Read the token, then pass decoded with user data to handlers */
-		// await server.ext({
-		// 	type: 'onRequest',
-		// 	method: async (request, h) => {
-		// 		if (request.path !== '/api/v1/user' && request.path !== '/api/v1/login' && request.method !== 'post') {
-		// 			request.server.current = await handlers.system.add_scope(request)
-		// 		}
-		// 		return h.continue
-		// 	}
-		// })
+		await server.ext({
+			type: 'onRequest',
+			method: async (request, h) => {
+				
+				/** Reject if !token or malformed */
+				if (!request.headers.authorization) return Boom.unauthorized()
+				
+				/** Exclude paths from scope validation */
+				if (request.path !== '/api/v1/user' && request.path !== '/api/v1/login') {
+					request.server.current = await handlers.system.add_scope(request)
+				}
+				
+				return h.continue
+			}
+		})
 		
 		/** Register all routes */
-		await server.route(routes)
+		await server.route(require('./routes'))
 		
 		/** Start the server */
 		await server.start()
@@ -86,10 +93,10 @@ const start = (host, port) => {
 }
 
 process.on('unhandledRejection', err => {
-  console.log(err);
-  process.exit(1);
-});
+	console.log(err)
+	process.exit(1)
+})
 
 module.exports = {
-  start,
-};
+	start,
+}

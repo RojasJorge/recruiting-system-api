@@ -21,7 +21,7 @@
     "dotenv": "^6.2.0",
     "fs": "0.0.1-security",
     "handlebars": "^4.7.6",
-    "hapi-auth-jwt2": "^8.3.0",
+    "hapi-auth-jwt2": "^8.8.1",
     "hapi-require-https": "^5.0.0",
     "joi": "^17.2.1",
     "jsonwebtoken": "^8.5.1",

@@ -9,11 +9,11 @@ const schemas = require('../schemas')
  * ####################################################################
  */
 
-const Company = [{
+module.exports = [{
 	method: 'POST',
 	path: config.get('/api/base_path') + '/company',
-	handler: handlers.company.add,
 	options: {
+		handler: handlers.company.add,
 		auth: {
 			scope: ['admin', 'umana', 'company', 'candidate']
 		},
@@ -48,11 +48,11 @@ const Company = [{
 		}
 	}
 }, {
-	
+
 	/**
 	 * Company careers
 	 */
-	
+
 	method: 'POST',
 	path: config.get('/api/base_path') + '/career',
 	handler: handlers.company.career_add,
@@ -90,5 +90,3 @@ const Company = [{
 		}
 	}
 }]
-
-module.exports = Company

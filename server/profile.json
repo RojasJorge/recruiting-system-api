@@ -1,0 +1,87 @@
+{
+  "academic": {
+    "courses": [],
+    "professions": [],
+    "studies": []
+  },
+  "document": {
+    "documentFile": []
+  },
+  "economic": {
+    "allowed": false,
+    "currentSalary": 0,
+    "currentSalaryCurrency": "",
+    "debts": "",
+    "debtsRepeater": [],
+    "dependents": 0,
+    "desiredSalary": {
+      "base_max": 0,
+      "base_min": 0,
+      "currency": ""
+    },
+    "haveDebts": false,
+    "health": {
+      "disease": "",
+      "haveDisease": false,
+      "tattoOrPiercing": false,
+      "whatTattoOrPiercing": "",
+      "whtaTattoOrPiercing": false
+    },
+    "incomes": [],
+    "legal": {
+      "infonetOrOther": false,
+      "legalProblem": false,
+      "whatProblem": ""
+    },
+    "nit": 0,
+    "otherIncome": true,
+    "otherIncomeValue": 0,
+    "sourceIncome": "",
+    "typeHousing": "",
+    "vehicles": []
+  },
+  "lookingFor": {
+    "availability": "",
+    "relocate": "",
+    "travel": "",
+    "workplace": ""
+  },
+  "others": {
+    "languages": [],
+    "skills": [],
+    "softwares": []
+  },
+  "personal": {
+    "about": "",
+    "age": 0,
+    "avatar": "",
+    "birthday": "",
+    "children": 0,
+    "currentJobTitle": [],
+    "dpi": "",
+    "driversLicence": 0,
+    "driversLicenceType": [],
+    "email": "",
+    "gender": "",
+    "lastname": "",
+    "location": {
+      "address": "",
+      "city": "",
+      "country": "",
+      "province": "",
+      "zone": 0
+    },
+    "maritalStatus": "",
+    "name": "",
+    "nationality": "",
+    "nit": 0,
+    "passport": 0,
+    "phones": [],
+    "religion": ""
+  },
+  "working": {
+    "experiences": [],
+    "sindicate": false,
+    "whatSindicate": ""
+  }
+}

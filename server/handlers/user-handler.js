@@ -25,7 +25,10 @@ module.exports = {
 	 */
 	
 	validate: async (decoded, req) => {
-		const user = await req.server.db.r.table('users').get(decoded.id).run(req.server.db.conn)
+		const user = await req.server.db.r.table('users')
+			.get(JSON.parse(decoded.data).id)
+			.run(req.server.db.conn)
+		
 		if (user) {
 			return {
 				isValid: true, credentials: {
@@ -70,14 +73,13 @@ module.exports = {
 		/** Delete temporary avatar */
 		// delete profile.personal.avatar
 		
-		// user.token =
-		
 		user = {
 			...user,
 			profile,
 			token: JWT.sign(
-				JSON.stringify(user),
-				config.get('/app/secret')
+				{data: JSON.stringify(user)},
+				config.get('/app/secret'),
+				{expiresIn: '1d'}
 			)
 		}
 		
@@ -106,12 +108,16 @@ module.exports = {
 		
 		/** Store new user */
 		const stored = await query.add(req, table)
+		
+		/** Get default profile fields config */
+		const fields = require('../profile.json')
+		
 		/** Declare profile as null */
 		let profile = null
 		
 		/** Store new profile referenced to the user */
 		if (stored) {
-			profile = await req.server.db.r.table('profiles').insert({uid: stored}).run(req.server.db.conn)
+			profile = await req.server.db.r.table('profiles').insert({uid: stored, fields}).run(req.server.db.conn)
 		}
 		
 		/**

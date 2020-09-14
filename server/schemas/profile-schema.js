@@ -1,21 +1,26 @@
-'use strict';
+'use strict'
 
-const Joi = require('joi');
+const Joi = require('joi')
 
 const _add = Joi.object().keys({
 	steps: Joi.object(),
-});
+})
+
+const id = Joi.object({
+	uid: Joi.string().min(36).max(36).required(),
+	id: Joi.string().min(36).max(36).required(),
+})
 
 const update = Joi.object({
 	personal: Joi.object().keys({
-		avatar: Joi.string().optional().allow(null, ''),
-		name: Joi.string().min(3).max(100).required(),
-		lastname: Joi.string().min(3).max(100).required(),
-		currentJobTitle: Joi.string().min(3).max(100).required(),
-		nationality: Joi.string().min(3).max(100).required(),
-		birthday: Joi.date().required(),
-		age: Joi.number().required(),
-		gender: Joi.string().min(3).max(50).required(),
+		avatar: Joi.string().allow(null, '').optional(),
+		name: Joi.string().min(3).max(100).optional(),
+		lastname: Joi.string().min(3).max(100).optional(),
+		currentJobTitle: Joi.string().min(3).max(100).optional(),
+		nationality: Joi.string().min(3).max(100).optional(),
+		birthday: Joi.date().optional(),
+		age: Joi.number().optional(),
+		gender: Joi.string().min(3).max(50).optional(),
 		religion: Joi.string().min(3).max(100).optional(),
 		maritalStatus: Joi.string().min(3).max(100).optional(),
 		children: Joi.number().default(0).optional(),
@@ -23,7 +28,7 @@ const update = Joi.object({
 		passport: Joi.number().allow(null).optional(),
 		driversLicence: Joi.number().allow(null).optional(),
 		driversLicenceType: Joi.string().min(1).max(2).optional(),
-		email: Joi.string().email().required(),
+		email: Joi.string().email().optional(),
 		phones: Joi.array().items(
 			Joi.object().optional().keys({
 				area: Joi.number().optional(),
@@ -39,7 +44,7 @@ const update = Joi.object({
 			zone: Joi.number().max(50),
 		}).optional(),
 		about: Joi.string().max(2000).allow(null).optional(),
-	}),
+	}).optional(),
 	academic: Joi.object().keys({
 		profesions: Joi.array()
 			.items(
@@ -171,109 +176,9 @@ const update = Joi.object({
 		travel: Joi.boolean().optional(),
 		hiringAvailability: Joi.string().valid('Immediate', 'One week', 'Time of law for change of work', 'One month').optional(),
 	}),
-});
+})
 
 module.exports = {
 	_add,
 	update
-};
-
-/**
- * PROFILE SCHEME.....
- * ------------------------------------
- */
-
-// {
-//   personal: {
-//     avatar: null,
-//     passport: "",
-//     email: "",
-//     age: 0,
-//     birthday: "",
-//     name: "",
-//     lastname: "",
-//     nationality: "",
-//     gender: "",
-//     currentJobTitle: "",
-//     religion: "",
-//     maritalStatus: "",
-//     children: 0,
-//     dpi: "",
-//     driversLicence: "",
-//     driversLicenceType: "",
-//     phones: [],
-//     location: {
-//       country: "",
-//       province: "",
-//       city: "",
-//       address: "",
-//       zone: 0,
-//     },
-//     about: "",
-//   },
-//   academic: {
-//     studies: [],
-//     professions: [
-//       {
-//         provisionalId: "001",
-//         area: "",
-//         profesion: "",
-//         specialization: "",
-//         collegiate: "",
-//         collegiateNumber: 0,
-//         experience: 0,
-//       },
-//     ],
-//     courses: [],
-//   },
-//   working: {
-//     experiences: [],
-//   },
-//   document: {
-//     documentFile: [],
-//   },
-//   economic: {
-//     currentSalary: 0,
-//     currentSalaryCurrency: "",
-//     desiredSalary: {
-//       currency: "",
-//       base_min: 0,
-//       base_max: 0,
-//     },
-//     otherIncome: false,
-//     otherIncomeValue: 0,
-//     sourceIncome: "",
-//     nit: 0,
-//     debts: {
-//       haveDebts: "",
-//       whatCompany: "",
-//       amout: "",
-//       monthlyFee: "",
-//     },
-//     typeHousing: "",
-//     dependents: 0,
-//     vehicles: [],
-//     health: {
-//       haveDisease: false,
-//       disease: "",
-//       tattoOrPiercing: false,
-//     },
-//     legal: {
-//       legalProblem: false,
-//       whatProblem: "",
-//       infonetOrOther: false,
-//     },
-//     allowed: false,
-//   },
-//   others: {
-//     languages: [],
-//     softwares: [],
-//     skills: [],
-//   },
-//   lookingFor: {
-//     availability: "",
-//     workplace: "",
-//     relocate: false,
-//     travel: false,
-//   },
-// };
+}

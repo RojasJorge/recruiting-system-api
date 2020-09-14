@@ -73,16 +73,19 @@ const get = (req, table) => new Promise(async (resolve, reject) => {
 })
 
 const add = (req, table) => new Promise((resolve, reject) =>
-	req.server.db.r
-		.table(table)
-		.insert(req.payload)
-		.run(req.server.db.conn, (err, result) => {
-			if (err) return reject(Boom.badGateway())
-			
-			/** Return stored object id */
-			const id = result.generated_keys.shift()
-			return resolve(id)
-		})
+	{
+		console.log('Add:', req.payload)
+		req.server.db.r
+			.table(table)
+			.insert(req.payload)
+			.run(req.server.db.conn, (err, result) => {
+				if (err) return reject(Boom.badGateway())
+				
+				/** Return stored object id */
+				const id = result.generated_keys.shift()
+				return resolve(id)
+			})
+	}
 )
 
 const update = (req, table) => new Promise((resolve, reject) =>
