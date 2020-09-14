@@ -30,7 +30,6 @@ module.exports = {
 			.run(req.server.db.conn)
 		
 		if (user) {
-			console.log('validate:', user)
 			return {
 				isValid: true,
 				credentials: {

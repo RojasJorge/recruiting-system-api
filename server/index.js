@@ -75,9 +75,8 @@ const start = (host, port) => {
 				if (
 					request.headers.authorization &&
 					request.path !== '/api/v1/user' &&
-					request.path !== '/api/v1/login' &&
-					request.method === 'POST') {
-					console.log('onRequest:', await handlers.system.add_scope(request))
+					request.path !== '/api/v1/login') {
+					// console.log('onRequest:', await handlers.system.add_scope(request))
 					request.server.current = await handlers.system.add_scope(request)
 				}
 				

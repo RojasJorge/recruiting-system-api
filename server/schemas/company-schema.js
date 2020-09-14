@@ -66,6 +66,7 @@ const _add = Joi.object({
 })
 
 const _update = Joi.object({
+  uid: Joi.string().min(36).max(36).allow(null, '').optional(),
   avatar: Joi.string().max(50).optional(),
   name: Joi.string().min(4).max(150).optional(),
   status: Joi.boolean().optional(),
