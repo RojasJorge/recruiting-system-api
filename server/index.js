@@ -76,7 +76,8 @@ const start = (host, port) => {
 					request.headers.authorization &&
 					request.path !== '/api/v1/user' &&
 					request.path !== '/api/v1/login') {
-					// console.log('onRequest:', await handlers.system.add_scope(request))
+
+					/** Attach decoded user to the server instance */
 					request.server.current = await handlers.system.add_scope(request)
 				}
 				
