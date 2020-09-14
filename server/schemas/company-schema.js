@@ -60,7 +60,7 @@ const _add = Joi.object({
     latitude: Joi.string().min(6).max(20).allow(null, 0).default(0).optional(),
     longitude: Joi.string().min(6).max(20).allow(null, 0).default(0).optional()
   }).required(),
-	typeBusness: Joi.string().max(50).allow(null, '').optional(),
+	typeBusiness: Joi.string().max(50).allow(null, '').optional(),
 	nit: Joi.string().max(50).allow(null, '').optional(),
 	socialreason: Joi.string().max(50).allow(null, '').optional()
 })

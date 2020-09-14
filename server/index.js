@@ -71,11 +71,13 @@ const start = (host, port) => {
 			type: 'onRequest',
 			method: async (request, h) => {
 				
-				/** Reject if !token or malformed */
-				if (!request.headers.authorization) return Boom.unauthorized()
-				
 				/** Exclude paths from scope validation */
-				if (request.path !== '/api/v1/user' && request.path !== '/api/v1/login') {
+				if (
+					request.headers.authorization &&
+					request.path !== '/api/v1/user' &&
+					request.path !== '/api/v1/login' &&
+					request.method === 'POST') {
+					console.log('onRequest:', await handlers.system.add_scope(request))
 					request.server.current = await handlers.system.add_scope(request)
 				}
 				

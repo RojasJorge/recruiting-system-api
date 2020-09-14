@@ -30,9 +30,11 @@ module.exports = {
 			.run(req.server.db.conn)
 		
 		if (user) {
+			console.log('validate:', user)
 			return {
-				isValid: true, credentials: {
-					scope: user.scope
+				isValid: true,
+				credentials: {
+					scope: user.scope[0]
 				}
 			}
 		} else {

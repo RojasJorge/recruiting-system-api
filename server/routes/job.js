@@ -15,7 +15,7 @@ const Job = [{
   handler: handlers.job.add,
   options: {
     auth: {
-      scope: ['admin', 'root', 'company']
+      scope: ['admin', 'umana', 'company', 'candidate']
     },
     validate: {
       payload: schemas.job._add
@@ -27,7 +27,7 @@ const Job = [{
   handler: handlers.job.get,
   options: {
     auth: {
-      scope: ['admin', 'root', 'candidate', 'company']
+      scope: ['admin', 'umana', 'candidate', 'company']
     },
     validate: {
       query: schemas.job._get,
@@ -40,7 +40,7 @@ const Job = [{
   handler: handlers.job.update,
   options: {
     auth: {
-      scope: ['admin', 'root', 'company']
+      scope: ['admin', 'umana', 'company', 'candidate']
     },
     validate: {
       payload: schemas.job._update,
