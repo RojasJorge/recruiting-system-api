@@ -58,6 +58,8 @@ module.exports = {
 		/** Request user in db */
 		const found = await helpers.user_exists(req, 'login')
 		
+		console.log('Found:', found)
+		
 		/** Reject if !user */
 		if (_.isEmpty(found)) return Boom.unauthorized()
 		

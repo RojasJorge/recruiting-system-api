@@ -18,6 +18,8 @@ const user_exists = (req, type = null) => new Promise((resolve, reject) => {
 		}
 	} = req
 	
+	console.log('user_exists:', req.payload)
+	
 	/** Find user by email */
 	r
 		.table('users')
