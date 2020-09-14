@@ -9,9 +9,7 @@ const get = (req, table) => new Promise(async (resolve, reject) => {
 	/**
 	 * Switch controller to fetch only user's contents
 	 */
-	// if(_.filter(req.server.current.scopes, o => o !== 'umana')) {
-	// 	await get_own_contents(req)
-	// }
+	const cUser = JSON.parse(req.server.current.data)
 	
 	/** Extract values from request */
 	const {
@@ -52,7 +50,12 @@ const get = (req, table) => new Promise(async (resolve, reject) => {
 		const start = ((parseInt(page, 10) * parseInt(offset, 10)) - parseInt(offset, 10))
 		const end = (start + parseInt(offset, 10))
 		
-		Query = Query.filter(req.query || {}).slice(start, end)
+		/** Switch method if module is 'company' */
+		if (table === 'companies') {
+			Query = Query.getAll(cUser.id, {index: 'uid'}).filter(req.query || {}).slice(start, end)
+		} else {
+			Query = Query.filter(req.query || {}).slice(start, end)
+		}
 	}
 	
 	Query.run(conn, (err, results) => {
