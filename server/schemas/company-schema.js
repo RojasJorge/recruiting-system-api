@@ -64,8 +64,8 @@ const _add = Joi.object({
 		province: Joi.string().max(50).allow(null, '').optional(),
 		city: Joi.string().max(50).allow(null, '').optional(),
 		zone: Joi.number().max(25).allow(null, '').optional(),
-		latitude: Joi.number().min(6).max(20).allow(null, 0).default(0).optional(),
-		longitude: Joi.number().min(6).max(20).allow(null, 0).default(0).optional()
+		latitude: Joi.number().min(0).max(20).allow(null, 0).default(0).optional(),
+		longitude: Joi.number().min(0).max(20).allow(null, 0).default(0).optional()
 	}).required(),
 	typeBusiness: Joi.string().max(50).allow(null, '').optional(),
 	nit: Joi.string().max(50).allow(null, '').optional(),
@@ -151,12 +151,12 @@ const _update = Joi.object({
 				.allow(null, '')
 				.optional(),
 			latitude: Joi.number()
-				.min(6)
+				.min(0)
 				.max(20)
 				.allow(null, '')
 				.optional(),
 			longitude: Joi.number()
-				.min(6)
+				.min(0)
 				.max(20)
 				.allow(null, '')
 				.optional(),
