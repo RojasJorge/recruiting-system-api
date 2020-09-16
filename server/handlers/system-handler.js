@@ -50,8 +50,13 @@ const config = require('../../config')
  * Check user scope & adds restrictions
  */
 const add_scope = req =>
-	new Promise(async (resolve, reject) =>
-		resolve(await JWT.verify(req.headers.authorization, config.get('/app/secret'))))
+	new Promise(async (resolve, reject) => {
+		const decoded = JWT.verify(req.headers.authorization, config.get('/app/secret'))
+		const user = await req.server.db.r.table('users').get(JSON.parse(decoded.data).id).run(req.server.db.conn)
+		
+		if (!user) return reject(Boom.unauthorized())
+		return resolve(decoded)
+	})
 
 module.exports = {
 	add_scope
