@@ -56,17 +56,77 @@ const user_exists = (req, type = null) => new Promise((resolve, reject) => {
  * Get profiles
  */
 
-const get_profiles = ({server: {db: {r, conn}}, params: {id, uid}}, table) =>
+const get_profiles = ({server: {db: {r, conn}}, params: {id}}, table, uid) =>
 	new Promise((resolve, reject) =>
 		r.table(table)
 			.get(id)
 			.run(conn, (err, profile) => {
 				if (err) return reject(Boom.badGateway())
 				
-				if (!profile || profile.uid !== uid) return reject(Boom.notFound())
+				if (!profile || profile.uid !== uid) return reject(Boom.forbidden())
 				return resolve(profile)
 			})
 	)
+
+/**
+ * Get jobs
+ */
+
+const get_jobs = (req, table) => new Promise((resolve, reject) => {
+	
+	const {
+		query: {
+			company_id,
+			page,
+			offset
+		},
+		server: {
+			db: {
+				r,
+				conn
+			}
+		}
+	} = req
+	
+	delete req.query.page
+	delete req.query.offset
+	
+	/** Apply pagination */
+	const start = ((parseInt(page, 10) * parseInt(offset, 10)) - parseInt(offset, 10))
+	const end = (start + parseInt(offset, 10))
+	
+	let Query = r.table(table)
+	
+	if (company_id) {
+		Query = Query.getAll(company_id, {
+			index: 'company_id'
+		})
+	}
+	
+	Query.innerJoin(r.table('companies'), function (jobs, companies) {
+		return jobs('company_id').eq(companies('id'))
+	}).map(doc => {
+		return doc.merge(() => {
+			return doc('left').merge({
+				company: {
+					name: doc('right')('name'),
+					location: doc('right')('location')
+				}
+			})
+		})
+	})
+		.without('left')
+		.without('right')
+		.slice(start, end)
+		.run(conn, (err, collection) => {
+			if (err) return reject(Boom.badGateway())
+			
+			collection.toArray((err, jobs) => {
+				if (err) return reject(Boom.badGateway())
+				return resolve(jobs)
+			})
+		})
+})
 
 
 /**
@@ -79,5 +139,6 @@ const verify_scope = _ =>
 
 module.exports = {
 	user_exists,
-	get_profiles
+	get_profiles,
+	get_jobs
 }

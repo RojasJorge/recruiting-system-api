@@ -6,9 +6,9 @@ const schemas = require('../schemas')
 
 module.exports = [{
 	method: 'PUT',
-	path: config.get('/api/base_path') + '/profile/{uid}/{id}',
-	handler: handlers.profile.update,
+	path: config.get('/api/base_path') + '/profile/{id}',
 	options: {
+		handler: handlers.profile.update,
 		auth: {
 			scope: ['umana', 'admin', 'company', 'candidate']
 		},

@@ -7,9 +7,11 @@ const table = 'profiles'
 
 module.exports = {
 	update: async (req, h) => {
-		if(req.params.uid !== JSON.parse(req.server.current.data).id) return Boom.forbidden()
-		const profile = await helpers.get_profiles(req, table)
 		
+		/** Check for profile and rejects if not. */
+		await helpers.get_profiles(req, table, JSON.parse(req.server.current.data).id /** Current user id from token */)
+		
+		/** Exec query */
 		return h.response(await query.update(req, table))
 	}
 }
