@@ -190,6 +190,31 @@ const _add = Joi.object().keys({
         .optional(),
     })
     .optional(),
+  branch: Joi.object()
+    .keys({
+      address: Joi.string()
+        .max(250)
+        .allow(null, '')
+        .default(null)
+        .optional(),
+      zone: Joi.number()
+        .default(0)
+        .allow(null, '')
+        .optional(),
+      country: Joi.string()
+        .max(100)
+        .default('Guatemala')
+        .optional(),
+      province: Joi.string()
+        .max(100)
+        .default('Guatemala')
+        .optional(),
+      city: Joi.string()
+        .max(100)
+        .default('Guatemala')
+        .optional(),
+    })
+    .optional(),
   gender: Joi.string()
     .valid('male', 'female', 'indifferent')
     .default('indifferent')
@@ -360,20 +385,56 @@ const _add = Joi.object().keys({
   positionalt: Joi.string()
     .optional()
     .allow(null, ''),
-  positionmaching: Joi.array()
+  postionmatching: Joi.array()
     .items(Joi.string())
     .default([])
     .optional(),
+  businessturn: Joi.string()
+    .optional()
+    .allow(null, ''),
+  isBranch: Joi.boolean()
+    .default(false)
+    .optional(),
+  locationState: Joi.string()
+    .optional()
+    .default('public')
+    .valid('public', 'private')
+    .allow('', null),
+  experience: Joi.number()
+    .optional()
+    .allow('', null),
+  interviewPlace: Joi.string()
+    .optional()
+    .valid('branch', 'office')
+    .allow('', null),
 });
 
 const _update = Joi.object().keys({
+  interviewPlace: Joi.string()
+    .optional()
+    .valid('branch', 'office')
+    .allow('', null),
+  experience: Joi.number()
+    .optional()
+    .allow('', null),
+  locationState: Joi.string()
+    .optional()
+    .default('public')
+    .valid('public', 'private')
+    .allow('', null),
+  isBranch: Joi.boolean()
+    .default(false)
+    .optional(),
+  businessturn: Joi.string()
+    .optional()
+    .allow(null, ''),
   jobposition: Joi.string()
     .optional()
     .allow(null, ''),
   positionalt: Joi.string()
     .optional()
     .allow(null, ''),
-  positionmaching: Joi.array()
+  postionmatching: Joi.array()
     .items(Joi.string())
     .default([])
     .optional(),
@@ -453,6 +514,31 @@ const _update = Joi.object().keys({
     .default('in-location')
     .optional(),
   location: Joi.object()
+    .keys({
+      address: Joi.string()
+        .max(250)
+        .allow(null, '')
+        .default(null)
+        .optional(),
+      zone: Joi.number()
+        .default(0)
+        .allow(null, '')
+        .optional(),
+      country: Joi.string()
+        .max(100)
+        .default('Guatemala')
+        .optional(),
+      province: Joi.string()
+        .max(100)
+        .default('Guatemala')
+        .optional(),
+      city: Joi.string()
+        .max(100)
+        .default('Guatemala')
+        .optional(),
+    })
+    .optional(),
+  branch: Joi.object()
     .keys({
       address: Joi.string()
         .max(250)
