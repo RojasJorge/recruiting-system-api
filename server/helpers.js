@@ -3,6 +3,7 @@
 const Promise = require('bluebird')
 const Boom = require('@hapi/boom')
 const _ = require('lodash')
+const query = require('./query')
 
 /**
  * Add user module tools
@@ -18,7 +19,7 @@ const user_exists = (req, type = null) => new Promise((resolve, reject) => {
 		}
 	} = req
 	
-	console.log('user_exists:', req.payload)
+	// console.log('user_exists:', req.payload)
 	
 	/** Find user by email */
 	r
@@ -72,9 +73,12 @@ const get_profiles = ({server: {db: {r, conn}}, params: {id}}, table, uid) =>
  * Get jobs
  */
 
-const get_jobs = (req, table) => new Promise((resolve, reject) => {
+const get_jobs = (req, table) => new Promise(async (resolve, reject) => {
 	
 	const {
+		params: {
+			id
+		},
 		query: {
 			company_id,
 			page,
@@ -88,21 +92,28 @@ const get_jobs = (req, table) => new Promise((resolve, reject) => {
 		}
 	} = req
 	
+	/** Redirects method -> simple get */
+	if (id) {
+		return resolve(await query.get(req, table))
+	}
+	
 	delete req.query.page
 	delete req.query.offset
+	delete req.query.company_id
 	
 	/** Apply pagination */
 	const start = ((parseInt(page, 10) * parseInt(offset, 10)) - parseInt(offset, 10))
 	const end = (start + parseInt(offset, 10))
 	
 	let Query = r.table(table)
+	const total = await Query.filter(req.query || {}).count().run(conn)
 	
 	if (company_id) {
 		Query = Query.getAll(company_id, {
 			index: 'company_id'
 		})
 	}
-	
+
 	Query.innerJoin(r.table('companies'), function (jobs, companies) {
 		return jobs('company_id').eq(companies('id'))
 	}).map(doc => {
@@ -121,9 +132,9 @@ const get_jobs = (req, table) => new Promise((resolve, reject) => {
 		.run(conn, (err, collection) => {
 			if (err) return reject(Boom.badGateway())
 			
-			collection.toArray((err, jobs) => {
+			collection.toArray((err, items) => {
 				if (err) return reject(Boom.badGateway())
-				return resolve(jobs)
+				return resolve({items, total})
 			})
 		})
 })
