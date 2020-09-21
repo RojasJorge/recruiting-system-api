@@ -445,10 +445,6 @@ const _update = Joi.object().keys({
     .max(50)
     .allow(null, '')
     .optional(),
-  company_id: Joi.string()
-    .min(6)
-    .max(36)
-    .required(),
   company_state: Joi.string()
     .valid('public', 'confidential')
     .default('public')
@@ -461,7 +457,7 @@ const _update = Joi.object().keys({
   title: Joi.string()
     .min(6)
     .max(250)
-    .required(),
+    .optional(),
   availability: Joi.string()
     .valid('freelance', 'practice', 'temporal', 'full', 'part', 'vacacionista')
     .default('temporal')
