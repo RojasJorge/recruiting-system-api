@@ -26,9 +26,7 @@ const Job = [{
   path: config.get('/api/base_path') + '/job/{id?}',
   handler: handlers.job.get,
   options: {
-    auth: {
-      scope: ['admin', 'umana', 'candidate', 'company']
-    },
+    auth: false,
     validate: {
       query: schemas.job._get,
       params: schemas.job._get_id

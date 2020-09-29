@@ -67,9 +67,7 @@ module.exports = [{
 	path: config.get('/api/base_path') + '/career',
 	handler: handlers.company.career_get,
 	options: {
-		auth: {
-			scope: ['admin', 'umana', 'company', 'candidate']
-		},
+		auth: false,
 		validate: {
 			query: schemas.company._career_get
 		}

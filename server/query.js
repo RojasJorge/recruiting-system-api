@@ -9,7 +9,12 @@ const get = (req, table) => new Promise(async (resolve, reject) => {
 	/**
 	 * Switch controller to fetch only user's contents
 	 */
-	const cUser = JSON.parse(req.server.current.data)
+	
+	let cUser
+	
+	if(req.server.current) {
+		cUser = JSON.parse(req.server.current.data)
+	}
 	
 	/** Extract values from request */
 	const {

@@ -15,7 +15,6 @@ const Boom = require('@hapi/boom')
 const search = async (req, h) =>
 	h.response(await eval(req.payload.query.name)(req))
 
-
 const last_companies = ({server: {db: {r, conn}}, payload: {type, query}}) =>
 	new Promise(async (resolve, reject) => {
 		let Query = r.table(type)
