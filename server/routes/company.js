@@ -57,9 +57,7 @@ module.exports = [{
 	path: config.get('/api/base_path') + '/career',
 	handler: handlers.company.career_add,
 	options: {
-		auth: {
-			scope: ['admin', 'umana', 'company', 'candidate']
-		},
+		auth: false,
 		validate: {
 			payload: schemas.company._career_add
 		}

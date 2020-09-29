@@ -26,9 +26,7 @@ const AcademicLevel = [{
 	path: config.get('/api/base_path') + '/academic-level/{id?}',
 	handler: handlers.academic_level.get,
 	options: {
-		auth: {
-			scope: ['admin', 'umana', 'candidate', 'company']
-		},
+		auth: false,
 		validate: {
 			query: schemas.academic_level._get,
 			params: schemas.academic_level._get_id

@@ -25,6 +25,7 @@ module.exports = {
 	 */
 	
 	validate: async (decoded, req) => {
+		console.log('/server/handlers/user-handler.js: decoded:', decoded)
 		const user = await req.server.db.r.table('users')
 			.get(JSON.parse(decoded.data).id)
 			.run(req.server.db.conn)
@@ -57,8 +58,6 @@ module.exports = {
 		
 		/** Request user in db */
 		const found = await helpers.user_exists(req, 'login')
-		
-		console.log('Found:', found)
 		
 		/** Reject if !user */
 		if (_.isEmpty(found)) return Boom.unauthorized()

@@ -13,7 +13,7 @@ const update = Joi.object({
 			name: Joi.string().min(3).max(100).optional(),
 			lastname: Joi.string().min(3).max(100).optional(),
 			currentJobTitle: Joi.string().min(3).max(100).optional(),
-			nationality: Joi.string().min(3).max(100).optional(),
+			nationality: Joi.string().min(2).max(100).optional(),
 			birthday: Joi.date().optional(),
 			age: Joi.number().optional(),
 			gender: Joi.string().min(3).max(50).optional(),
@@ -21,14 +21,15 @@ const update = Joi.object({
 			maritalStatus: Joi.string().min(3).max(100).optional(),
 			children: Joi.number().optional(),
 			dpi: Joi.string().optional(),
-			passport: Joi.number().allow(null).optional(),
-			driversLicence: Joi.number().allow(null).optional(),
-			driversLicenceType: Joi.string().min(1).max(2).optional(),
+			nit: Joi.string().optional(),
+			passport: Joi.number().allow(null, 'undefined').optional(),
+			driversLicence: Joi.number().allow(null, 0).optional(),
+			driversLicenceType: Joi.array().items(Joi.string()).optional(),
 			email: Joi.string().email().optional(),
 			phones: Joi.array().items(
 				Joi.object().optional().keys({
 					area: Joi.number().optional(),
-					number: Joi.number().optional(),
+					number: Joi.string().max(20).optional(),
 					type: Joi.string().optional(),
 				}),
 			),
@@ -42,27 +43,30 @@ const update = Joi.object({
 			about: Joi.string().max(2000).allow(null).optional(),
 		}).optional(),
 		academic: Joi.object().keys({
-			profesions: Joi.array()
-				.items(
-					Joi.object({
-						area: Joi.string().max(100),
-						profesion: Joi.string().max(100),
-						specialization: Joi.string().max(100),
-						collegiate: Joi.string().max(100),
-						collegiateNumber: Joi.number(),
-						experience: Joi.number(),
-					}),
-				).optional(),
+			// profesions: Joi.array()
+			// 	.items(
+			// 		Joi.object({
+			// 			area: Joi.string().max(100),
+			// 			profesion: Joi.string().max(100),
+			// 			specialization: Joi.string().max(100),
+			// 			collegiate: Joi.string().max(100),
+			// 			collegiateNumber: Joi.number(),
+			// 			experience: Joi.number(),
+			// 		}),
+			// 	).optional(),
 			studies: Joi.array()
 				.items(
 					Joi.object({
-						school: Joi.string().max(100),
-						academicLevel: Joi.string().max(100).optional().allow(null, ''),
+						// id: Joi.number().required(),
+						// _id: Joi.string().required(),
+						establishment: Joi.string().max(100).optional(),
+						academicLevel: Joi.string().max(100).optional().allow(null, '').optional(),
 						specialization: Joi.string().max(100).optional().allow(null, ''),
 						dateInit: Joi.date().optional().allow(null, ''),
 						dateEnd: Joi.date().optional().allow(null, ''),
-						studyNow: Joi.boolean(),
-						schedule: Joi.string().valid('daytime', 'evening', 'night', 'weekends', 'inline'),
+						currently: Joi.boolean().default(false).optional(),
+						collegiate: Joi.string().max(100),
+						// schedule: Joi.string().valid('daytime', 'evening', 'night', 'weekends', 'inline'),
 					}),
 				).optional(),
 			courses: Joi.array()
@@ -70,8 +74,8 @@ const update = Joi.object({
 					Joi.object({
 						establishment: Joi.string().max(100),
 						titleCourse: Joi.string().max(100).optional().allow(null, ''),
-						place: Joi.string().max(100).optional().allow(null, ''),
-						year: Joi.number().optional(),
+						country: Joi.string().max(100).optional().allow(null, ''),
+						year: Joi.date().optional(),
 					}),
 				).optional(),
 		}),
@@ -164,7 +168,6 @@ const update = Joi.object({
 				}).optional(),
 			allowed: Joi.boolean(),
 		}),
-		
 		lookingFor: Joi.object().keys({
 			availability: Joi.string().optional(),
 			workplace: Joi.string().optional(),

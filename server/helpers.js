@@ -64,7 +64,8 @@ const get_profiles = ({server: {db: {r, conn}}, params: {id}}, table, uid) =>
 			.run(conn, (err, profile) => {
 				if (err) return reject(Boom.badGateway())
 				
-				if (!profile || profile.uid !== uid) return reject(Boom.forbidden())
+				if (!profile || profile.uid !== uid) return reject(Boom.notFound())
+				
 				return resolve(profile)
 			})
 	)
