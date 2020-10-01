@@ -133,26 +133,26 @@ const update = Joi.object({
 				})
 				.optional(),
 			otherIncome: Joi.boolean().optional(),
-			otherIncomeValue: Joi.string().optional(),
-			sourceIncome: Joi.string().optional(),
-			nit: Joi.number().optional(),
-			debts: Joi.object()
-				.keys({
-					haveDebts: Joi.boolean().optional(),
+			otherIncomeValue: Joi.number().default(0).optional(),
+			sourceIncome: Joi.string().default('').optional(),
+			// nit: Joi.number().optional(),
+			debts: Joi.array().items(
+				Joi.object().keys({
 					whatCompany: Joi.string().optional(),
 					amount: Joi.number().optional(),
 					monthlyFee: Joi.number().optional(),
-				}).optional(),
+				})
+			),
 			typeHousing: Joi.string().valid('own', 'family', 'rented').optional(),
 			dependents: Joi.number().optional(),
-			vehicle: Joi.array()
+			vehicles: Joi.array()
 				.items(
 					Joi.object().keys({
 						type: Joi.string().optional(),
 						brand: Joi.string().optional(),
 						year: Joi.number().optional(),
 						debts: Joi.boolean().optional(),
-						amount: Joi.string().optional(),
+						amount: Joi.number().optional(),
 					}),
 				).optional(),
 			health: Joi.object()
