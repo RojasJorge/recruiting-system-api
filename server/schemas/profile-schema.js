@@ -130,6 +130,8 @@ const update = Joi.object({
 					currency: Joi.string().default('GTQ'),
 					baseMin: Joi.number(),
 					baseMax: Joi.number(),
+					base_min: Joi.number().default(0).optional(),
+					base_max: Joi.number().default(0).optional(),
 				})
 				.optional(),
 			otherIncome: Joi.boolean().optional(),
@@ -157,14 +159,16 @@ const update = Joi.object({
 				).optional(),
 			health: Joi.object()
 				.keys({
-					haveDisease: Joi.boolean().optional(),
-					disease: Joi.string().optional(),
-					tattoOrPiercing: Joi.boolean().optional(),
+					haveDisease: Joi.boolean().default(false).optional(),
+					disease: Joi.string().default('').allow('').optional(),
+					tattoOrPiercing: Joi.boolean().default(false).optional(),
+					whatTattoOrPiercing: Joi.string().default('').allow('').optional(),
+					whtaTattoOrPiercing: Joi.boolean().default(false).allow('').optional()
 				}).optional(),
 			legal: Joi.object()
 				.keys({
 					legalProblem: Joi.boolean().optional(),
-					whatProblem: Joi.string().max(800).optional(),
+					whatProblem: Joi.string().max(800).allow('').optional(),
 					infonetOrOther: Joi.boolean().optional(),
 				}).optional(),
 			allowed: Joi.boolean(),
