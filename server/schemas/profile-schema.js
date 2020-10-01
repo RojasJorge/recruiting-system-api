@@ -80,18 +80,19 @@ const update = Joi.object({
 				).optional(),
 		}),
 		working: Joi.object().keys({
-			experience: Joi.array().items(
+			experiences: Joi.array().items(
 				Joi.object().keys({
 					jobTitle: Joi.string().max(100),
 					area: Joi.string().max(100),
-					profesion: Joi.string().max(100),
-					specialization: Joi.string().max(100),
+					currency: Joi.string().max(8),
+					amount: Joi.number(),
 					company: Joi.string().max(100),
+					companyPhone: Joi.string().max(15),
 					specializationCompany: Joi.string().max(100),
-					workingNow: Joi.boolean(),
-					dateInit: Joi.date(),
-					dateEnd: Joi.date(),
-					imediatiBoss: Joi.array()
+					workingNow: Joi.boolean().default(false).optional(),
+					dateInit: Joi.date().default(new Date()).optional(),
+					dateEnd: Joi.date().default(new Date()).optional(),
+					immediateBoss: Joi.array()
 						.items(
 							Joi.object().keys({
 								name: Joi.string().max(100),
@@ -101,12 +102,12 @@ const update = Joi.object({
 						)
 						.optional(),
 					dependents: Joi.boolean(),
-					dependentsNumber: Joi.number(),
+					totalDependents: Joi.number().default(0).optional(),
 					whyResignation: Joi.string().max(800),
 				}),
 			),
-			sindicate: Joi.boolean().optional(),
-			whatSindicate: Joi.string().max(200).optional(),
+			sindicate: Joi.boolean().default(false).optional(),
+			whatSindicate: Joi.string().max(200).default('').optional(),
 		}),
 		others: Joi.object().keys({
 			languages: Joi.array()
@@ -127,8 +128,8 @@ const update = Joi.object({
 			desiredSalary: Joi.object()
 				.keys({
 					currency: Joi.string().default('GTQ'),
-					base_min: Joi.number(),
-					base_max: Joi.number(),
+					baseMin: Joi.number(),
+					baseMax: Joi.number(),
 				})
 				.optional(),
 			otherIncome: Joi.boolean().optional(),
