@@ -115,7 +115,7 @@ const get_jobs = (req, table) => new Promise(async (resolve, reject) => {
 		})
 	}
 
-	Query.innerJoin(r.table('companies'), function (jobs, companies) {
+	Query.filter(req.query || {}).innerJoin(r.table('companies'), function (jobs, companies) {
 		return jobs('company_id').eq(companies('id'))
 	}).map(doc => {
 		return doc.merge(() => {

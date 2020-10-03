@@ -8,6 +8,8 @@ const _get = Joi.object().keys({
     .min(6)
     .max(36)
     .optional(),
+  jobposition: Joi.string().allow('', null).optional(),
+  title: Joi.string().max(60).allow('', null).optional(),
   company_id: Joi.string()
     .min(6)
     .max(36)
