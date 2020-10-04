@@ -19,25 +19,31 @@ const _get = Joi.object().keys({
   availability: Joi.string()
     .valid('freelance', 'practice', 'temporal', 'full', 'part')
     .optional(),
-  location: Joi.object()
-    .keys({
-      address: Joi.string()
-        .max(250)
-        .optional(),
-      zone: Joi.number()
-        .default(0)
-        .optional(),
-      country: Joi.string()
-        .max(100)
-        .optional(),
-      province: Joi.string()
-        .max(100)
-        .optional(),
-      city: Joi.string()
-        .max(100)
-        .optional(),
-    })
+  province: Joi.string()
+    .max(100)
     .optional(),
+  city: Joi.string()
+    .max(100)
+    .optional(),
+  // location: Joi.object()
+  //   .keys({
+  //     address: Joi.string()
+  //       .max(250)
+  //       .optional(),
+  //     zone: Joi.number()
+  //       .default(0)
+  //       .optional(),
+  //     country: Joi.string()
+  //       .max(100)
+  //       .optional(),
+  //     province: Joi.string()
+  //       .max(100)
+  //       .optional(),
+  //     city: Joi.string()
+  //       .max(100)
+  //       .optional(),
+  //   })
+  //   .optional(),
   salary: Joi.object()
     .keys({
       min: Joi.number()

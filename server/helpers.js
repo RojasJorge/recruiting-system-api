@@ -76,6 +76,8 @@ const get_profiles = ({server: {db: {r, conn}}, params: {id}}, table, uid) =>
 
 const get_jobs = (req, table) => new Promise(async (resolve, reject) => {
 	
+	console.log('Fields job helper:', req.query)
+	
 	const {
 		params: {
 			id
@@ -114,8 +116,27 @@ const get_jobs = (req, table) => new Promise(async (resolve, reject) => {
 			index: 'company_id'
 		})
 	}
-
-	Query.filter(req.query || {}).innerJoin(r.table('companies'), function (jobs, companies) {
+	
+	if (!_.isEmpty(req.query)) {
+		Query = Query.filter(doc => {
+			
+			const jobposition = _.toLower(req.query.jobposition)
+			const title = _.toLower(req.query.title)
+			const province = _.toLower(req.query.province)
+			const city = _.toLower(req.query.city)
+			
+			let pipe = doc('id').downcase().match(`(?i)^${jobposition || title}$`)
+			
+			if (jobposition) pipe = pipe.or(doc('jobposition').eq(jobposition))
+			if (title) pipe = pipe.and(doc('title').downcase().match(title))
+			if (province) pipe = pipe.and(doc('location')('province').downcase().match(province))
+			if (city) pipe = pipe.and(doc('location')('city').downcase().match(city))
+			
+			return pipe
+		})
+	}
+	
+	Query.innerJoin(r.table('companies'), function (jobs, companies) {
 		return jobs('company_id').eq(companies('id'))
 	}).map(doc => {
 		return doc.merge(() => {
