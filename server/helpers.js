@@ -117,24 +117,10 @@ const get_jobs = (req, table) => new Promise(async (resolve, reject) => {
 		})
 	}
 	
-	if (!_.isEmpty(req.query)) {
-		Query = Query.filter(doc => {
-			
-			const jobposition = _.toLower(req.query.jobposition)
-			const title = _.toLower(req.query.title)
-			const province = _.toLower(req.query.province)
-			const city = _.toLower(req.query.city)
-			
-			let pipe = doc('id').downcase().match(`(?i)^${jobposition || title}$`)
-			
-			if (jobposition) pipe = pipe.or(doc('jobposition').eq(jobposition))
-			if (title) pipe = pipe.or(doc('title').downcase().match(title))
-			if (province) pipe = pipe.and(doc('location')('province').downcase().match(province))
-			if (city) pipe = pipe.and(doc('location')('city').downcase().match(city))
-			
-			return pipe
-		})
-	}
+	/**
+	 * This returns rows filtered
+	 */
+	if (!_.isEmpty(req.query)) Query = Query.filter(doc => map_filters(req, doc))
 	
 	Query.innerJoin(r.table('companies'), function (jobs, companies) {
 		return jobs('company_id').eq(companies('id'))
@@ -161,6 +147,63 @@ const get_jobs = (req, table) => new Promise(async (resolve, reject) => {
 		})
 })
 
+/** Map filters */
+const map_filters = (req, doc) => {
+	const jobposition = _.toLower(req.query.jobposition)
+	const title = _.toLower(req.query.title)
+	const province = _.toLower(req.query.province)
+	const city = _.toLower(req.query.city)
+	
+	/**
+	 * Validate ir order
+	 */
+	
+	if(jobposition && !title && !province && !city)
+		return doc('jobposition').downcase().eq(jobposition)
+	
+	if(jobposition && title && !province && !city)
+		return doc('jobposition').downcase().eq(jobposition)
+			.and(doc('title').downcase().match(title))
+	
+	if(jobposition && title && province && !city)
+		return doc('jobposition').downcase().eq(jobposition)
+			.and(doc('title').downcase().match(title))
+			.and(doc('location')('province').downcase().eq(province))
+	
+	if(jobposition && title && province && city)
+		return doc('jobposition').downcase().eq(jobposition)
+			.and(doc('title').downcase().match(title))
+			.and(doc('location')('province').downcase().eq(province))
+			.and(doc('location')('city').downcase().eq(city))
+	
+	/**
+	 * Validate single
+	 */
+	if(!jobposition && title && !province && !city)
+		return doc('title').downcase().match(title)
+	
+	if(!jobposition && !title && province && !city)
+		return doc('location')('province').downcase().eq(province)
+	
+	if(!jobposition && !title && province && city)
+		return doc('location')('province').downcase().eq(province)
+			.and(doc('location')('city').downcase().eq(city))
+	
+	if(jobposition && !title && province && !city)
+		return doc('title').downcase().match(title)
+			.and(doc('location')('province').downcase().eq(province))
+	
+	if(jobposition && !title && province && !city)
+		return doc('jobposition').downcase().eq(jobposition)
+			.and(doc('location')('province').downcase().eq(province))
+	
+	if(jobposition && !title && province && city)
+		return doc('jobposition').downcase().eq(jobposition)
+			.and(doc('location')('province').downcase().eq(province))
+			.and(doc('location')('city').downcase().eq(city))
+	
+	return {}
+}
 
 /**
  * Watch user scope to show/edit contents
