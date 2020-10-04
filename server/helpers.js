@@ -128,7 +128,7 @@ const get_jobs = (req, table) => new Promise(async (resolve, reject) => {
 			let pipe = doc('id').downcase().match(`(?i)^${jobposition || title}$`)
 			
 			if (jobposition) pipe = pipe.or(doc('jobposition').eq(jobposition))
-			if (title) pipe = pipe.and(doc('title').downcase().match(title))
+			if (title) pipe = pipe.or(doc('title').downcase().match(title))
 			if (province) pipe = pipe.and(doc('location')('province').downcase().match(province))
 			if (city) pipe = pipe.and(doc('location')('city').downcase().match(city))
 			
