@@ -34,7 +34,7 @@ const get_apply = req =>
 			Query = Query.filter(doc => {
 				if (uid && jobId) return doc('uid').eq(uid).and(doc('jobId').eq(jobId))
 				if (uid && !jobId) return doc('uid').eq(uid)
-				if (!uid && jobId) return doc('uid').eq(jobId)
+				if (!uid && jobId) return doc('jobId').eq(jobId)
 				
 				return {}
 			})
