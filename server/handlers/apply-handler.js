@@ -40,16 +40,26 @@ const get_apply = req =>
 			})
 		}
 		
-		Query = Query.eqJoin('jobId', r.table('jobs'))
-			.eqJoin(r.row('right')('company_id'), r.table('companies'))
+		Query = Query.innerJoin(r.table('profiles'), (applications, profiles) => {
+			return profiles('uid').eq(applications('uid'))
+		})
+			.eqJoin(r.row('left')('jobId'), r.db('umana').table('jobs'))
+			.eqJoin(r.row('right')('company_id'), r.db('umana').table('companies'))
+			.eqJoin(r.row('left')('left')('left')('uid'), r.db('umana').table('users'))
 			.map(function (doc) {
 				return doc.merge(function () {
 					return doc.merge({
-						'apply': doc('left')('left'),
-						'job': doc('left')('right'),
-						'company': doc('right')
+						'apply': doc('left')('left')('left')('left'),
+						'job': doc('left')('left')('right'),
+						'company': doc('left')('right'),
+						'candidate': doc('right').merge({
+							profile: doc('left')('left')('left')('right')
+						})
 					})
 				})
+			})
+			.without({
+				'candidate': ['password']
 			})
 			.without('left')
 			.without('right')
