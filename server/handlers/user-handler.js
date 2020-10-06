@@ -25,7 +25,7 @@ module.exports = {
 	 */
 	
 	validate: async (decoded, req) => {
-		console.log('/server/handlers/user-handler.js: decoded:', decoded)
+		// console.log('/server/handlers/user-handler.js: decoded:', decoded)
 		const user = await req.server.db.r.table('users')
 			.get(JSON.parse(decoded.data).id)
 			.run(req.server.db.conn)

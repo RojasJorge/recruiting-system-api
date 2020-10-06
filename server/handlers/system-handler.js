@@ -53,7 +53,7 @@ const add_scope = req =>
 	new Promise(async (resolve, reject) => {
 		const decoded = JWT.verify(req.headers.authorization, config.get('/app/secret'))
 		
-		console.log('Decoded::::::::::', decoded)
+		// console.log('Decoded::::::::::', decoded)
 		if(!decoded) return reject(Boom.unauthorized())
 		
 		const user = await req.server.db.r.table('users').get(JSON.parse(decoded.data).id).run(req.server.db.conn)
