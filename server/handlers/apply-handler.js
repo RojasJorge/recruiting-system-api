@@ -24,30 +24,47 @@ const find_apply = req =>
 
 const get_apply = req =>
 	new Promise((resolve, reject) => {
-		const {server: {db: {r, conn}}, params: {id}, query: {uid, jobId}} = req
 		
-		let Query = r.table('applications')
+		/**
+		 * Detructure request
+		 */
+		const {
+			server: {
+				db: {
+					r,
+					conn
+				}
+			},
+			params: {
+				id
+			},
+			query: {
+				uid,
+				jobId,
+				companyId
+			}
+		} = req
 		
-		if (id) {
-			Query = Query.get(id)
-		} else {
-			Query = Query.filter(doc => {
-				if (uid && jobId) return doc('uid').eq(uid).and(doc('jobId').eq(jobId))
-				if (uid && !jobId) return doc('uid').eq(uid)
-				if (!uid && jobId) return doc('jobId').eq(jobId)
+		r
+			.table('applications').filter(doc => {
 				
-				return {}
-			})
-		}
-		
-		Query = Query.innerJoin(r.table('profiles'), (applications, profiles) => {
-			return profiles('uid').eq(applications('uid'))
+				/** First look for the id */
+			if (id) return doc('id').eq(id)
+			
+			/** Check another params (filtering) */
+			if (uid && jobId && !companyId) return doc('uid').eq(uid).and(doc('jobId').eq(jobId))
+			if (uid && !jobId && !companyId) return doc('uid').eq(uid)
+			if (!uid && !jobId && companyId) return doc('companyId').eq(companyId)
+			if (!uid && jobId && !companyId) return doc('jobId').eq(jobId)
+			
+			return {}
 		})
+			.innerJoin(r.table('profiles'), (applications, profiles) => profiles('uid').eq(applications('uid')))
 			.eqJoin(r.row('left')('jobId'), r.db('umana').table('jobs'))
 			.eqJoin(r.row('right')('company_id'), r.db('umana').table('companies'))
 			.eqJoin(r.row('left')('left')('left')('uid'), r.db('umana').table('users'))
-			.map(function (doc) {
-				return doc.merge(function () {
+			.map(doc => {
+				return doc.merge(_ => {
 					return doc.merge({
 						'apply': doc('left')('left')('left')('left'),
 						'job': doc('left')('left')('right'),
@@ -63,16 +80,15 @@ const get_apply = req =>
 			})
 			.without('left')
 			.without('right')
-		
-		Query.run(conn, (err, results) => {
-			if (err) return reject(Boom.badGateway())
-			
-			results.toArray((err, rows) => {
+			.run(conn, (err, results) => {
 				if (err) return reject(Boom.badGateway())
 				
-				return resolve(rows)
+				results.toArray((err, rows) => {
+					if (err) return reject(Boom.badGateway())
+					
+					return resolve(rows)
+				})
 			})
-		})
 	})
 
 module.exports = {

@@ -9,22 +9,25 @@ const get_id = Joi.object({
 const get = Joi.object({
 	jobId: Joi.string().min(10).max(36).optional(),
 	uid: Joi.string().min(10).max(36).optional(),
-	status: Joi.boolean().optional()
+	companyId: Joi.string().min(10).max(36).optional(),
+	status: Joi.string().valid('PENDING', 'RECEIVED', 'IN_REVIEW', 'CANCELLED', 'SUCCESS').optional()
 })
 
 const add = Joi.object({
 	uid: Joi.string().min(10).max(36).required(),
 	jobId: Joi.string().min(10).max(36).required(),
-	status: Joi.boolean().default(true).forbidden(),
+	companyId: Joi.string().min(10).max(36).required(),
+	status: Joi.string().valid('PENDING', 'RECEIVED', 'IN_REVIEW', 'CANCELLED', 'SUCCESS').default('PENDING').optional(),
 	created_at: Joi.date().default(new Date()).forbidden(),
 	updated_at: Joi.date().default(new Date()).forbidden()
 })
 
 const update = Joi.object({
-	status: Joi.boolean().optional()
+	status: Joi.string().valid('PENDING', 'RECEIVED', 'IN_REVIEW', 'CANCELLED', 'SUCCESS').required()
 })
 
 module.exports = {
+	get_id,
 	get,
 	add,
 	update
