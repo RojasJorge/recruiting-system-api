@@ -40,8 +40,8 @@
   },
   "lookingFor": {
     "availability": "",
-    "relocate": "",
-    "travel": "",
+    "relocate": false,
+    "travel": false,
     "workplace": ""
   },
   "others": {

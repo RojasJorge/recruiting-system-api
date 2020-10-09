@@ -12,7 +12,7 @@ const update = Joi.object({
 			avatar: Joi.string().allow(null, '').optional(),
 			name: Joi.string().min(3).max(100).optional(),
 			lastname: Joi.string().min(3).max(100).optional(),
-			currentJobTitle: Joi.string().min(3).max(100).optional(),
+			currentJobTitle: Joi.array().items(Joi.string()).optional(),
 			nationality: Joi.string().min(2).max(100).optional(),
 			birthday: Joi.date().optional(),
 			age: Joi.number().optional(),
