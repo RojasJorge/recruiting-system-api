@@ -101,19 +101,19 @@ const get_apply = req =>
 				})
 				.without('left')
 				.without('right')
-				
-				const total = await Query.count().run(conn)
 		
-				Query.slice(start, end)
-				.run(conn, (err, results) => {
+		const total = await Query.count().run(conn)
+		
+		Query.slice(start, end)
+			.run(conn, (err, results) => {
+				if (err) return reject(Boom.badGateway())
+				
+				results.toArray((err, items) => {
 					if (err) return reject(Boom.badGateway())
 					
-					results.toArray((err, items) => {
-						if (err) return reject(Boom.badGateway())
-						
-						return resolve({items, total})
-					})
+					return resolve({items, total})
 				})
+			})
 	})
 
 module.exports = {

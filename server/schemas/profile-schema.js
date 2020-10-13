@@ -8,6 +8,7 @@ const id = Joi.object({
 
 const update = Joi.object({
 	fields: Joi.object().keys({
+		document: Joi.array().items(Joi.object()).optional(),
 		personal: Joi.object().keys({
 			avatar: Joi.string().allow(null, '').optional(),
 			name: Joi.string().min(3).max(100).optional(),

@@ -76,7 +76,7 @@ const get_profiles = ({server: {db: {r, conn}}, params: {id}}, table, uid) =>
 
 const get_jobs = (req, table) => new Promise(async (resolve, reject) => {
 	
-	console.log('Fields job helper:', req.query)
+	// console.log('Fields job helper:', req.query)
 	
 	const {
 		params: {
@@ -158,19 +158,19 @@ const map_filters = (req, doc) => {
 	 * Validate ir order
 	 */
 	
-	if(jobposition && !title && !province && !city)
+	if (jobposition && !title && !province && !city)
 		return doc('jobposition').downcase().eq(jobposition)
 	
-	if(jobposition && title && !province && !city)
+	if (jobposition && title && !province && !city)
 		return doc('jobposition').downcase().eq(jobposition)
 			.and(doc('title').downcase().match(title))
 	
-	if(jobposition && title && province && !city)
+	if (jobposition && title && province && !city)
 		return doc('jobposition').downcase().eq(jobposition)
 			.and(doc('title').downcase().match(title))
 			.and(doc('location')('province').downcase().eq(province))
 	
-	if(jobposition && title && province && city)
+	if (jobposition && title && province && city)
 		return doc('jobposition').downcase().eq(jobposition)
 			.and(doc('title').downcase().match(title))
 			.and(doc('location')('province').downcase().eq(province))
@@ -179,25 +179,25 @@ const map_filters = (req, doc) => {
 	/**
 	 * Validate single
 	 */
-	if(!jobposition && title && !province && !city)
+	if (!jobposition && title && !province && !city)
 		return doc('title').downcase().match(title)
 	
-	if(!jobposition && !title && province && !city)
+	if (!jobposition && !title && province && !city)
 		return doc('location')('province').downcase().eq(province)
 	
-	if(!jobposition && !title && province && city)
+	if (!jobposition && !title && province && city)
 		return doc('location')('province').downcase().eq(province)
 			.and(doc('location')('city').downcase().eq(city))
 	
-	if(jobposition && !title && province && !city)
+	if (jobposition && !title && province && !city)
 		return doc('title').downcase().match(title)
 			.and(doc('location')('province').downcase().eq(province))
 	
-	if(jobposition && !title && province && !city)
+	if (jobposition && !title && province && !city)
 		return doc('jobposition').downcase().eq(jobposition)
 			.and(doc('location')('province').downcase().eq(province))
 	
-	if(jobposition && !title && province && city)
+	if (jobposition && !title && province && city)
 		return doc('jobposition').downcase().eq(jobposition)
 			.and(doc('location')('province').downcase().eq(province))
 			.and(doc('location')('city').downcase().eq(city))
@@ -206,15 +206,81 @@ const map_filters = (req, doc) => {
 }
 
 /**
- * Watch user scope to show/edit contents
+ * Watch applys by company
  */
-const verify_scope = _ =>
-	new Promise((resolve, reject) => {
-	
+const get_each_company_applications = async ({server: {current, db: {r, conn}}, query: {companyId}}) => {
+	console.log('Company ID:', companyId)
+	const cUser = JSON.parse(current.data)
+	const companies = await new Promise((resolve, reject) => {
+		
+		let GET_COMPANIES = r
+			.table('companies')
+			
+			if(companyId) {
+				GET_COMPANIES = GET_COMPANIES.get(companyId)
+			}
+			
+			if(!companyId) {
+				GET_COMPANIES = GET_COMPANIES.getAll(cUser.id, {index: 'uid'})
+			}
+			
+			GET_COMPANIES.run(conn, (err, results) => {
+				if(companyId) return resolve([results])
+				results.toArray((err, rows) => resolve(rows))
+			})
 	})
+	
+	return Promise.reduce(companies, (acc, current) => {
+		return new Promise(async (resolve, reject) => {
+			
+			const applications = await r
+				.table('applications').getAll(current.id, {index: 'companyId'})
+				.innerJoin(r.table('profiles'), (applications, profiles) => profiles('uid').eq(applications('uid')))
+				.eqJoin(r.row('left')('jobId'), r.db('umana').table('jobs'))
+				.eqJoin(r.row('right')('company_id'), r.db('umana').table('companies'))
+				.eqJoin(r.row('left')('left')('left')('uid'), r.db('umana').table('users'))
+				.map(doc => {
+					return doc.merge(_ => {
+						return doc.merge({
+							'apply': doc('left')('left')('left')('left'),
+							'job': doc('left')('left')('right'),
+							'company': doc('left')('right'),
+							'candidate': doc('right').merge({
+								profile: doc('left')('left')('left')('right')
+							})
+						})
+					})
+				})
+				.without({
+					'candidate': ['password']
+				})
+				.without('left')
+				.without('right')
+				.run(conn, (err, results) => {
+					if (err) throw err
+
+					results.toArray((err, items) => {
+						if (err) throw err
+
+						current.applications = items
+						acc.push(current)
+					})
+				})
+		
+			// current.applications = applications
+			// current.applications = []
+			// acc.push(current)
+			return resolve(acc)
+		
+		})
+	}, [])
+		.then(result => result)
+		.catch(err => new Boom.badImplementation('Scheme error'))
+}
 
 module.exports = {
 	user_exists,
 	get_profiles,
-	get_jobs
+	get_jobs,
+	get_each_company_applications
 }
