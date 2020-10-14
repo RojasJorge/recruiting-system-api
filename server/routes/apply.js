@@ -26,4 +26,14 @@ module.exports = [{
 			query: schemas.apply.get
 		}
 	}
+}, {
+	method: 'GET',
+	path: config.get('/api/base_path') + '/apply/candidate',
+	handler: handlers.apply.candidate_apply,
+	// options: {
+	// 	validate: {
+	// 		params: schemas.apply.get_apply_candidate_id,
+	// 		query: schemas.apply.get_apply_candidate
+	// 	}
+	// }
 }]
