@@ -4,9 +4,7 @@
     "professions": [],
     "studies": []
   },
-  "document": {
-    "documentFile": []
-  },
+  "documents": [],
   "economic": {
     "allowed": false,
     "currentSalary": 0,
@@ -52,7 +50,7 @@
   "personal": {
     "about": "",
     "age": 0,
-    "avatar": "",
+    "avatar": [],
     "birthday": "",
     "children": 0,
     "currentJobTitle": [],
