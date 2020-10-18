@@ -43,23 +43,35 @@ const setup = async (req, h) => {
   return { db_status: _response }
 }
 
-const avatar_get = async (req, h) => h.file(await queries.system.avatar_get(req.query))
-const avatar_add = async (req, h) => h.response(await queries.system.avatar_add(req.server.db.r, req.server.db.conn, req.payload))
-
 /**
  * Check user scope & adds restrictions
  */
 const add_scope = req =>
 	new Promise(async (resolve, reject) => {
-		const decoded = JWT.verify(req.headers.authorization, config.get('/app/secret'))
 		
-		// console.log('Decoded::::::::::', decoded)
-		if(!decoded) return reject(Boom.unauthorized())
+		try {
+			
+			/** Verify token before attach it on server */
+			const decoded = JWT.verify(req.headers.authorization, config.get('/app/secret'))
+			
+			/** Reject if token has expired */
+			if(!decoded) return reject(Boom.unauthorized())
+			
+			/** Fetch user in database using decoded id */
+			const user = await req.server.db.r.table('users').get(JSON.parse(decoded.data).id).run(req.server.db.conn)
+			
+			/** Reject if !user */
+			if (!user) return reject(Boom.unauthorized())
+			
+			/** Return decoded info to attach */
+			return resolve(decoded)
+			
+		} catch (err) {
+			
+			/** Prevent crash using 401 to the client */
+			return reject(Boom.unauthorized())
+		}
 		
-		const user = await req.server.db.r.table('users').get(JSON.parse(decoded.data).id).run(req.server.db.conn)
-		
-		if (!user) return reject(Boom.unauthorized())
-		return resolve(decoded)
 	})
 
 module.exports = {

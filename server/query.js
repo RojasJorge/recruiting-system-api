@@ -57,7 +57,8 @@ const get = (req, table) => new Promise(async (resolve, reject) => {
 		
 		/** Switch method if module is 'company' */
 		if (table === 'companies') {
-			Query = Query.getAll(cUser.id, {index: 'uid'}).filter(req.query || {}).slice(start, end)
+			if(cUser.scope[0] === 'company') Query = Query.getAll(cUser.id, {index: 'uid'}).filter(req.query || {}).slice(start, end)
+			if(cUser.scope[0] === 'umana') Query = Query.filter(req.query || {}).slice(start, end)
 		} else {
 			Query = Query.filter(req.query || {}).slice(start, end)
 		}

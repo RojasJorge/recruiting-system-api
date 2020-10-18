@@ -208,33 +208,70 @@ const map_filters = (req, doc) => {
 /**
  * Watch applys by company
  */
-const get_each_company_applications = async ({server: {current, db: {r, conn}}, query: {companyId}}) => {
-	console.log('Company ID:', companyId)
+const get_each_company_applications = async ({server: {current, db: {r, conn}}, query: {companyId, page, offset, jobId}}) => {
+	// console.log('pager:', page, offset)
+	
+	/** PAGER */
+	const start = ((parseInt(page, 10) * parseInt(offset, 10)) - parseInt(offset, 10))
+	const end = (start + parseInt(offset, 10))
+	
 	const cUser = JSON.parse(current.data)
-	const companies = await new Promise((resolve, reject) => {
-		
-		let GET_COMPANIES = r
-			.table('companies')
+	const scope = cUser.scope[0]
+	
+	// console.log('User scope:', cUser)
+	let companies = []
+	
+	if(scope === 'umana') {
+		companies = await new Promise((resolve, reject) => {
 			
-			if(companyId) {
+			let GET_COMPANIES = r.table('companies')
+			
+			if (companyId) {
 				GET_COMPANIES = GET_COMPANIES.get(companyId)
 			}
 			
-			if(!companyId) {
+			GET_COMPANIES.run(conn, (err, results) => {
+				
+				if(companyId) return resolve([results])
+				
+				results.toArray((err, rows) => resolve(rows))
+			})
+		})
+	}
+	
+	if(scope === 'company') {
+		companies = await new Promise((resolve, reject) => {
+			
+			let GET_COMPANIES = r.table('companies')
+			
+			if (companyId) {
+				GET_COMPANIES = GET_COMPANIES.get(companyId)
+			} else {
 				GET_COMPANIES = GET_COMPANIES.getAll(cUser.id, {index: 'uid'})
 			}
 			
 			GET_COMPANIES.run(conn, (err, results) => {
+				
 				if(companyId) return resolve([results])
+				
 				results.toArray((err, rows) => resolve(rows))
 			})
-	})
+		})
+	}
 	
 	return Promise.reduce(companies, (acc, current) => {
 		return new Promise(async (resolve, reject) => {
 			
-			const applications = await r
-				.table('applications').getAll(current.id, {index: 'companyId'})
+			// console.log('Filters for applications:', jobId)
+			
+			await r
+				.table('applications')
+				.filter(doc => {
+					let pipe = doc('companyId').eq(current.id)
+					if(jobId) pipe = pipe.and(doc('jobId').eq(jobId))
+					
+					return pipe
+				})
 				.innerJoin(r.table('profiles'), (applications, profiles) => profiles('uid').eq(applications('uid')))
 				.eqJoin(r.row('left')('jobId'), r.db('umana').table('jobs'))
 				.eqJoin(r.row('right')('company_id'), r.db('umana').table('companies'))
@@ -256,22 +293,23 @@ const get_each_company_applications = async ({server: {current, db: {r, conn}}, 
 				})
 				.without('left')
 				.without('right')
+				.slice(start, end)
 				.run(conn, (err, results) => {
 					if (err) throw err
-
+					
 					results.toArray((err, items) => {
 						if (err) throw err
-
+						
 						current.applications = items
 						acc.push(current)
 					})
 				})
-		
+			
 			// current.applications = applications
 			// current.applications = []
 			// acc.push(current)
 			return resolve(acc)
-		
+			
 		})
 	}, [])
 		.then(result => result)

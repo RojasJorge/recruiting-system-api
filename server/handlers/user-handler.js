@@ -24,7 +24,7 @@ module.exports = {
 	 | @returns {Promise<{credentials: {scope: *}, isValid: boolean}|{credentials: {}, isValid: boolean}>}
 	 */
 	
-	validate: async (decoded, req) => {
+	validate: async (decoded, req, h) => {
 		// console.log('/server/handlers/user-handler.js: decoded:', decoded)
 		const user = await req.server.db.r.table('users')
 			.get(JSON.parse(decoded.data).id)

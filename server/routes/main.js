@@ -43,31 +43,6 @@ const Main = [{
 	// 		handler: handlers.system.setup
 	// 	}
 	// },
-	// {
-	// 	method: 'GET',
-	// 	path: config.get('/api/base_path') + '/avatar',
-	// 	handler: handlers.system.avatar_get,
-	// 	options: {
-	// 		auth: {
-	// 			scope: ['admin', 'root', 'candidate', 'company']
-	// 		},
-	// 		validate: {
-	// 			query: schemas.system.avatar_get
-	// 		}
-	// 	}
-	// }, {
-	// 	method: 'POST',
-	// 	path: config.get('/api/base_path') + '/avatar',
-	// 	handler: handlers.system.avatar_add,
-	// 	options: {
-	// 		auth: {
-	// 			scope: ['admin', 'root', 'candidate', 'company']
-	// 		},
-	// 		validate: {
-	// 			payload: schemas.system.avatar_add
-	// 		}
-	// 	}
-	// }
 ]
 
 module.exports = Main

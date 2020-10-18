@@ -17,6 +17,16 @@ module.exports = [{
 		}
 	}
 }, {
+	method: 'PUT',
+	path: config.get('/api/base_path') + '/apply/{id?}',
+	handler: handlers.apply.update,
+	options: {
+		validate: {
+			params: schemas.apply.get_id,
+			payload: schemas.apply.update
+		}
+	}
+}, {
 	method: 'GET',
 	path: config.get('/api/base_path') + '/apply/{id?}',
 	handler: handlers.apply.get,

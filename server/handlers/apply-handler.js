@@ -145,34 +145,34 @@ const candidate_apply = req =>
 		delete req.query.offset
 		
 		/** Apply pagination */
-		// const start = ((parseInt(page, 10) * parseInt(offset, 10)) - parseInt(offset, 10))
-		// const end = (start + parseInt(offset, 10))
+			// const start = ((parseInt(page, 10) * parseInt(offset, 10)) - parseInt(offset, 10))
+			// const end = (start + parseInt(offset, 10))
 		
 		let Query =
-			await r
-				.table('applications')
-				.getAll(cUser.id, {index: 'uid'})
-		.innerJoin(r.table('profiles'), (applications, profiles) => profiles('uid').eq(applications('uid')))
-		.eqJoin(r.row('left')('jobId'), r.db('umana').table('jobs'))
-		.eqJoin(r.row('right')('company_id'), r.db('umana').table('companies'))
-		.eqJoin(r.row('left')('left')('left')('uid'), r.db('umana').table('users'))
-		.map(doc => {
-			return doc.merge(_ => {
-				return doc.merge({
-					'apply': doc('left')('left')('left')('left'),
-					'job': doc('left')('left')('right'),
-					'company': doc('left')('right'),
-					'candidate': doc('right').merge({
-						'profile': doc('left')('left')('left')('right')
+				await r
+					.table('applications')
+					.getAll(cUser.id, {index: 'uid'})
+					.innerJoin(r.table('profiles'), (applications, profiles) => profiles('uid').eq(applications('uid')))
+					.eqJoin(r.row('left')('jobId'), r.db('umana').table('jobs'))
+					.eqJoin(r.row('right')('company_id'), r.db('umana').table('companies'))
+					.eqJoin(r.row('left')('left')('left')('uid'), r.db('umana').table('users'))
+					.map(doc => {
+						return doc.merge(_ => {
+							return doc.merge({
+								'apply': doc('left')('left')('left')('left'),
+								'job': doc('left')('left')('right'),
+								'company': doc('left')('right'),
+								'candidate': doc('right').merge({
+									'profile': doc('left')('left')('left')('right')
+								})
+							})
+						})
 					})
-				})
-			})
-		})
-		.without({
-			'candidate': ['password']
-		})
-		.without('left')
-		.without('right')
+					.without({
+						'candidate': ['password']
+					})
+					.without('left')
+					.without('right')
 		
 		const total = await Query.count().run(conn)
 		
@@ -181,11 +181,38 @@ const candidate_apply = req =>
 			
 			results.toArray((err, items) => {
 				if (err) return reject(Boom.badGateway())
-
+				
 				return resolve({items, total})
 			})
 		})
 	})
+
+const update_single_apply = req => new Promise((resolve, reject) => {
+	const {
+		server: {
+			db: {
+				r,
+				conn
+			}
+		},
+		params: {
+			id
+		},
+		payload: {
+			status
+		}
+	} = req
+	
+	r
+		.table('applications')
+		.get(id)
+		.update({status})
+		.run(conn, (err, result) => {
+			if (err) return reject(Boom.badGateway())
+			
+			return resolve(result)
+		})
+})
 
 module.exports = {
 	add: async (req, h) => {
@@ -199,5 +226,7 @@ module.exports = {
 	get: async (req, h) =>
 		h.response(await get_apply(req)),
 	candidate_apply: async (req, h) =>
-		h.response(await candidate_apply(req))
+		h.response(await candidate_apply(req)),
+	update: async (req, h) =>
+		h.response(await update_single_apply(req))
 }

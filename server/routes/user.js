@@ -3,6 +3,7 @@
 const config = require('../../config')
 const handlers = require('../handlers')
 const schemas = require('../schemas')
+const mailing = require('../mailing')
 
 /**
  * User paths
@@ -59,7 +60,14 @@ const User = [{
       params: schemas.user.get_id
     }
   }
-}, 
+}, {
+  method: 'GET',
+  path: config.get('/api/base_path') +  '/testmail',
+  handler: mailing.user.sendMailTest,
+  options: {
+    auth: false
+  }
+}
 // {
 //   method: 'POST',
 //   path: config.get('/api/base_path') + '/refresh',

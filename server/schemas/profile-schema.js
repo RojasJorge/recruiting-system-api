@@ -145,7 +145,7 @@ const update = Joi.object({
 					amount: Joi.number().optional(),
 					monthlyFee: Joi.number().optional(),
 				})
-			),
+			).optional(),
 			typeHousing: Joi.string().valid('own', 'family', 'rented').optional(),
 			dependents: Joi.number().optional(),
 			vehicles: Joi.array()
