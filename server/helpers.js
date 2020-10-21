@@ -316,9 +316,47 @@ const get_each_company_applications = async ({server: {current, db: {r, conn}}, 
 		.catch(err => new Boom.badImplementation('Scheme error'))
 }
 
+const verify_account = (req, table) =>
+	new Promise((resolve, reject) => {
+		const {
+			server: {
+				db: {
+					r,
+					conn
+				}
+			},
+			params: {
+				hash
+			}
+		} = req
+		
+		r.table(table).filter({
+			verified: hash
+		})
+			.run(conn, (err, result) => {
+				if(err) return reject(Boom.notFound())
+				
+				result.toArray((err, rows) => {
+					if(err) return reject(Boom.notFound())
+					return resolve(rows)
+				})
+			})
+	})
+
+const update_verified_user = (db, id) =>
+	new Promise((resolve, reject) => {
+		db.r.table('users').get(id).update({verified: ''}).run(db.conn, (err, result) => {
+			if(err) return reject(Boom.notFound())
+			
+			return resolve(result)
+		})
+	})
+
 module.exports = {
 	user_exists,
 	get_profiles,
 	get_jobs,
-	get_each_company_applications
+	get_each_company_applications,
+	verify_account,
+	update_verified_user
 }

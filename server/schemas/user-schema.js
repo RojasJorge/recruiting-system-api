@@ -38,7 +38,8 @@ const add = Joi.object({
 	birthday: Joi.date().default(null).optional(),
 	address: Joi.string().allow(null).max(250).optional(),
 	scope: Joi.array().items(Joi.string().valid('umana', 'admin', 'candidate', 'company')).default(['candidate']).optional(),
-	status: Joi.boolean().default(true).forbidden()
+	status: Joi.boolean().default(true).forbidden(),
+	verified: Joi.string().default('').forbidden()
 })
 
 const update = Joi.object({

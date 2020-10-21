@@ -3,7 +3,7 @@
 const config = require('../../config')
 const handlers = require('../handlers')
 const schemas = require('../schemas')
-const mailing = require('../mailing')
+const Joi = require('joi')
 
 /**
  * User paths
@@ -62,22 +62,16 @@ const User = [{
   }
 }, {
   method: 'GET',
-  path: config.get('/api/base_path') +  '/testmail',
-  handler: mailing.user.sendMailTest,
+  path: config.get('/api/base_path') + '/verify/{hash}',
+  handler: handlers.user.verify,
   options: {
-    auth: false
+    auth: false,
+    validate: {
+      params: Joi.object({
+        hash: Joi.string().max(36).required()
+      })
+    }
   }
-}
-// {
-//   method: 'POST',
-//   path: config.get('/api/base_path') + '/refresh',
-//   handler: handlers.user.refresh,
-//   options: {
-//     auth: {
-//       scope: ['admin', 'umana', 'company', 'candidate']
-//     }
-//   }
-// }
-]
+}]
 
 module.exports = User

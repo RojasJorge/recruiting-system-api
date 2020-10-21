@@ -8,6 +8,8 @@ const _ = require('lodash')
 const JWT = require('jsonwebtoken')
 const config = require('../../config')
 const table = 'users'
+const mailing = require('../mailing')
+const md5 = require('md5')
 
 module.exports = {
 	
@@ -64,6 +66,10 @@ module.exports = {
 		
 		/** Extract from collection */
 		let user = found.shift()
+		
+		/** Reject if !verified */
+		if(user.verified.length > 1) return Boom.locked()
+		
 		const profile = user.profile
 		
 		/** Validate password */
@@ -108,6 +114,10 @@ module.exports = {
 		/** Hash the user password */
 		req.payload.password = bcrypt.hashSync(req.payload.password, 10, hash => hash)
 		
+		/** Add hash verification field */
+		const HASH = md5(req.payload.email)
+		req.payload.verified = HASH
+		
 		/** Store new user */
 		const stored = await query.add(req, table)
 		
@@ -121,6 +131,8 @@ module.exports = {
 		if (stored) {
 			profile = await req.server.db.r.table('profiles').insert({uid: stored, fields}).run(req.server.db.conn)
 		}
+		
+		await mailing.user.confirm(Object.assign(req.payload, {id: HASH}))
 		
 		/**
 		 * Return id's of user and profile
@@ -138,5 +150,29 @@ module.exports = {
 			req.payload.password = bcrypt.hashSync(req.payload.password, 10, hash => hash)
 		
 		return h.response(await query.update(req, table))
+	},
+	
+	/** Verify account handler */
+	verify: async (req, h) => {
+		
+		const found = await helpers.verify_account(req, table)
+		
+		if(_.isEmpty(found)) return Boom.notFound()
+		
+		const user = found[0]
+		
+		const updated = await helpers.update_verified_user(req.server.db, user.id)
+		
+		if(updated.unchanged >= 1 || updated.skipped >= 1) return Boom.locked()
+		
+		if(updated.replaced >= 1) {
+			
+			return h.response({
+				name: `${user.name} ${user.lastname}`,
+				email: user.email
+			})
+		} else {
+			return Boom.notFound()
+		}
 	}
 }

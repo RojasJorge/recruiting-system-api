@@ -9,15 +9,13 @@
     "allowed": false,
     "currentSalary": 0,
     "currentSalaryCurrency": "",
-    "debts": "",
-    "debtsRepeater": [],
+    "debts": [],
     "dependents": 0,
     "desiredSalary": {
       "base_max": 0,
       "base_min": 0,
       "currency": ""
     },
-    "haveDebts": false,
     "health": {
       "disease": "",
       "haveDisease": false,
@@ -53,7 +51,7 @@
     "avatar": [],
     "birthday": "",
     "children": 0,
-    "currentJobTitle": [],
+    "currentJobTitle": "",
     "dpi": "",
     "driversLicence": 0,
     "driversLicenceType": [],

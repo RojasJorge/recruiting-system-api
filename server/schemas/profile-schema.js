@@ -13,7 +13,8 @@ const update = Joi.object({
 			avatar: Joi.array().items(Joi.object()).optional(),
 			name: Joi.string().min(3).max(100).optional(),
 			lastname: Joi.string().min(3).max(100).optional(),
-			currentJobTitle: Joi.array().items(Joi.string()).optional(),
+			currentJobTitle: Joi.string().optional(),
+			// currentJobTitle: Joi.array().items(Joi.string()).optional(),
 			nationality: Joi.string().min(2).max(100).optional(),
 			birthday: Joi.date().optional(),
 			age: Joi.number().optional(),
@@ -130,14 +131,12 @@ const update = Joi.object({
 				.keys({
 					currency: Joi.string().default('GTQ'),
 					baseMin: Joi.number(),
-					baseMax: Joi.number(),
-					base_min: Joi.number().default(0).optional(),
-					base_max: Joi.number().default(0).optional(),
+					baseMax: Joi.number()
 				})
 				.optional(),
 			otherIncome: Joi.boolean().optional(),
 			otherIncomeValue: Joi.number().default(0).optional(),
-			sourceIncome: Joi.string().default('').optional(),
+			sourceIncome: Joi.string().allow('').optional(),
 			// nit: Joi.number().optional(),
 			debts: Joi.array().items(
 				Joi.object().keys({
@@ -164,7 +163,6 @@ const update = Joi.object({
 					disease: Joi.string().default('').allow('').optional(),
 					tattoOrPiercing: Joi.boolean().default(false).optional(),
 					whatTattoOrPiercing: Joi.string().default('').allow('').optional(),
-					whtaTattoOrPiercing: Joi.boolean().default(false).allow('').optional()
 				}).optional(),
 			legal: Joi.object()
 				.keys({
