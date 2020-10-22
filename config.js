@@ -54,6 +54,16 @@ const config = {
       $default: 3026,
     },
   },
+  mail: {
+    server: {
+      $env: 'APP_MAIL_SERVER',
+      $default: 'http://localhost:30300',
+    },
+    paths: {
+      $env: 'APP_MAIL_SERVER_PATHS',
+      $default: '/user/new-account, /user/welcome',
+    },
+  },
 };
 
 const store = new Confidence.Store(config),
