@@ -68,7 +68,7 @@ module.exports = {
 		let user = found.shift()
 		
 		/** Reject if !verified */
-		if(user.verified.length > 1) return Boom.locked()
+		if (user.verified.length > 1) return Boom.locked()
 		
 		const profile = user.profile
 		
@@ -157,15 +157,17 @@ module.exports = {
 		
 		const found = await helpers.verify_account(req, table)
 		
-		if(_.isEmpty(found)) return Boom.notFound()
+		if (_.isEmpty(found)) return Boom.notFound()
 		
 		const user = found[0]
 		
 		const updated = await helpers.update_verified_user(req.server.db, user.id)
 		
-		if(updated.unchanged >= 1 || updated.skipped >= 1) return Boom.locked()
+		if (updated.unchanged >= 1 || updated.skipped >= 1) return Boom.locked()
 		
-		if(updated.replaced >= 1) {
+		if (updated.replaced >= 1) {
+			
+			await mailing.user.welcome({email: user.email, name: user.name})
 			
 			return h.response({
 				name: `${user.name} ${user.lastname}`,
