@@ -15,7 +15,7 @@ const confirm = data =>
 				}
 			})
 				.then(res => resolve(res.json()))
-				.then(json => console.log(json));
+				.then(json => console.log(json))
 		} catch(err) {
 			return reject(err)
 		}
@@ -32,7 +32,7 @@ const welcome = data =>
 				}
 			})
 				.then(res => resolve(res.json()))
-				.then(json => console.log(json));
+				.then(json => console.log(json))
 		} catch(err) {
 			return reject(err)
 		}
@@ -49,7 +49,7 @@ const resetPassword = data =>
 				}
 			})
 				.then(res => resolve(res.json()))
-				.then(json => console.log(json));
+				.then(json => console.log(json))
 		} catch(err) {
 			return reject(err)
 		}
