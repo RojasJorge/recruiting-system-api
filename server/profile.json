@@ -12,8 +12,8 @@
     "debts": [],
     "dependents": 0,
     "desiredSalary": {
-      "base_max": 0,
-      "base_min": 0,
+      "baseMax": 0,
+      "baseMin": 0,
       "currency": ""
     },
     "health": {
