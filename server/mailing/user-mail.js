@@ -15,7 +15,7 @@ const confirm = data =>
 				}
 			})
 				.then(res => resolve(res.json()))
-				.then(json => console.log(json));
+				.then(json => console.log(json))
 		} catch(err) {
 			return reject(err)
 		}
@@ -32,7 +32,24 @@ const welcome = data =>
 				}
 			})
 				.then(res => resolve(res.json()))
-				.then(json => console.log(json));
+				.then(json => console.log(json))
+		} catch(err) {
+			return reject(err)
+		}
+	})
+
+const resetPassword = data =>
+	new Promise((resolve, reject) => {
+		try {
+			fetch(  config.get('/mail/server') + '/user/reset-password', {
+				method: 'POST',
+				body: JSON.stringify(data),
+				headers: {
+					'Content-Type': 'application/json'
+				}
+			})
+				.then(res => resolve(res.json()))
+				.then(json => console.log(json))
 		} catch(err) {
 			return reject(err)
 		}
@@ -40,5 +57,6 @@ const welcome = data =>
 
 module.exports = {
 	confirm,
-	welcome
+	welcome,
+	resetPassword
 }

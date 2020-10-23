@@ -5,9 +5,7 @@ const handlers = require('./handlers')
 const plugins = require('./plugins')
 const config = require('../config')
 const Boom = require('@hapi/boom')
-// const Path = require('path')
-// const helpers = require('./queries/helpers')
-// const Fs = require('fs')
+const Fs = require('fs')
 
 /** Connect to DB */
 const r = require('rethinkdb')
@@ -19,13 +17,10 @@ const ConnectiontDB = r.connect({
 })
 
 const start = (host, port) => {
-	let server = Hapi.server({
+	
+	let options = {
 		host,
 		port,
-		// tls: JSON.parse(config.get('/app/secure')) ? {
-		//   key: Fs.readFileSync('/etc/letsencrypt/live/staging.umana.co/privkey.pem'),
-		//   cert: Fs.readFileSync('/etc/letsencrypt/live/staging.umana.co/fullchain.pem')
-		// } : false,
 		routes: {
 			cors: true,
 			validate: {
@@ -40,7 +35,17 @@ const start = (host, port) => {
 				}
 			}
 		}
-	})
+	}
+	
+	/** Attach tls config if env is production */
+	if (JSON.parse(config.get('/api/secure'))) {
+		options.tls = {
+			key: Fs.readFileSync('/etc/letsencrypt/live/staging.umana.co/privkey.pem'),
+			cert: Fs.readFileSync('/etc/letsencrypt/live/staging.umana.co/fullchain.pem')
+		}
+	}
+	
+	let server = Hapi.server(options)
 	
 	ConnectiontDB.then(async (conn) => {
 		
@@ -78,8 +83,9 @@ const start = (host, port) => {
 					request.path !== '/api/v1/career' &&
 					request.path !== '/api/v1/job' &&
 					request.path !== '/api/v1/user' &&
-					request.path !== '/api/v1/login') {
-
+					request.path !== '/api/v1/login' &&
+					request.path !== '/api/v1/reset-password') {
+					
 					/** Attach decoded user to the server instance */
 					request.server.current = await handlers.system.add_scope(request)
 				}
