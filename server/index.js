@@ -78,7 +78,8 @@ const start = (host, port) => {
 					request.path !== '/api/v1/career' &&
 					request.path !== '/api/v1/job' &&
 					request.path !== '/api/v1/user' &&
-					request.path !== '/api/v1/login') {
+					request.path !== '/api/v1/login' &&
+					request.path !== '/api/v1/reset-password') {
 
 					/** Attach decoded user to the server instance */
 					request.server.current = await handlers.system.add_scope(request)
