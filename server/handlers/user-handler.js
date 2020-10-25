@@ -68,8 +68,9 @@ module.exports = {
 		let user = found.shift()
 		
 		/** Reject if !verified */
-		if (user.verified.length > 1) return Boom.locked()
+		if (typeof user.verified !== 'undefined' && user.verified.length > 1) return Boom.locked()
 		
+		/** Subtract profile to sign token */
 		const profile = user.profile
 		
 		/** Validate password */
@@ -78,8 +79,6 @@ module.exports = {
 		/** Exclude password from token */
 		delete user.password
 		delete user.profile
-		/** Delete temporary avatar */
-		// delete profile.personal.avatar
 		
 		user = {
 			...user,
@@ -128,9 +127,7 @@ module.exports = {
 		let profile = null
 		
 		/** Store new profile referenced to the user */
-		if (stored) {
-			profile = await req.server.db.r.table('profiles').insert({uid: stored, fields}).run(req.server.db.conn)
-		}
+		if (stored) profile = await req.server.db.r.table('profiles').insert({uid: stored, fields}).run(req.server.db.conn)
 		
 		await mailing.user.confirm(Object.assign(req.payload, {id: HASH}))
 		
@@ -142,6 +139,9 @@ module.exports = {
 			profile_id: profile.generated_keys.shift()
 		})
 	},
+	
+	
+	/** Simple update handler */
 	update: async (req, h) => {
 		if (!req.params.id) return Boom.badData('Id is required')
 		
@@ -176,5 +176,76 @@ module.exports = {
 		} else {
 			return Boom.notFound()
 		}
+	},
+	
+	request_password_reset: async (req, h) => {
+		
+		const found = await helpers.user_exists(req, 'login')
+		
+		if (_.isEmpty(found)) return Boom.notFound()
+		
+		let user = found.shift()
+		
+		const hash = md5(user.id + new Date())
+		
+		const data = {
+			hash,
+			uid: user.id,
+			createdAt: new Date(),
+			updatedAt: new Date(),
+			status: 'PENDING'
+		}
+		
+		const requested = await new Promise((resolve) => {
+			req.server.db.r
+				.table('password_resets')
+				.getAll(user.id, {index: 'uid'})
+				.run(req.server.db.conn, (err, results) => {
+					if (err) return []
+					
+					results.toArray((err, rows) => {
+						if (err) return []
+						
+						return resolve(rows)
+					})
+				})
+		})
+		
+		if (_.isEmpty(requested)) {
+			await req.server.db.r.table('password_resets').insert(data).run(req.server.db.conn)
+		} else {
+			await req.server.db.r.table('password_resets').get(requested[0].id).update({
+				updatedAt: new Date(),
+				hash,
+				status: 'PENDING'
+			}).run(req.server.db.conn)
+		}
+		
+		return h.response(await mailing.user.resetPassword({email: user.email, hash}))
+	},
+	
+	/** Forgot password */
+	reset_password: async (req, h) => {
+		
+		const found = await helpers.find_request_password_reset(req)
+		
+		if (_.isEmpty(found)) return Boom.notFound('Request password reset not found')
+		
+		const user = await helpers.get_single_user_password_reset(req.server.db.r, req.server.db.conn, found[0].uid)
+		
+		if (!user) return Boom.notFound('User not found')
+		
+		/** Reset the password */
+		await req.server.db.r.table('users').get(user.id).update({password: bcrypt.hashSync(req.payload.password, 10, hash => hash)}).run(req.server.db.conn)
+		
+		/** Change status to the current password reset request */
+		await req.server.db.r.table('password_resets').get(found[0].id).update({
+			updatedAt: new Date(),
+			status: 'DONE',
+			hash: ''
+		}).run(req.server.db.conn)
+		
+		return h.response({message: 'Password was updated successfully.'})
 	}
 }
+

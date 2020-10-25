@@ -11,5 +11,6 @@ module.exports = [].concat(
   require('./job'),
   require('./academic_level'),
 	require('./profile'),
-	require('./apply')
+	require('./apply'),
+	require('./match')
 )

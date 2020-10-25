@@ -221,7 +221,7 @@ const get_each_company_applications = async ({server: {current, db: {r, conn}}, 
 	// console.log('User scope:', cUser)
 	let companies = []
 	
-	if(scope === 'umana') {
+	if (scope === 'umana') {
 		companies = await new Promise((resolve, reject) => {
 			
 			let GET_COMPANIES = r.table('companies')
@@ -232,14 +232,14 @@ const get_each_company_applications = async ({server: {current, db: {r, conn}}, 
 			
 			GET_COMPANIES.run(conn, (err, results) => {
 				
-				if(companyId) return resolve([results])
+				if (companyId) return resolve([results])
 				
 				results.toArray((err, rows) => resolve(rows))
 			})
 		})
 	}
 	
-	if(scope === 'company') {
+	if (scope === 'company') {
 		companies = await new Promise((resolve, reject) => {
 			
 			let GET_COMPANIES = r.table('companies')
@@ -252,7 +252,7 @@ const get_each_company_applications = async ({server: {current, db: {r, conn}}, 
 			
 			GET_COMPANIES.run(conn, (err, results) => {
 				
-				if(companyId) return resolve([results])
+				if (companyId) return resolve([results])
 				
 				results.toArray((err, rows) => resolve(rows))
 			})
@@ -268,7 +268,7 @@ const get_each_company_applications = async ({server: {current, db: {r, conn}}, 
 				.table('applications')
 				.filter(doc => {
 					let pipe = doc('companyId').eq(current.id)
-					if(jobId) pipe = pipe.and(doc('jobId').eq(jobId))
+					if (jobId) pipe = pipe.and(doc('jobId').eq(jobId))
 					
 					return pipe
 				})
@@ -334,10 +334,10 @@ const verify_account = (req, table) =>
 			verified: hash
 		})
 			.run(conn, (err, result) => {
-				if(err) return reject(Boom.notFound())
+				if (err) return reject(Boom.notFound())
 				
 				result.toArray((err, rows) => {
-					if(err) return reject(Boom.notFound())
+					if (err) return reject(Boom.notFound())
 					return resolve(rows)
 				})
 			})
@@ -346,10 +346,37 @@ const verify_account = (req, table) =>
 const update_verified_user = (db, id) =>
 	new Promise((resolve, reject) => {
 		db.r.table('users').get(id).update({verified: ''}).run(db.conn, (err, result) => {
-			if(err) return reject(Boom.notFound())
+			if (err) return reject(Boom.notFound())
 			
 			return resolve(result)
 		})
+	})
+
+const find_request_password_reset = ({server: {db: {r, conn}}, payload: {hash}}) =>
+	new Promise(async (resolve, reject) => {
+		
+		r.table('password_resets').getAll(hash, {index: 'hash'}).run(conn, (err, results) => {
+			if (err) return reject(err)
+			
+			results.toArray((err, rows) => {
+				if (err) return reject(err)
+				
+				return resolve(rows)
+			})
+		})
+		
+	})
+
+const get_single_user_password_reset = (r, conn, id) =>
+	new Promise((resolve, reject) => {
+		r
+			.table('users')
+			.get(id)
+			.run(conn, (err, result) => {
+				if(err) return reject(err)
+				
+				return resolve(result)
+			})
 	})
 
 module.exports = {
@@ -358,5 +385,7 @@ module.exports = {
 	get_jobs,
 	get_each_company_applications,
 	verify_account,
-	update_verified_user
+	update_verified_user,
+	find_request_password_reset,
+	get_single_user_password_reset
 }
