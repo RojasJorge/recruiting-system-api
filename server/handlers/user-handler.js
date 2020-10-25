@@ -235,8 +235,6 @@ module.exports = {
 		
 		if (!user) return Boom.notFound('User not found')
 		
-		console.log('User found:', user)
-		
 		/** Reset the password */
 		await req.server.db.r.table('users').get(user.id).update({password: bcrypt.hashSync(req.payload.password, 10, hash => hash)}).run(req.server.db.conn)
 		
