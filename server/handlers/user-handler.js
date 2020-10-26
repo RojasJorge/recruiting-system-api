@@ -121,7 +121,11 @@ module.exports = {
 		const stored = await query.add(req, table)
 		
 		/** Get default profile fields config */
-		const fields = require('../profile.json')
+		let fields = require('../profile.json')
+		
+		fields.personal.name = req.payload.name
+		fields.personal.lastname = req.payload.lastname
+		fields.personal.email = req.payload.email
 		
 		/** Declare profile as null */
 		let profile = null

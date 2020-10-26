@@ -34,7 +34,6 @@ const update = Joi.object({
           .max(100)
           .optional(),
         birthday: Joi.date().optional(),
-        age: Joi.number().optional(),
         gender: Joi.string()
           .min(3)
           .max(50)
