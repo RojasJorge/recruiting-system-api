@@ -121,7 +121,11 @@ module.exports = {
 		const stored = await query.add(req, table)
 		
 		/** Get default profile fields config */
-		const fields = require('../profile.json')
+		let fields = require('../profile.json')
+		
+		fields.personal.name = req.payload.name
+		fields.personal.lastname = req.payload.lastname
+		fields.personal.email = req.payload.email
 		
 		/** Declare profile as null */
 		let profile = null
@@ -234,8 +238,6 @@ module.exports = {
 		const user = await helpers.get_single_user_password_reset(req.server.db.r, req.server.db.conn, found[0].uid)
 		
 		if (!user) return Boom.notFound('User not found')
-		
-		console.log('User found:', user)
 		
 		/** Reset the password */
 		await req.server.db.r.table('users').get(user.id).update({password: bcrypt.hashSync(req.payload.password, 10, hash => hash)}).run(req.server.db.conn)

@@ -35,10 +35,10 @@
     "vehicles": []
   },
   "lookingFor": {
-    "availability": "",
+    "availability": [],
     "relocate": false,
     "travel": false,
-    "workplace": ""
+    "workplace": []
   },
   "others": {
     "languages": [],
@@ -47,7 +47,6 @@
   },
   "personal": {
     "about": "",
-    "age": 0,
     "avatar": [],
     "birthday": "",
     "children": 0,

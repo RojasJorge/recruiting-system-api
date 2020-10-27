@@ -78,7 +78,7 @@ const start = (host, port) => {
 				
 				/** Exclude paths from scope validation */
 				if (
-					request.headers.authorization &&
+					// request.headers.authorization &&
 					request.path !== '/api/v1/academic-level' &&
 					request.path !== '/api/v1/career' &&
 					request.path !== '/api/v1/job' &&
