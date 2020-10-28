@@ -5,6 +5,7 @@ const Promise = require('bluebird')
 const Boom = require('@hapi/boom')
 const _ = require('lodash')
 const helpers = require('../helpers')
+const mailing = require('../mailing')
 
 const find_apply = req =>
 	new Promise((resolve, reject) => {
@@ -188,6 +189,21 @@ const candidate_apply = req =>
 	})
 
 const update_single_apply = req => new Promise((resolve, reject) => {
+	
+	const statuses = [{
+		key: 'RECEIVED',
+		name: 'Recibido'
+	}, {
+		key: 'IN_REVIEW',
+		name: 'En revisión'
+	}, {
+		key: 'CANCELLED',
+		name: 'Cancelado'
+	}, {
+		key: 'SUCCESS',
+		name: 'Finalizado'
+	}]
+	
 	const {
 		server: {
 			db: {
@@ -199,16 +215,26 @@ const update_single_apply = req => new Promise((resolve, reject) => {
 			id
 		},
 		payload: {
-			status
+			name,
+			status,
+			email,
+			company,
+			job
 		}
 	} = req
 	
 	r
 		.table('applications')
 		.get(id)
-		.update({status})
-		.run(conn, (err, result) => {
+		.update({status: status})
+		.run(conn, async (err, result) => {
 			if (err) return reject(Boom.badGateway())
+			
+			const statusFound = _.find(statuses, o => o.key === status)
+			
+			if (statusFound) {
+				await mailing.user.requestChange({name, email: 'jorge@royalestudios.com', company, job, status: statusFound.name})
+			}
 			
 			return resolve(result)
 		})
@@ -220,8 +246,23 @@ module.exports = {
 		/** Check if record exists */
 		if (!_.isEmpty(await find_apply(req))) return Boom.locked()
 		
+		const dataEmail = req.payload.mailing
+		delete req.payload.mailing
+		
+		const stored = await query.add(req, 'applications')
+		
+		if(stored) await mailing.user.newRequest({
+			id: stored,
+			email: 'jorge@royalestudios.com',
+			// email: dataEmail.company.contactEmail,
+			name: dataEmail.company.contactName,
+			company: dataEmail.company.name,
+			candidate: dataEmail.candidate.name,
+			job: dataEmail.job
+		})
+		
 		/** Returns insert results */
-		return h.response(await query.add(req, 'applications'))
+		return h.response(stored)
 	},
 	get: async (req, h) =>
 		h.response(await get_apply(req)),

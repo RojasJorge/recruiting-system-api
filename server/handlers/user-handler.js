@@ -62,7 +62,7 @@ module.exports = {
 		const found = await helpers.user_exists(req, 'login')
 		
 		/** Reject if !user */
-		if (_.isEmpty(found)) return Boom.unauthorized()
+		if (_.isEmpty(found)) return Boom.notFound()
 		
 		/** Extract from collection */
 		let user = found.shift()
