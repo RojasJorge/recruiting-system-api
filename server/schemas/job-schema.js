@@ -645,13 +645,13 @@ const _update = Joi.object().keys({
     .allow(null, '')
     .default(null)
     .optional(),
-  vehicle: Joi.string()
-    .valid('indifferent', 'vehicle', 'motorcycle')
-    .default('indifferent')
+  vehicle: Joi.array()
+    .items(Joi.string())
+    .default([])
     .optional(),
-  type_license: Joi.string()
-    .valid('indifferent', 'a', 'b', 'c')
-    .default('indifferent')
+  type_license: Joi.array()
+    .items(Joi.string())
+    .default([])
     .optional(),
   benefits: Joi.array()
     .items(Joi.string())
