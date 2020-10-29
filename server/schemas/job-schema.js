@@ -24,7 +24,7 @@ const _get = Joi.object().keys({
     .valid('public', 'draft', 'expired')
     .optional(),
   availability: Joi.string()
-    .valid('freelance', 'practice', 'temporal', 'full_time', 'part')
+    .valid('freelance', 'practicing', 'temporary', 'full_time', 'part_time', 'vacationer')
     .optional(),
   province: Joi.string()
     .max(100)
@@ -115,7 +115,7 @@ const _add = Joi.object().keys({
     .max(250)
     .required(),
   availability: Joi.string()
-    .valid('freelance', 'practice', 'temporal', 'full_time', 'part', 'vacacionista')
+    .valid('freelance', 'practicing', 'temporary', 'full_time', 'part_time', 'vacationer')
     .default('temporal')
     .optional(),
   career: Joi.array()
@@ -328,13 +328,13 @@ const _add = Joi.object().keys({
     .allow(null, '')
     .default(null)
     .optional(),
-  vehicle: Joi.string()
-    .valid('indifferent', 'vehicle', 'motorcycle')
-    .default('indifferent')
+  vehicle: Joi.array()
+    .items(Joi.string())
+    .default([])
     .optional(),
-  type_license: Joi.string()
-    .valid('indifferent', 'a', 'b', 'c')
-    .default('indifferent')
+  type_license: Joi.array()
+    .items(Joi.string())
+    .default([])
     .optional(),
   benefits: Joi.array()
     .items(Joi.string())
@@ -454,7 +454,7 @@ const _update = Joi.object().keys({
     .max(250)
     .optional(),
   availability: Joi.string()
-    .valid('freelance', 'practice', 'temporal', 'full_time', 'part', 'vacacionista')
+    .valid('freelance', 'practicing', 'temporary', 'full_time', 'part_time', 'vacationer')
     .default('temporal')
     .optional(),
   career: Joi.array()
