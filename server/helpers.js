@@ -74,9 +74,30 @@ const get_profiles = ({server: {db: {r, conn}}, params: {id}}, table, uid) =>
  * Get jobs
  */
 
-const get_jobs = (req, table) => new Promise(async (resolve, reject) => {
+const get_single_job = req => new Promise((resolve, reject) => {
 	
-	// console.log('Fields job helper:', req.query)
+	/** Extract db tools & connection */
+	const {server: {db: {r, conn}}, params: {id}} = req
+	
+	r.table('jobs').get(id).run(conn, (err, result) => {
+		if (err) reject(err)
+		
+		return resolve(result)
+	})
+	
+})
+
+const get_single_company = (r, conn, cid) => new Promise((resolve, reject) => {
+	
+	r.table('companies').get(cid).run(conn, (err, result) => {
+		if (err) reject(err)
+		
+		return resolve(result)
+	})
+	
+})
+
+const get_jobs = (req, table) => new Promise(async (resolve, reject) => {
 	
 	const {
 		params: {
@@ -97,7 +118,20 @@ const get_jobs = (req, table) => new Promise(async (resolve, reject) => {
 	
 	/** Redirects method -> simple get */
 	if (id) {
-		return resolve(await query.get(req, table))
+		let single = await get_single_job(req)
+		
+		if (single) {
+			const parent = await get_single_company(r, conn, single.company_id)
+			
+			if (parent) {
+				single.company = {
+					name: parent.name,
+					location: parent.location
+				}
+			}
+		}
+		
+		return resolve(single)
 	}
 	
 	delete req.query.page
@@ -116,6 +150,7 @@ const get_jobs = (req, table) => new Promise(async (resolve, reject) => {
 			index: 'company_id'
 		})
 	}
+	
 	
 	/**
 	 * This returns rows filtered
@@ -373,7 +408,7 @@ const get_single_user_password_reset = (r, conn, id) =>
 			.table('users')
 			.get(id)
 			.run(conn, (err, result) => {
-				if(err) return reject(err)
+				if (err) return reject(err)
 				
 				return resolve(result)
 			})
