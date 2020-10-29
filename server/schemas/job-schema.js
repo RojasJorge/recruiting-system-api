@@ -515,14 +515,6 @@ const _update = Joi.object().keys({
     .allow(null, '')
     .default(false)
     .optional(),
-  relocate: Joi.boolean()
-    .allow(null, '')
-    .default(false)
-    .optional(),
-  travel: Joi.boolean()
-    .allow(null, '')
-    .default(false)
-    .optional(),
   location: Joi.object()
     .keys({
       address: Joi.string()
