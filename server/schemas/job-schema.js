@@ -20,9 +20,6 @@ const _get = Joi.object().keys({
     .max(36)
     .optional(),
   expiration_date: Joi.date().optional(),
-  dependents: Joi.number()
-    .default(0)
-    .optional(),
   status: Joi.string()
     .valid('public', 'draft', 'expired')
     .optional(),
