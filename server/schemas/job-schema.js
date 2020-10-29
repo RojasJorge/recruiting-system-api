@@ -20,11 +20,14 @@ const _get = Joi.object().keys({
     .max(36)
     .optional(),
   expiration_date: Joi.date().optional(),
+  dependents: Joi.number()
+    .default(0)
+    .optional(),
   status: Joi.string()
     .valid('public', 'draft', 'expired')
     .optional(),
   availability: Joi.string()
-    .valid('freelance', 'practice', 'temporal', 'full', 'part')
+    .valid('freelance', 'practice', 'temporal', 'full_time', 'part')
     .optional(),
   province: Joi.string()
     .max(100)
@@ -81,6 +84,9 @@ const _add = Joi.object().keys({
   created_at: Joi.date()
     .default(new Date())
     .forbidden(),
+  dependents: Joi.number()
+    .default(0)
+    .optional(),
   updated_at: Joi.date()
     .default(new Date())
     .forbidden(),
@@ -112,7 +118,7 @@ const _add = Joi.object().keys({
     .max(250)
     .required(),
   availability: Joi.string()
-    .valid('freelance', 'practice', 'temporal', 'full', 'part', 'vacacionista')
+    .valid('freelance', 'practice', 'temporal', 'full_time', 'part', 'vacacionista')
     .default('temporal')
     .optional(),
   career: Joi.array()
@@ -159,8 +165,16 @@ const _add = Joi.object().keys({
     .allow(null, '')
     .optional(),
   workplace: Joi.string()
-    .valid('in-location', 'remoto', 'semi-remoto')
-    .default('in-location')
+    .max(2000)
+    .allow(null, '')
+    .optional(),
+  relocate: Joi.boolean()
+    .allow(null, '')
+    .default(false)
+    .optional(),
+  travel: Joi.boolean()
+    .allow(null, '')
+    .default(false)
     .optional(),
   location: Joi.object()
     .keys({
@@ -404,6 +418,9 @@ const _update = Joi.object().keys({
     .optional()
     .valid('branch', 'office')
     .allow('', null),
+  dependents: Joi.number()
+    .default(0)
+    .optional(),
   experience: Joi.number()
     .optional()
     .allow('', null),
@@ -440,7 +457,7 @@ const _update = Joi.object().keys({
     .max(250)
     .optional(),
   availability: Joi.string()
-    .valid('freelance', 'practice', 'temporal', 'full', 'part', 'vacacionista')
+    .valid('freelance', 'practice', 'temporal', 'full_time', 'part', 'vacacionista')
     .default('temporal')
     .optional(),
   career: Joi.array()
@@ -487,8 +504,24 @@ const _update = Joi.object().keys({
     .allow(null, '')
     .optional(),
   workplace: Joi.string()
-    .valid('in-location', 'remoto', 'semi-remoto')
-    .default('in-location')
+    .max(2000)
+    .allow(null, '')
+    .optional(),
+  relocate: Joi.boolean()
+    .allow(null, '')
+    .default(false)
+    .optional(),
+  travel: Joi.boolean()
+    .allow(null, '')
+    .default(false)
+    .optional(),
+  relocate: Joi.boolean()
+    .allow(null, '')
+    .default(false)
+    .optional(),
+  travel: Joi.boolean()
+    .allow(null, '')
+    .default(false)
     .optional(),
   location: Joi.object()
     .keys({
