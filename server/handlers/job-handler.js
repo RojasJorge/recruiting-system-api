@@ -28,16 +28,23 @@ module.exports = {
 		/** Current user from token */
 		const current = JSON.parse(req.server.current.data)
 		
-		/** Reject if job is not found */
+		/** Search job */
 		const job = await r.table(table).get(id).run(conn)
+		
+		/** Reject if job is not found */
 		if(!job) return Boom.notFound()
 		
-		/** Reject if company doesn't match */
+		/** Search company parent */
 		const company = await r.table('companies').get(job.company_id).run(conn)
+		
+		/** Reject if company doesn't match */
 		if(!company) return Boom.badRequest()
 		
 		/** Reject if !current.id */
 		if(company.uid !== current.id) return Boom.badRequest()
+		
+		/** Lock updates if job has been published */
+		if(req.payload.status !== 'draft') return Boom.locked()
 		
 		/** Exec query */
 		return h.response(await query.update(req, table))
