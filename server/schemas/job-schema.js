@@ -24,7 +24,7 @@ const _get = Joi.object().keys({
     .valid('public', 'draft', 'expired')
     .optional(),
   availability: Joi.string()
-    .valid('freelance', 'practicing', 'temporary', 'full_time', 'part_time', 'vacationer')
+    // .valid('freelance', 'practicing', 'temporary', 'full_time', 'part_time', 'vacationer')
     .optional(),
   province: Joi.string()
     .max(100)
@@ -115,7 +115,7 @@ const _add = Joi.object().keys({
     .max(250)
     .required(),
   availability: Joi.string()
-    .valid('freelance', 'practicing', 'temporary', 'full_time', 'part_time', 'vacationer')
+    // .valid('freelance', 'practicing', 'temporary', 'full_time', 'part_time', 'vacationer')
     .default('temporal')
     .optional(),
   career: Joi.array()
@@ -454,7 +454,7 @@ const _update = Joi.object().keys({
     .max(250)
     .optional(),
   availability: Joi.string()
-    .valid('freelance', 'practicing', 'temporary', 'full_time', 'part_time', 'vacationer')
+    // .valid('freelance', 'practicing', 'temporary', 'full_time', 'part_time', 'vacationer')
     .default('temporal')
     .optional(),
   career: Joi.array()
