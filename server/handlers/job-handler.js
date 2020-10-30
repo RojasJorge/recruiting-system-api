@@ -40,11 +40,13 @@ module.exports = {
 		/** Reject if company doesn't match */
 		if(!company) return Boom.badRequest()
 		
-		/** Reject if !current.id */
-		if(company.uid !== current.id) return Boom.badRequest()
+		if(current.scope[0] !== 'umana') {
+			/** Reject if !current.id */
+			if(company.uid !== current.id) return Boom.badRequest()
+		}
 		
 		/** Lock updates if job has been published */
-		if(req.payload.status !== 'draft') return Boom.locked()
+		if(job.status === 'public' && req.payload.status !== 'expired') return Boom.locked()
 		
 		/** Exec query */
 		return h.response(await query.update(req, table))
