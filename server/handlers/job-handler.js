@@ -46,7 +46,7 @@ module.exports = {
 		}
 		
 		/** Lock updates if job has been published */
-		if(job.status === 'public') return Boom.locked()
+		if(job.status === 'public' && req.payload.status !== 'expired') return Boom.locked()
 		
 		/** Exec query */
 		return h.response(await query.update(req, table))
