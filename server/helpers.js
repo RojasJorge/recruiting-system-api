@@ -149,6 +149,7 @@ const get_jobs = (req, table) => new Promise(async (resolve, reject) => {
 		Query = Query.getAll(company_id, {
 			index: 'company_id'
 		})
+			.filter(req.query || {})
 	}
 	
 	
