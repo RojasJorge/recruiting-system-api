@@ -233,7 +233,7 @@ const update_single_apply = req => new Promise((resolve, reject) => {
 			const statusFound = _.find(statuses, o => o.key === status)
 			
 			if (statusFound) {
-				await mailing.user.requestChange({name, email: 'jorge@royalestudios.com', company, job, status: statusFound.name})
+				await mailing.user.requestChange({name, email, company, job, status: statusFound.name})
 			}
 			
 			return resolve(result)
@@ -253,7 +253,7 @@ module.exports = {
 		
 		if(stored) await mailing.user.newRequest({
 			id: stored,
-			email: 'jorge@royalestudios.com',
+			email: 'umanadev@gmail.com',
 			// email: dataEmail.company.contactEmail,
 			name: dataEmail.company.contactName,
 			company: dataEmail.company.name,
