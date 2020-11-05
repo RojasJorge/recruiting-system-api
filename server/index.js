@@ -6,6 +6,7 @@ const plugins = require('./plugins')
 const config = require('../config')
 const Boom = require('@hapi/boom')
 const Fs = require('fs')
+const Promise = require('bluebird')
 
 /** Connect to DB */
 const r = require('rethinkdb')
@@ -99,8 +100,28 @@ const start = (host, port) => {
 		
 		/** Start the server */
 		await server.start()
+		
+		// const cursor = await server.db.r.table('chats').changes().run(server.db.conn)
+		
+		/**
+		 * Sockets
+		 */
+		// const io = require('socket.io')(server.listener)
+		//
+		// io.on('connection', async socket => {
+		// 	console.log('User connected Hapijs server...')
+		//
+		// 	cursor.each(async (err, data) => {
+		// 		console.log('DAta:', data)
+		// 		io.sockets.emit('session start', {data: data.new_val})
+		// 	})
+		//
+		// })
+		
 		console.log(`Server running at: ${server.info.uri}${config.get('/api/base_path')}`)
 	})
+	
+
 }
 
 process.on('unhandledRejection', err => {

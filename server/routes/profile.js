@@ -17,5 +17,17 @@ module.exports = [{
 			payload: schemas.profile.update
 		}
 	}
+}, {
+	method: 'GET',
+	path: config.get('/api/base_path') + '/profile',
+	options: {
+		handler: handlers.profile.get,
+		auth: {
+			scope: ['umana', 'admin', 'company']
+		},
+		validate: {
+			query: schemas.profile.get
+		}
+	}
 }]
 
