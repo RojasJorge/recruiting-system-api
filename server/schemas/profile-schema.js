@@ -6,8 +6,19 @@ const id = Joi.object({
   id: Joi.string()
     .min(36)
     .max(36)
-    .required(),
+    .required()
 });
+
+const get = Joi.object({
+  id: Joi.string()
+    .min(36)
+    .max(36)
+    .optional(),
+  uid: Joi.string()
+    .min(36)
+    .max(36)
+    .optional(),
+})
 
 const update = Joi.object({
   fields: Joi.object().keys({
@@ -297,5 +308,6 @@ const update = Joi.object({
 
 module.exports = {
   id,
+  get,
   update,
 };
