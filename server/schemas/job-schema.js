@@ -289,6 +289,7 @@ const _add = Joi.object().keys({
     .optional(),
   skills: Joi.array()
     .items(Joi.string())
+    .allow(null)
     .default([])
     .optional(),
   languages: Joi.array()
@@ -629,6 +630,7 @@ const _update = Joi.object().keys({
   skills: Joi.array()
     .items(Joi.string())
     .default([])
+    .allow(null)
     .optional(),
   languages: Joi.array()
     .items(
