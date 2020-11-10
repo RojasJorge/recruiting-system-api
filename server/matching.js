@@ -13,11 +13,13 @@ module.exports = {
 				.innerJoin(r.table('profiles'), (jobs, profiles) => {
 					return profiles('fields')('personal')('currentJobTitle').eq(jobs('jobposition'))
 				})
+				.eqJoin(r.row('left')('company_id'), r.table('companies'))
 				.map(doc => {
 					return doc.merge(_ => {
 						return doc.merge({
-							'profile': doc('right'),
-							'job': doc('left')
+							'profile': doc('left')('right'),
+							'job': doc('left')('left'),
+							'company': doc('right')
 						})
 					})
 				})

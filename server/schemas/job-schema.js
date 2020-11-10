@@ -222,6 +222,7 @@ const _add = Joi.object().keys({
         .default('Guatemala')
         .optional(),
     })
+    .default(null)
     .optional(),
   gender: Joi.string()
     .valid('male', 'female', 'indifferent')
