@@ -89,10 +89,28 @@ const newRequest = data =>
 		}
 	})
 
+const newRequestCc = data =>
+	new Promise((resolve, reject) => {
+		try {
+			fetch(  config.get('/mail/server') + '/user/new-request-cc', {
+				method: 'POST',
+				body: JSON.stringify(data),
+				headers: {
+					'Content-Type': 'application/json'
+				}
+			})
+				.then(res => resolve(res.json()))
+				.then(json => console.log(json))
+		} catch(err) {
+			return reject(err)
+		}
+	})
+
 module.exports = {
 	confirm,
 	welcome,
 	resetPassword,
 	requestChange,
-	newRequest
+	newRequest,
+	newRequestCc
 }

@@ -251,15 +251,26 @@ module.exports = {
 		
 		const stored = await query.add(req, 'applications')
 		
-		if(stored) await mailing.user.newRequest({
-			id: stored,
-			email: 'umanadev@gmail.com',
-			// email: dataEmail.company.contactEmail,
-			name: dataEmail.company.contactName,
-			company: dataEmail.company.name,
-			candidate: dataEmail.candidate.name,
-			job: dataEmail.job
-		})
+		if(stored) {
+			await mailing.user.newRequest({
+				id: stored,
+				// email: 'umanadev@gmail.com',
+				email: dataEmail.company.contactEmail,
+				name: dataEmail.company.contactName,
+				company: dataEmail.company.name,
+				candidate: dataEmail.candidate.name,
+				job: dataEmail.job
+			})
+			
+			await mailing.user.newRequestCc({
+				id: stored,
+				email: dataEmail.candidate.email,
+				name: dataEmail.candidate.name,
+				company: dataEmail.company.name,
+				candidate: dataEmail.candidate.name,
+				job: dataEmail.job
+			})
+		}
 		
 		/** Returns insert results */
 		return h.response(stored)
