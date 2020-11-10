@@ -29,7 +29,6 @@ module.exports = {
 					if(err) return reject(Boom.badGateway())
 					
 					results.toArray((err, rows) => {
-						console.log('Rows:', rows)
 						if(err) return reject(Boom.badGateway())
 						
 						return resolve(rows)
