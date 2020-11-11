@@ -6,7 +6,7 @@ const id = Joi.object({
   id: Joi.string()
     .min(36)
     .max(36)
-    .required()
+    .required(),
 });
 
 const get = Joi.object({
@@ -18,7 +18,7 @@ const get = Joi.object({
     .min(36)
     .max(36)
     .optional(),
-})
+});
 
 const update = Joi.object({
   fields: Joi.object().keys({
@@ -224,6 +224,13 @@ const update = Joi.object({
       skills: Joi.array().items(Joi.string().max(100)),
     }),
     economic: Joi.object().keys({
+      sindicate: Joi.boolean()
+        .default(false)
+        .optional(),
+      whatSindicate: Joi.string()
+        .max(200)
+        .default('')
+        .optional(),
       currentSalary: Joi.number().optional(),
       desiredSalary: Joi.object()
         .keys({

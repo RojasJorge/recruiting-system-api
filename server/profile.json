@@ -6,6 +6,8 @@
   },
   "documents": [],
   "economic": {
+    "sindicate": false,
+    "whatSindicate": "",
     "allowed": false,
     "currentSalary": 0,
     "currentSalaryCurrency": "",
