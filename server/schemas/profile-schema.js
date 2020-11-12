@@ -6,7 +6,7 @@ const id = Joi.object({
   id: Joi.string()
     .min(36)
     .max(36)
-    .required()
+    .required(),
 });
 
 const get = Joi.object({
@@ -18,7 +18,7 @@ const get = Joi.object({
     .min(36)
     .max(36)
     .optional(),
-})
+});
 
 const update = Joi.object({
   fields: Joi.object().keys({
@@ -232,7 +232,9 @@ const update = Joi.object({
           baseMax: Joi.number(),
         })
         .optional(),
-      otherIncome: Joi.boolean().optional(),
+      otherIncome: Joi.boolean()
+        .optional()
+        .default(false),
       otherIncomeValue: Joi.number()
         .default(0)
         .optional(),
@@ -273,10 +275,10 @@ const update = Joi.object({
             .default('')
             .allow('')
             .optional(),
-          tattoOrPiercing: Joi.boolean()
+          tattooOrPiercing: Joi.boolean()
             .default(false)
             .optional(),
-          whatTattoOrPiercing: Joi.string()
+          whatTattooOrPiercing: Joi.string()
             .default('')
             .allow('')
             .optional(),
@@ -284,6 +286,13 @@ const update = Joi.object({
         .optional(),
       legal: Joi.object()
         .keys({
+          sindicate: Joi.boolean()
+            .default(false)
+            .optional(),
+          whatsindicate: Joi.string()
+            .max(200)
+            .default('')
+            .optional(),
           legalProblem: Joi.boolean().optional(),
           whatProblem: Joi.string()
             .max(800)

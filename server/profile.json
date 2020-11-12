@@ -19,16 +19,19 @@
     "health": {
       "disease": "",
       "haveDisease": false,
-      "tattoOrPiercing": false
+      "tattooOrPiercing": false,
+      "whatTattooOrPiercing": ""
     },
     "incomes": [],
     "legal": {
+      "sindicate": false,
+      "whatsindicate": "",
       "infonetOrOther": false,
       "legalProblem": false,
       "whatProblem": ""
     },
     "nit": 0,
-    "otherIncome": true,
+    "otherIncome": false,
     "otherIncomeValue": 0,
     "sourceIncome": "",
     "typeHousing": "",
