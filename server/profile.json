@@ -6,8 +6,6 @@
   },
   "documents": [],
   "economic": {
-    "sindicate": false,
-    "whatSindicate": "",
     "allowed": false,
     "currentSalary": 0,
     "currentSalaryCurrency": "",
@@ -21,10 +19,13 @@
     "health": {
       "disease": "",
       "haveDisease": false,
-      "tattoOrPiercing": false
+      "tattoOrPiercing": false,
+      "whtaTattoOrPiercing": ""
     },
     "incomes": [],
     "legal": {
+      "sindicate": false,
+      "whatsindicate": "",
       "infonetOrOther": false,
       "legalProblem": false,
       "whatProblem": ""

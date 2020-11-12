@@ -224,13 +224,6 @@ const update = Joi.object({
       skills: Joi.array().items(Joi.string().max(100)),
     }),
     economic: Joi.object().keys({
-      sindicate: Joi.boolean()
-        .default(false)
-        .optional(),
-      whatSindicate: Joi.string()
-        .max(200)
-        .default('')
-        .optional(),
       currentSalary: Joi.number().optional(),
       desiredSalary: Joi.object()
         .keys({
@@ -291,6 +284,13 @@ const update = Joi.object({
         .optional(),
       legal: Joi.object()
         .keys({
+          sindicate: Joi.boolean()
+            .default(false)
+            .optional(),
+          whatsindicate: Joi.string()
+            .max(200)
+            .default('')
+            .optional(),
           legalProblem: Joi.boolean().optional(),
           whatProblem: Joi.string()
             .max(800)
