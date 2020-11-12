@@ -25,7 +25,7 @@ const start = (host, port) => {
 		routes: {
 			// cors: true,
 			cors: {
-				origin: ['https://dev.umana.co']
+				origin: [process.env.APP_TRUST]
 			},
 			validate: {
 				failAction: async (request, h, err) => {
