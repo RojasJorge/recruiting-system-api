@@ -19,8 +19,8 @@
     "health": {
       "disease": "",
       "haveDisease": false,
-      "tattoOrPiercing": false,
-      "whtaTattoOrPiercing": ""
+      "tattooOrPiercing": false,
+      "whatTattooOrPiercing": ""
     },
     "incomes": [],
     "legal": {

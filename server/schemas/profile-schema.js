@@ -275,10 +275,10 @@ const update = Joi.object({
             .default('')
             .allow('')
             .optional(),
-          tattoOrPiercing: Joi.boolean()
+          tattooOrPiercing: Joi.boolean()
             .default(false)
             .optional(),
-          whatTattoOrPiercing: Joi.string()
+          whatTattooOrPiercing: Joi.string()
             .default('')
             .allow('')
             .optional(),
