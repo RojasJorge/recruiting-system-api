@@ -18,6 +18,7 @@ const get = Joi.object({
 	status: Joi.boolean().optional(),
 	page: Joi.number().default(1).optional(),
 	offset: Joi.number().default(10).optional(),
+	scope: Joi.string().valid('umana', 'candidate', 'company').optional(),
 	profile: Joi.object({
 		personal: Joi.object()
 	}).optional()

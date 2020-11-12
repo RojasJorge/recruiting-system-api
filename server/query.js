@@ -59,6 +59,16 @@ const get = (req, table) => new Promise(async (resolve, reject) => {
 		if (table === 'companies') {
 			if(cUser.scope[0] === 'company') Query = Query.getAll(cUser.id, {index: 'uid'}).filter(req.query || {}).slice(start, end)
 			if(cUser.scope[0] === 'umana') Query = Query.filter(req.query || {}).slice(start, end)
+			
+		} else if(req.query.scope) {
+			Query = Query.filter((doc) => {
+				console.log('query:', req.query)
+				let pipe = doc('scope')(0).eq(req.query.scope)
+				
+				if(typeof req.query.status !== 'undefined') pipe = pipe.and(doc('status').eq(req.query.status))
+				
+				return pipe
+			}).slice(start, end)
 		} else {
 			Query = Query.filter(req.query || {}).slice(start, end)
 		}
