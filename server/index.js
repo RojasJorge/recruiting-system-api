@@ -23,7 +23,10 @@ const start = (host, port) => {
 		host,
 		port,
 		routes: {
-			cors: true,
+			// cors: true,
+			cors: {
+				origin: ['https://dev.umana.co']
+			},
 			validate: {
 				failAction: async (request, h, err) => {
 					if (process.env.NODE_ENV === 'production') {
