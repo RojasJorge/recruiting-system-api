@@ -232,7 +232,9 @@ const update = Joi.object({
           baseMax: Joi.number(),
         })
         .optional(),
-      otherIncome: Joi.boolean().optional(),
+      otherIncome: Joi.boolean()
+        .optional()
+        .default(false),
       otherIncomeValue: Joi.number()
         .default(0)
         .optional(),
