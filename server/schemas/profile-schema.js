@@ -291,7 +291,7 @@ const update = Joi.object({
             .optional(),
           whatsindicate: Joi.string()
             .max(200)
-            .default('')
+            .allow('')
             .optional(),
           legalProblem: Joi.boolean().optional(),
           whatProblem: Joi.string()
