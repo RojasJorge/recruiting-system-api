@@ -143,7 +143,7 @@ const get_jobs = (req, table) => new Promise(async (resolve, reject) => {
 	const end = (start + parseInt(offset, 10))
 	
 	let Query = r.table(table)
-	const total = await Query.filter(req.query || {}).count().run(conn)
+	// const total = await Query.filter(req.query || {}).count().run(conn)
 	
 	if (company_id) {
 		Query = Query.getAll(company_id, {
@@ -151,6 +151,8 @@ const get_jobs = (req, table) => new Promise(async (resolve, reject) => {
 		})
 			.filter(req.query || {})
 	}
+	
+	const total = await Query.count().run(conn)
 	
 	
 	/**
