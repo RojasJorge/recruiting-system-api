@@ -86,7 +86,7 @@ module.exports = {
 			token: JWT.sign(
 				{data: JSON.stringify(user)},
 				config.get('/app/secret'),
-				{expiresIn: '1d'}
+				{expiresIn: '1w'}
 			)
 		}
 		
