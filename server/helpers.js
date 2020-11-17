@@ -116,6 +116,8 @@ const get_jobs = (req, table) => new Promise(async (resolve, reject) => {
 		}
 	} = req
 	
+	// console.log('Job handler:', req.query)
+	
 	/** Redirects method -> simple get */
 	if (id) {
 		let single = await get_single_job(req)
@@ -143,7 +145,6 @@ const get_jobs = (req, table) => new Promise(async (resolve, reject) => {
 	const end = (start + parseInt(offset, 10))
 	
 	let Query = r.table(table)
-	// const total = await Query.filter(req.query || {}).count().run(conn)
 	
 	if (company_id) {
 		Query = Query.getAll(company_id, {
@@ -152,13 +153,12 @@ const get_jobs = (req, table) => new Promise(async (resolve, reject) => {
 			.filter(req.query || {})
 	}
 	
-	const total = await Query.count().run(conn)
-	
-	
 	/**
 	 * This returns rows filtered
 	 */
 	if (!_.isEmpty(req.query)) Query = Query.filter(doc => map_filters(req, doc))
+	
+	const total = await Query.count().run(conn)
 	
 	Query.innerJoin(r.table('companies'), function (jobs, companies) {
 		return jobs('company_id').eq(companies('id'))
@@ -191,6 +191,7 @@ const map_filters = (req, doc) => {
 	const title = _.toLower(req.query.title)
 	const province = _.toLower(req.query.province)
 	const city = _.toLower(req.query.city)
+	const status = _.toLower(req.query.status)
 	
 	/**
 	 * Validate ir order
@@ -206,13 +207,13 @@ const map_filters = (req, doc) => {
 	if (jobposition && title && province && !city)
 		return doc('jobposition').downcase().eq(jobposition)
 			.and(doc('title').downcase().match(title))
-			.and(doc('location')('province').downcase().eq(province))
+			.and(doc('branch')('province').downcase().eq(province))
 	
 	if (jobposition && title && province && city)
 		return doc('jobposition').downcase().eq(jobposition)
 			.and(doc('title').downcase().match(title))
-			.and(doc('location')('province').downcase().eq(province))
-			.and(doc('location')('city').downcase().eq(city))
+			.and(doc('branch')('province').downcase().eq(province))
+			.and(doc('branch')('city').downcase().eq(city))
 	
 	/**
 	 * Validate single
@@ -221,24 +222,26 @@ const map_filters = (req, doc) => {
 		return doc('title').downcase().match(title)
 	
 	if (!jobposition && !title && province && !city)
-		return doc('location')('province').downcase().eq(province)
+		return doc('branch')('province').downcase().eq(province)
 	
 	if (!jobposition && !title && province && city)
-		return doc('location')('province').downcase().eq(province)
-			.and(doc('location')('city').downcase().eq(city))
+		return doc('branch')('province').downcase().eq(province)
+			.and(doc('branch')('city').downcase().eq(city))
 	
 	if (jobposition && !title && province && !city)
 		return doc('title').downcase().match(title)
-			.and(doc('location')('province').downcase().eq(province))
+			.and(doc('branch')('province').downcase().eq(province))
 	
 	if (jobposition && !title && province && !city)
 		return doc('jobposition').downcase().eq(jobposition)
-			.and(doc('location')('province').downcase().eq(province))
+			.and(doc('branch')('province').downcase().eq(province))
 	
 	if (jobposition && !title && province && city)
 		return doc('jobposition').downcase().eq(jobposition)
-			.and(doc('location')('province').downcase().eq(province))
-			.and(doc('location')('city').downcase().eq(city))
+			.and(doc('branch')('province').downcase().eq(province))
+			.and(doc('branch')('city').downcase().eq(city))
+	
+	if(status) return doc('status').downcase().eq(status)
 	
 	return {}
 }
