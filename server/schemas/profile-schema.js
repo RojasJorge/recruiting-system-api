@@ -76,7 +76,9 @@ const update = Joi.object({
           Joi.object()
             .optional()
             .keys({
-              area: Joi.number().optional(),
+              area: Joi.number()
+                .optional()
+                .allow(null, 0),
               number: Joi.string()
                 .max(20)
                 .optional(),
@@ -97,7 +99,10 @@ const update = Joi.object({
             address: Joi.string()
               .min(4)
               .max(50),
-            zone: Joi.number().max(50),
+            zone: Joi.number()
+              .max(50)
+              .allow(null, 0)
+              .optional(),
           })
           .optional(),
         about: Joi.string()
@@ -172,7 +177,9 @@ const update = Joi.object({
           jobTitle: Joi.string().max(100),
           area: Joi.string().max(100),
           currency: Joi.string().max(8),
-          amount: Joi.number(),
+          amount: Joi.number()
+            .allow(null, 0)
+            .optional(),
           company: Joi.string().max(100),
           companyPhone: Joi.string().max(15),
           specializationCompany: Joi.string().max(100),
@@ -190,13 +197,16 @@ const update = Joi.object({
               Joi.object().keys({
                 name: Joi.string().max(100),
                 titleJob: Joi.string().max(100),
-                phone: Joi.number(),
+                phone: Joi.number()
+                  .allow(null, 0)
+                  .optional(),
               }),
             )
             .optional(),
           dependents: Joi.boolean(),
           totalDependents: Joi.number()
             .default(0)
+            .allow(null, 0)
             .optional(),
           whyResignation: Joi.string().max(800),
         }),
@@ -215,8 +225,8 @@ const update = Joi.object({
           Joi.object().keys({
             language: Joi.string(),
             comprehension: Joi.number(),
-            speak: Joi.number(),
-            write: Joi.number(),
+            speak: Joi.number().allow(null, 0),
+            write: Joi.number().allow(null, 0),
           }),
         )
         .optional(),
@@ -224,18 +234,21 @@ const update = Joi.object({
       skills: Joi.array().items(Joi.string().max(100)),
     }),
     economic: Joi.object().keys({
-      currentSalary: Joi.number().optional(),
+      currentSalary: Joi.number()
+        .optional()
+        .allow(null, 0),
       desiredSalary: Joi.object()
         .keys({
           currency: Joi.string().default('GTQ'),
-          baseMin: Joi.number(),
-          baseMax: Joi.number(),
+          baseMin: Joi.number().allow(null, 0),
+          baseMax: Joi.number().allow(null, 0),
         })
         .optional(),
       otherIncome: Joi.boolean()
         .optional()
         .default(false),
       otherIncomeValue: Joi.number()
+        .allow(null, 0)
         .default(0)
         .optional(),
       sourceIncome: Joi.string()
@@ -246,23 +259,33 @@ const update = Joi.object({
         .items(
           Joi.object().keys({
             whatCompany: Joi.string().optional(),
-            amount: Joi.number().optional(),
-            monthlyFee: Joi.number().optional(),
+            amount: Joi.number()
+              .optional()
+              .allow(null, 0),
+            monthlyFee: Joi.number()
+              .optional()
+              .allow(null, 0),
           }),
         )
         .optional(),
       typeHousing: Joi.string()
         .valid('own', 'family', 'rented')
         .optional(),
-      dependents: Joi.number().optional(),
+      dependents: Joi.number()
+        .optional()
+        .allow(null, 0),
       vehicles: Joi.array()
         .items(
           Joi.object().keys({
             type: Joi.string().optional(),
             brand: Joi.string().optional(),
-            year: Joi.number().optional(),
+            year: Joi.number()
+              .optional()
+              .allow(null, 0),
             debts: Joi.boolean().optional(),
-            amount: Joi.number().optional(),
+            amount: Joi.number()
+              .optional()
+              .allow(null, 0),
           }),
         )
         .optional(),
