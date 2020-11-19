@@ -10,6 +10,7 @@ const config = require('../../config')
 const table = 'users'
 const mailing = require('../mailing')
 const md5 = require('md5')
+const Promise = require('bluebird')
 
 module.exports = {
 	
@@ -303,6 +304,33 @@ module.exports = {
 		}
 		
 		return h.response(sent)
+	},
+	
+	getInvites: async (req, h) => {
+		const invites = () => new Promise(async (resolve, reject) => {
+			let Query = req.server.db.r
+				.table('invites')
+				.filter((doc) => {
+					return doc('profile')('id').eq(req.query.profileId)
+						.and(doc('company')('id').eq(req.query.companyId))
+						.and(doc('job')('id').eq(req.query.jobId))
+				})
+				const total = await Query.count().run(req.server.db.conn)
+				
+				Query.run(req.server.db.conn, (err, results) => {
+					if(err) return reject(Boom.notFound())
+					
+					results.toArray((err, items) => {
+						if(err) return reject(Boom.notFound())
+						
+						if(typeof req.query.withDetails !== 'undefined' && !req.query.withDetails) return resolve({items: [], total})
+						
+						return resolve({items, total})
+					})
+				})
+		})
+		
+		return h.response(await invites())
 	}
 }
 

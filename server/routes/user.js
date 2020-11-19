@@ -113,6 +113,23 @@ const User = [{
 			})
 		}
 	}
+}, {
+	method: 'GET',
+	path: config.get('/api/base_path') + '/invite-a-user',
+	handler: handlers.user.getInvites,
+	options: {
+		auth: {
+			scope: ['umana', 'company']
+		},
+		validate: {
+			query: Joi.object({
+				profileId: Joi.string().required(),
+				companyId: Joi.string().required(),
+				jobId: Joi.string().required(),
+				withDetails: Joi.boolean().default(false).optional()
+			})
+		}
+	}
 }]
 
 module.exports = User
