@@ -97,6 +97,22 @@ const User = [{
 			})
 		}
 	}
+}, {
+	method: 'POST',
+	path: config.get('/api/base_path') + '/invite-a-user',
+	handler: handlers.user.invite_a_user,
+	options: {
+		auth: {
+			scope: ['umana', 'company']
+		},
+		validate: {
+			payload: Joi.object({
+				profileId: Joi.string().required(),
+				companyId: Joi.string().required(),
+				jobId: Joi.string().required()
+			})
+		}
+	}
 }]
 
 module.exports = User

@@ -254,6 +254,55 @@ module.exports = {
 		}).run(req.server.db.conn)
 		
 		return h.response({message: 'Password was updated successfully.'})
+	},
+	
+	/**
+	 * Company invites users to requests it's jobs
+	 */
+	invite_a_user: async (req, h) => {
+		
+		/**
+		 * Get entities
+		 */
+		const profile = await req.server.db.r.table('profiles').get(req.payload.profileId).run(req.server.db.conn)
+		const company = await req.server.db.r.table('companies').get(req.payload.companyId).run(req.server.db.conn)
+		const job = await req.server.db.r.table('jobs').get(req.payload.jobId).run(req.server.db.conn)
+		
+		/**
+		 * An empty result
+		 * @type {{}}
+		 */
+		let sent = {}
+		
+		/**
+		 * Check for the entities
+		 */
+		if(profile && company && job) {
+			
+			/**
+			 * Store the new record
+			 */
+			await req.server.db.r.table('invites').insert({
+				company,
+				job,
+				profile,
+				createdAt: req.server.db.r.now(),
+				updatedAt: req.server.db.r.now()
+			}).run(req.server.db.conn)
+			
+			/**
+			 * Notify user via email
+			 */
+			sent = await mailing.user.inviteAUser({
+				name: profile.fields.personal.name,
+				company: company.name,
+				email: profile.fields.personal.email,
+				job: job.title,
+				id: job.id
+			})
+		}
+		
+		return h.response(sent)
 	}
 }
 
