@@ -25,7 +25,7 @@ module.exports = {
 		if (!company) return Boom.notFound()
 		
 		/** Reject if owner id does not match */
-		if (company.uid !== current.id) return Boom.forbidden()
+		if (current.scope[0] !== 'umana' && company.uid !== current.id) return Boom.forbidden()
 		
 		return h.response(await query.update(req, table))
 	},
