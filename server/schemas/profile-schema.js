@@ -59,7 +59,10 @@ const update = Joi.object({
           .optional(),
         children: Joi.number().optional(),
         dpi: Joi.string().optional(),
-        nit: Joi.string().optional(),
+        nit: Joi.alternatives().try(
+          Joi.string(),
+          Joi.number()
+        ).optional(),
         passport: Joi.number()
           .allow(null, 'undefined')
           .optional(),
