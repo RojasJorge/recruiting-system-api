@@ -413,6 +413,7 @@ const _add = Joi.object().keys({
 });
 
 const _update = Joi.object().keys({
+  created_at: Joi.date().optional(),
   interviewPlace: Joi.string()
     .optional()
     .valid('branch', 'office')
