@@ -59,20 +59,10 @@ const update = Joi.object({
           .max(100)
           .optional(),
         children: Joi.number().optional(),
-<<<<<<< Updated upstream
         dpi: Joi.string().optional(),
-        nit: Joi.alternatives().try(
-          Joi.string(),
-          Joi.number()
-        ).optional(),
-=======
-        dpi: Joi.string()
-          .optional()
-          .allow(null, ''),
-        nit: Joi.string()
-          .optional()
-          .allow(null, ''),
->>>>>>> Stashed changes
+        nit: Joi.alternatives()
+          .try(Joi.string(), Joi.number())
+          .optional(),
         passport: Joi.number()
           .allow(null, 'undefined', '')
           .optional(),
