@@ -70,10 +70,10 @@
     "maritalStatus": "",
     "name": "",
     "nationality": "",
-    "nit": 0,
+    "nit": "",
     "passport": 0,
     "phones": [],
-    "religion": ""
+    "religion": "Sin Religión"
   },
   "working": {
     "experiences": [],
