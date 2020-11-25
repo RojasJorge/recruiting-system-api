@@ -152,25 +152,25 @@ const get_jobs = (req, table) => new Promise(async (resolve, reject) => {
 			index: 'company_id'
 		})
 			.filter(req.query || {})
-	}
-	
-	/**
-	 * This returns rows filtered
-	 */
-	if (!_.isEmpty(req.query)) Query = Query.filter(doc => map_filters(req, doc))
-	
-	Query = Query.innerJoin(r.table('companies'), function (jobs, companies) {
-		let pipe = jobs('company_id').eq(companies('id'))
+	} else {
+		/**
+		 * This returns rows filtered
+		 */
+		if (!_.isEmpty(req.query)) Query = Query.filter(doc => map_filters(req, doc))
 		
-		if(current) {
-			const owner = JSON.parse(current.data)
-			if(owner.scope[0] === 'company') {
-				pipe = pipe.and(companies('uid').eq(owner.id))
+		Query = Query.innerJoin(r.table('companies'), function (jobs, companies) {
+			let pipe = jobs('company_id').eq(companies('id'))
+			
+			if(current) {
+				const owner = JSON.parse(current.data)
+				if(owner.scope[0] === 'company') {
+					pipe = pipe.and(companies('uid').eq(owner.id))
+				}
 			}
-		}
-	
-		return pipe
-	})
+			
+			return pipe
+		})
+	}
 	
 	const total = await Query.count().run(conn)
 	
