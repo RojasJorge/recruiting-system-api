@@ -68,7 +68,7 @@ const get = (req, table) => new Promise(async (resolve, reject) => {
 				if(typeof req.query.status !== 'undefined') pipe = pipe.and(doc('status').eq(req.query.status))
 				
 				return pipe
-			}).slice(start, end)
+			})
 		} else {
 			Query = Query.filter(req.query || {})
 		}
