@@ -3,7 +3,8 @@
 const Promise = require('bluebird')
 const Boom = require('@hapi/boom')
 const _ = require('lodash')
-const query = require('./query')
+// const query = require('./query')
+const handlers = require('./handlers/system-handler')
 
 /**
  * Add user module tools
@@ -99,6 +100,8 @@ const get_single_company = (r, conn, cid) => new Promise((resolve, reject) => {
 
 const get_jobs = (req, table) => new Promise(async (resolve, reject) => {
 	
+	const current = await handlers.add_scope(req)
+	
 	const {
 		params: {
 			id
@@ -115,8 +118,6 @@ const get_jobs = (req, table) => new Promise(async (resolve, reject) => {
 			}
 		}
 	} = req
-	
-	// console.log('Job handler:', req.query)
 	
 	/** Redirects method -> simple get */
 	if (id) {
@@ -158,11 +159,22 @@ const get_jobs = (req, table) => new Promise(async (resolve, reject) => {
 	 */
 	if (!_.isEmpty(req.query)) Query = Query.filter(doc => map_filters(req, doc))
 	
+	Query = Query.innerJoin(r.table('companies'), function (jobs, companies) {
+		let pipe = jobs('company_id').eq(companies('id'))
+		
+		if(current) {
+			const owner = JSON.parse(current.data)
+			if(owner.scope[0] === 'company') {
+				pipe = pipe.and(companies('uid').eq(owner.id))
+			}
+		}
+	
+		return pipe
+	})
+	
 	const total = await Query.count().run(conn)
 	
-	Query.innerJoin(r.table('companies'), function (jobs, companies) {
-		return jobs('company_id').eq(companies('id'))
-	}).map(doc => {
+		Query.map(doc => {
 		return doc.merge(() => {
 			return doc('left').merge({
 				company: {

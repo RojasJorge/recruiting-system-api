@@ -6,7 +6,7 @@ const plugins = require('./plugins')
 const config = require('../config')
 const Boom = require('@hapi/boom')
 const Fs = require('fs')
-const Promise = require('bluebird')
+// const Promise = require('bluebird')
 
 /** Connect to DB */
 const r = require('rethinkdb')

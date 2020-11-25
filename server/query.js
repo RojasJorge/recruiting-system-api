@@ -40,7 +40,7 @@ const get = (req, table) => new Promise(async (resolve, reject) => {
 	
 	/** Query init as pipe */
 	let Query = r.table(table)
-	const total = await Query.count().run(conn)
+	// const total = await Query.count().run(conn)
 	
 	/** Reject if query + id */
 	if (!_.isEmpty(req.query) && id)
@@ -73,6 +73,8 @@ const get = (req, table) => new Promise(async (resolve, reject) => {
 			Query = Query.filter(req.query || {}).slice(start, end)
 		}
 	}
+	
+	const total = await Query.count().run(conn)
 	
 	Query.run(conn, (err, results) => {
 		if (err) return reject(Boom.badGateway(err))
