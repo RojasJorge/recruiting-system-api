@@ -95,9 +95,6 @@ module.exports = {
 	},
 	get: async (req, h) => {
 		
-		// console.log('Query user-handler', req.query)
-		// return h.response({})
-		
 		const data = await query.get(req, table)
 		
 		if (_.find(Object.keys(data), o => o === 'items')) {

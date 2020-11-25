@@ -40,7 +40,7 @@ const get = (req, table) => new Promise(async (resolve, reject) => {
 	
 	/** Query init as pipe */
 	let Query = r.table(table)
-	// const total = await Query.count().run(conn)
+	let total = 0
 	
 	/** Reject if query + id */
 	if (!_.isEmpty(req.query) && id)
@@ -57,12 +57,12 @@ const get = (req, table) => new Promise(async (resolve, reject) => {
 		
 		/** Switch method if module is 'company' */
 		if (table === 'companies') {
-			if(cUser.scope[0] === 'company') Query = Query.getAll(cUser.id, {index: 'uid'}).filter(req.query || {}).slice(start, end)
-			if(cUser.scope[0] === 'umana') Query = Query.filter(req.query || {}).slice(start, end)
+			if(cUser.scope[0] === 'company') Query = Query.getAll(cUser.id, {index: 'uid'}).filter(req.query || {})
+			if(cUser.scope[0] === 'umana') Query = Query.filter(req.query || {})
 			
 		} else if(req.query.scope) {
 			Query = Query.filter((doc) => {
-				console.log('query:', req.query)
+				// console.log('query:', req.query)
 				let pipe = doc('scope')(0).eq(req.query.scope)
 				
 				if(typeof req.query.status !== 'undefined') pipe = pipe.and(doc('status').eq(req.query.status))
@@ -70,13 +70,15 @@ const get = (req, table) => new Promise(async (resolve, reject) => {
 				return pipe
 			}).slice(start, end)
 		} else {
-			Query = Query.filter(req.query || {}).slice(start, end)
+			Query = Query.filter(req.query || {})
 		}
+		
+		total = await Query.count().run(conn)
+		Query = Query.slice(start, end)
 	}
 	
-	const total = await Query.count().run(conn)
-	
-	Query.run(conn, (err, results) => {
+	Query
+		.run(conn, (err, results) => {
 		if (err) return reject(Boom.badGateway(err))
 		
 		/** Map results */
