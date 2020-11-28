@@ -147,7 +147,7 @@ const get_jobs = (req, table) => new Promise(async (resolve, reject) => {
 	
 	let Query = r.table(table)
 	
-	if (company_id) {
+	if (company_id && !req.query.jobposition) {
 		Query = Query.getAll(company_id, {
 			index: 'company_id'
 		})
@@ -161,37 +161,41 @@ const get_jobs = (req, table) => new Promise(async (resolve, reject) => {
 		Query = Query.innerJoin(r.table('companies'), function (jobs, companies) {
 			let pipe = jobs('company_id').eq(companies('id'))
 			
-			if(current) {
+			if (current) {
 				const owner = JSON.parse(current.data)
-				if(owner.scope[0] === 'company') {
+				if (owner.scope[0] === 'company') {
 					pipe = pipe.and(companies('uid').eq(owner.id))
 				}
 			}
 			
 			return pipe
+		}).map(doc => {
+			return doc.merge(() => {
+				return doc('left').merge({
+					company: {
+						name: doc('right')('name'),
+						location: doc('right')('location')
+					}
+				})
+			})
 		})
+			.without('left')
+			.without('right')
 	}
 	
 	const total = await Query.count().run(conn)
 	
-		Query.map(doc => {
-		return doc.merge(() => {
-			return doc('left').merge({
-				company: {
-					name: doc('right')('name'),
-					location: doc('right')('location')
-				}
-			})
-		})
-	})
-		.without('left')
-		.without('right')
-		.slice(start, end)
+	// console.log('total:', total)
+		
+		Query.slice(start, end)
 		.run(conn, (err, collection) => {
-			if (err) return reject(Boom.badGateway())
+			// if (err) return reject(Boom.badGateway())
+			if (err) throw err
 			
 			collection.toArray((err, items) => {
-				if (err) return reject(Boom.badGateway())
+				// if (err) return reject(Boom.badGateway())
+				if (err) throw err
+				
 				return resolve({items, total})
 			})
 		})
@@ -253,7 +257,7 @@ const map_filters = (req, doc) => {
 			.and(doc('branch')('province').downcase().eq(province))
 			.and(doc('branch')('city').downcase().eq(city))
 	
-	if(status) return doc('status').downcase().eq(status)
+	if (status) return doc('status').downcase().eq(status)
 	
 	return {}
 }

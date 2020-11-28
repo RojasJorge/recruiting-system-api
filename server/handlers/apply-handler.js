@@ -27,6 +27,8 @@ const find_apply = req =>
 const get_apply = req =>
 	new Promise(async (resolve, reject) => {
 		
+		// console.log('Requests | Get:', req.query)
+		
 		if (!req.params.id) return resolve(await helpers.get_each_company_applications(req))
 		
 		/**

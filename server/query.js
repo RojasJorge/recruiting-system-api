@@ -62,7 +62,7 @@ const get = (req, table) => new Promise(async (resolve, reject) => {
 			
 		} else if(req.query.scope) {
 			Query = Query.filter((doc) => {
-				// console.log('query:', req.query)
+				
 				let pipe = doc('scope')(0).eq(req.query.scope)
 				
 				if(typeof req.query.status !== 'undefined') pipe = pipe.and(doc('status').eq(req.query.status))
