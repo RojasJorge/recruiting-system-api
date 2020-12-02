@@ -59,7 +59,7 @@ const update = Joi.object({
           .max(100)
           .optional(),
         children: Joi.number().optional(),
-        dpi: Joi.string().optional(),
+        dpi: Joi.string().allow('', null).optional(),
         nit: Joi.alternatives()
           .try(Joi.string(), Joi.number())
           .allow('', null, 0)
