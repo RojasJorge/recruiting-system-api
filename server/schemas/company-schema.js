@@ -89,9 +89,8 @@ const _add = Joi.object({
   updated_at: Joi.date()
     .default(new Date())
     .forbidden(),
-  avatar: Joi.string()
-    .allow(null, '')
-    .default(null)
+  avatar: Joi.array()
+    .items(Joi.object())
     .optional(),
   name: Joi.string()
     .min(4)
@@ -198,8 +197,8 @@ const _update = Joi.object({
     .max(36)
     .allow(null, '')
     .optional(),
-  avatar: Joi.string()
-    .max(50)
+  avatar: Joi.array()
+    .items(Joi.object())
     .optional(),
   name: Joi.string()
     .min(4)
