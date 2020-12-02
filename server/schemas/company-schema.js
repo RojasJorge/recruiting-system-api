@@ -100,7 +100,7 @@ const _add = Joi.object({
     .default(true)
     .forbidden(),
   description: Joi.string()
-    .max(4000)
+    .max(5000)
     .allow(null, '')
     .default(null)
     .optional(),
@@ -206,7 +206,7 @@ const _update = Joi.object({
     .optional(),
   status: Joi.boolean().optional(),
   description: Joi.string()
-    .max(800)
+    .max(5000)
     .allow(null, '')
     .optional(),
   employees: Joi.string()
