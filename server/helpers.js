@@ -156,6 +156,7 @@ const get_jobs = (req, table) => new Promise(async (resolve, reject) => {
 		/**
 		 * This returns rows filtered
 		 */
+		
 		if (!_.isEmpty(req.query)) Query = Query.filter(doc => map_filters(req, doc))
 		
 		Query = Query.innerJoin(r.table('companies'), function (jobs, companies) {
@@ -209,8 +210,13 @@ const map_filters = (req, doc) => {
 	const city = _.toLower(req.query.city)
 	const status = _.toLower(req.query.status)
 	
+	if(title && status) {
+		return doc('status').downcase().eq(status)
+			.and(doc('title').downcase().match(title))
+	}
+	
 	/**
-	 * Validate ir order
+	 * Validate
 	 */
 	
 	if (jobposition && !title && !province && !city)
