@@ -129,7 +129,8 @@ const get_jobs = (req, table) => new Promise(async (resolve, reject) => {
 			if (parent) {
 				single.company = {
 					name: parent.name,
-					location: parent.location
+					location: parent.location,
+					avatar: parent.avatar
 				}
 			}
 		}
