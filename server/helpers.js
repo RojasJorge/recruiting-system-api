@@ -176,7 +176,8 @@ const get_jobs = (req, table) => new Promise(async (resolve, reject) => {
 				return doc('left').merge({
 					company: {
 						name: doc('right')('name'),
-						location: doc('right')('location')
+						location: doc('right')('location'),
+						avatar: doc('right')('avatar')
 					}
 				})
 			})
