@@ -75,6 +75,7 @@ const get = (req, table) => new Promise(async (resolve, reject) => {
 		
 		total = await Query.count().run(conn)
 		Query = Query.slice(start, end)
+		Query = Query.orderBy(r.desc('created_at'))
 	}
 	
 	Query
