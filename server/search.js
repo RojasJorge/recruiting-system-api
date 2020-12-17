@@ -55,13 +55,15 @@ const term_in_tables = ({server: {db: {r, conn}}, payload: {query}}) =>
 				.filter(doc => {
 					/** Extract fields from current iteration */
 					const {fields} = current
+					// console.log('TERM, QUERY', )
 					/** Init query */
-					let pipe = doc(fields[0]).downcase().match(`(?i)^${query.variables.term}$`)
+					let pipe = doc(fields[0]).downcase().eq(query.variables.term)
+					// let pipe = doc(fields[0]).downcase().match(`(?i)^${query.variables.term}$`)
 					
 					/** Find DB matches based on term param */
 					if (fields.length > 0) {
 						for (const i in fields) {
-							pipe = pipe.or(doc(fields[i]).downcase().match(`(?i)^${query.variables.term}$`))
+							pipe = pipe.or(doc(fields[i]).downcase().match(`${query.variables.term}`))
 						}
 					}
 					
@@ -103,6 +105,10 @@ const get_total_jobs = (r, conn, companies) =>
 			return [...accumulator, currentValue]
 		}, []))
 	)
+
+const eliminarDiacriticos = (texto) => {
+	return texto.normalize('NFD').replace(/[\u0300-\u036f]/g,"");
+}
 
 
 module.exports = search
